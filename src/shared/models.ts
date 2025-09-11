@@ -29,3 +29,13 @@ export type MkrGroup = {
   name: string;
   course: number;
 }
+
+export type MkrEvent = {
+  name: string,
+  place: string,
+  group?: string,
+  teacher?: string,
+  type: string,
+  start: string,
+  end: string
+}

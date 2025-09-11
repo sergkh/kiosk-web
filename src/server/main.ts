@@ -1,7 +1,8 @@
 import express from "express";
 import ViteExpress from "vite-express";
-import type { Article, StudentInfo } from "../shared/models";
 import { newsData, studentInfo } from "./data";
+
+import { config } from "./config";
 
 const app = express();
 
@@ -11,6 +12,10 @@ app.get("/student-info", (_, res) => {
 
 app.get("/news", (_, res) => {
   res.json(newsData);
+});
+
+app.get("/admin/firebase-config.json", (_, res) => {
+  res.json(config.firebaseConfig);
 });
 
 ViteExpress.listen(app, 3000, () =>

@@ -26,7 +26,7 @@ function Header() {
 
 function Footer() {
   return <footer>          
-    <span>© 2025 ВНАУ. Інформація на сайті може оновлюватися. Актуальні дані уточнюйте в приймальній комісії</span>        
+    <span>© 2025 ВНАУ. Інформація може оновлюватися. Актуальні дані уточнюйте в приймальній комісії</span>        
     <span>Cтворено з <FontAwesomeIcon icon={faHeart} /> для студентів. <NavLink to="/developers">Команда розробників</NavLink></span>                        
   </footer>
 }

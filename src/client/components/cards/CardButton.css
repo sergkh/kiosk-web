@@ -1,4 +1,4 @@
-.student-info-card {
+.info-card {
   background: var(--card-bg);
   border-radius: 18px;
   padding: 32px 24px;
@@ -11,10 +11,15 @@
   max-width: 400px;
 }
 
-.student-info-card h3 {
+.info-card h3 {
   font-size: 1.18em;
   font-weight: 700;
   color: #5ed96b;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
+}
+
+.info-card img {
+  max-width: 90%;
+  height: auto;  
 }

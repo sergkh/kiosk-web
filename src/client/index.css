@@ -104,3 +104,9 @@ main {
   flex-direction: column;
   padding: 1em;
 }
+
+main h1 {
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: center;
+}

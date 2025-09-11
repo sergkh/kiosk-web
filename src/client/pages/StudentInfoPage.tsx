@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { StudentInfo } from "../../shared/models";
-import StudentCardButton from "../components/cards/StudentCardButton";
 import "./StudentInfoPage.css";
+import CardButton from "../components/cards/CardButton";
 
 async function fetchInfo(): Promise<StudentInfo[]> {
   return fetch('/student-info').then(r => r.json())
@@ -23,7 +23,7 @@ function InfosList({cards, onSelect}: {cards: StudentInfo[], onSelect: (info: St
   return <div className="student-info-cards">
   {
     cards.map((info) => (
-      <StudentCardButton key={info.id} info={info} onClick={() => onSelect(info)} />
+      <CardButton key={info.id} title={info.title} subtitle={info.subtitle} image={info.image} onClick={() => onSelect(info)} />
     ))
   }
   </div>

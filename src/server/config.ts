@@ -1,13 +1,20 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '.env' });
 
-export const config = {
-  firebaseConfig: {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: `${process.env.FIREBASE_PROJECT_ID}.firebaseapp.com`,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
-    messagingSenderId: process.env.FIREBASE_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID
-  }
+console.log("Loading environment variables...");
+
+if (!process.env.ADMIN_EMAILS) {
+  console.warn(`
+    ADMIN_EMAILS environment variable is not set. 
+    No one wiil be able to log in as admin. 
+    Set it to a comma-separated list of admin emails.
+  `);
+}
+
+const config = {
+  admins: (process.env.ADMIN_EMAILS ?? '').split(',').map(email => email.trim()).filter(email => email.length > 0),
 };
+
+console.log("Loaded environment variables:", config);
+
+export default config;

@@ -1,7 +1,7 @@
 import type { Faculty, MkrApiDictionary, MkrEvent, MkrGroup } from "../../shared/models";
 
 // TODO: move to config
-const API_URL = 'https://mkr.sergkh.com'
+const API_URL = import.meta.env.VITE_MKR_API_URL || 'https://mkr.sergkh.com';
 
 // TODO: Add more faculties
 const facultyImages: Map<string, string> = new Map([

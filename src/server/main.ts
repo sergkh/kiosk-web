@@ -1,10 +1,12 @@
 import express from "express";
 import ViteExpress from "vite-express";
 import { newsData, studentInfo } from "./data";
-
-import { config } from "./config";
+import api from "./api";
 
 const app = express();
+
+app.use(express.json());
+app.use("/api", api);
 
 app.get("/student-info", (_, res) => {
   res.json(studentInfo);
@@ -12,10 +14,6 @@ app.get("/student-info", (_, res) => {
 
 app.get("/news", (_, res) => {
   res.json(newsData);
-});
-
-app.get("/admin/firebase-config.json", (_, res) => {
-  res.json(config.firebaseConfig);
 });
 
 ViteExpress.listen(app, 3000, () =>

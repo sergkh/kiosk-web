@@ -1,0 +1,14 @@
+header nav li a {
+  display: inline-block;
+  padding: 0.9rem 1.2rem;
+  background-color: #018804; /* blue */
+  color: white;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.active {
+  background-color: #005b02; /* darker blue */
+}

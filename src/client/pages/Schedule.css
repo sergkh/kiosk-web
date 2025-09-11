@@ -1,0 +1,6 @@
+.faculties {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 9fr));
+  gap: 32px;
+  padding-top: 1em;
+}

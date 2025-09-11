@@ -13,8 +13,8 @@ if (!process.env.ADMIN_EMAILS) {
 
 const config = {
   admins: (process.env.ADMIN_EMAILS ?? '').split(',').map(email => email.trim()).filter(email => email.length > 0),
+  secureCookie: process.env.NODE_ENV === 'production',
+  sessionExpiration: 60 * 60 * 1 * 1000, // 1 hour
 };
-
-console.log("Loaded environment variables:", config);
 
 export default config;

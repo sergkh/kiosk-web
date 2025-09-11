@@ -4,18 +4,19 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../index.css'
 import Login from "./pages/Login";
+import AdminMain from "./pages/AdminMain";
+import { AuthorizedRoute } from "./AuthorizedRoute";
 
 const router = createBrowserRouter([ 
   {
     path: "/admin",
-    element: <div>
-      Admin page 
-      <NavLink to="/admin/login">Login</NavLink>
-    </div>,
+    element: <AuthorizedRoute> 
+        <AdminMain />
+    </AuthorizedRoute>,
   },
   {
     path: "/admin/login",
-    element: <div> <Login /> </div>,
+    element: <Login />,
   }
 ]);
 

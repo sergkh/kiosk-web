@@ -2,7 +2,7 @@ import express from "express";
 import admin, { type ServiceAccount } from "firebase-admin";
 
 import config from "./config";
-import serviceAccount from "./serviceAccount.json" assert { type: "json" };
+import serviceAccount from "./serviceAccount.json" with { type: "json" };
 import { authorized } from "./auth";
 
 admin.initializeApp({

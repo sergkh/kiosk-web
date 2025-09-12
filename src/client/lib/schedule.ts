@@ -3,6 +3,7 @@ import type { Faculty, MkrApiDictionary, MkrEvent, MkrGroup } from "../../shared
 import cache from "js-cache";
 
 const API_URL = import.meta.env.VITE_MKR_API_URL || 'https://mkr.sergkh.com';
+const baseUrl = import.meta.env.VITE_BASE_URL || '/';
 
 const localCache = new cache.Cache({
   max: 100,
@@ -11,12 +12,12 @@ const localCache = new cache.Cache({
 
 // TODO: Add more faculties
 const facultyImages: Map<string, string> = new Map([
-  ['1', '/img/faculties/agro.png'],
-  ['5', '/img/faculties/economics.png'],
-  ['57', '/img/faculties/veterinarian.png'],
-  ['7', '/img/faculties/itf.png'],
-  ['6', '/img/faculties/management.png'],
-  ['42', '/img/faculties/finances.png'],
+  ['1',  `${baseUrl}img/faculties/agro.png`],
+  ['5',  `${baseUrl}img/faculties/economics.png`],
+  ['57', `${baseUrl}img/faculties/veterinarian.png`],
+  ['7',  `${baseUrl}img/faculties/itf.png`],
+  ['6',  `${baseUrl}img/faculties/management.png`],
+  ['42', `${baseUrl}img/faculties/finances.png`],
 ]);
 
 async function getFaculties(): Promise<Faculty[]> {

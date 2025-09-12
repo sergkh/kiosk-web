@@ -4,10 +4,12 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from 'react-router'
 import './Page.css'
 
+const baseUrl = import.meta.env.VITE_BASE_URL || '/';
+
 function Header() {
   return <header>
     <div className="logo-vnau-header left">
-        <img src="/img/logo.png" alt="Логотип ВНАУ|Logo VNAU"/>
+        <img src={`${baseUrl}img/logo.png`} alt="Логотип ВНАУ|Logo VNAU"/>
         <span className="vnau">Вінницький національний <br/> аграрний університет</span>
     </div>
     <nav className="center">
@@ -18,8 +20,8 @@ function Header() {
         </ul>
     </nav>
     <div className="language-header right">
-      <img src="/img/flags/uk.png" alt="Українська" />
-      <img src="/img/flags/en.png" alt="Англійська" />
+      <img src={`${baseUrl}img/flags/uk.png`} alt="Українська" />
+      <img src={`${baseUrl}img/flags/en.png`} alt="Англійська" />
     </div>
   </header>
 }

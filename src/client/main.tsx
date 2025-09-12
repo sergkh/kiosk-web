@@ -31,7 +31,9 @@ const router = createBrowserRouter([
     element: <Page><DevelopersPage /></Page>,
     errorElement: <ErrorBoundary />
   },
-]);
+], {
+  basename: import.meta.env.VITE_BASE_URL
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

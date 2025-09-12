@@ -1,17 +1,18 @@
-FROM oven/bun:1.2.5 AS base
-
-FROM base AS builder
+FROM node:20 AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN bun install
+RUN npm install
+ENV VITE_BASE_URL=/kiosk-web/
 COPY . .
-RUN bun run build
+RUN npm run build
 
-FROM base AS runner
+FROM node:17 AS runner
 WORKDIR /app
-EXPOSE 3000
 ENV NODE_ENV=production
+EXPOSE 3000
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/src/server ./server
+COPY --from=builder /app/vite.config.ts .
+COPY --from=builder /app/src/server ./src/server
+COPY --from=builder /app/src/shared ./src/shared
 COPY --from=builder /app/dist ./dist
-CMD ["bun", "server/main.ts"]
+CMD ["npx", "tsx", "src/server/main.ts"]

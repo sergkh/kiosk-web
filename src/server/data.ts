@@ -1,11 +1,14 @@
 import type { Article, StudentInfo } from "../shared/models";
+import config from "./config";
+
+const baseUrl = config.baseUrl;
 
 export const studentInfo = [
     {
       id: 'rules',
       title: 'Правила вступу',
       subtitle: 'Ознайомтесь з актуальними правилами прийому',
-      image: 'img/student-info/rules.png',
+      image: `${baseUrl}img/student-info/rules.png`,
       content: `
         <h1>Загальні положення</h1>
         <ol>

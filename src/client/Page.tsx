@@ -3,33 +3,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from 'react-router'
 import './Page.css'
+import { useTranslation } from 'react-i18next';
 
 const baseUrl = import.meta.env.VITE_BASE_URL || '/';
 
 function Header() {
+  const {t, i18n} = useTranslation();
   return <header>
     <div className="logo-vnau-header left">
         <img src={`${baseUrl}img/logo.png`} alt="Логотип ВНАУ|Logo VNAU"/>
-        <span className="vnau">Вінницький національний <br/> аграрний університет</span>
+        <span className="vnau"> { t('header.title') } </span>
     </div>
     <nav className="center">
         <ul>
-          <li><NavLink to="/">Головна</NavLink></li>
-          <li><NavLink to="/students">Студентам</NavLink></li>
-          <li><NavLink to="/schedule">Розклад</NavLink></li>
+          <li><NavLink to="/">{ t('header.main')}</NavLink></li>
+          <li><NavLink to="/students">{ t('header.applicants')}</NavLink></li>
+          <li><NavLink to="/schedule">{ t('header.schedule')}</NavLink></li>
         </ul>
     </nav>
     <div className="language-header right">
-      <img src={`${baseUrl}img/flags/uk.png`} alt="Українська" />
-      <img src={`${baseUrl}img/flags/en.png`} alt="Англійська" />
+      <img src={`${baseUrl}img/flags/uk.png`} alt="Українська" onClick={() => i18n.changeLanguage('uk') } />
+      <img src={`${baseUrl}img/flags/en.png`} alt="Англійська" onClick={() => i18n.changeLanguage('en') } />
     </div>
   </header>
 }
 
 function Footer() {
+  const {t, i18n} = useTranslation();
   return <footer>          
-    <span>© 2025 ВНАУ. Інформація може оновлюватися. Актуальні дані уточнюйте в приймальній комісії</span>        
-    <span>Cтворено з <FontAwesomeIcon icon={faHeart} /> для студентів. <NavLink to="/developers">Команда розробників</NavLink></span>                        
+    <span>{ t('footer.info')}</span>        
+    <span>{ t('footer.created_pt1') } <FontAwesomeIcon icon={faHeart} /> { t('footer.created_pt2') } 
+    <NavLink to="/developers">{ t('footer.devs_link')}</NavLink></span>                        
   </footer>
 }
 

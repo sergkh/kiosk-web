@@ -20,5 +20,11 @@ header .language-header {
 
 header .logo-vnau-header {
   display: flex;
+  align-items: center;
   gap: 0.5em;
+}
+
+header .logo-vnau-header img {
+  height: 46px;
+  width: auto;
 }

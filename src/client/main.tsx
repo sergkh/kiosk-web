@@ -9,6 +9,8 @@ import StudentInfoPage from "./pages/StudentInfoPage.tsx";
 import Page from "./Page.tsx";
 import DevelopersPage from "./pages/DevelopersPage.tsx";
 import ErrorBoundary from "./pages/ErrorBoundary.tsx";
+// needed for i18n to work
+import i18n from "./lib/locale.ts";
 
 const router = createBrowserRouter([
   {

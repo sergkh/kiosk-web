@@ -1,7 +1,13 @@
 import type { Faculty, MkrApiDictionary, MkrEvent, MkrGroup } from "../../shared/models";
+// @ts-ignore We have no types for js-cache
+import cache from "js-cache";
 
-// TODO: move to config
 const API_URL = import.meta.env.VITE_MKR_API_URL || 'https://mkr.sergkh.com';
+
+const localCache = new cache.Cache({
+  max: 100,
+  ttl: 1000 * 60 * 60 // 1 hour
+});
 
 // TODO: Add more faculties
 const facultyImages: Map<string, string> = new Map([
@@ -14,15 +20,22 @@ const facultyImages: Map<string, string> = new Map([
 ]);
 
 async function getFaculties(): Promise<Faculty[]> {
+  const cached = localCache.get('faculties');
+  
+  if (cached) return cached as Faculty[];
+
   const facultiesResp = await fetch(`${API_URL}/structures/0/faculties`)
   const faculties: [MkrApiDictionary] = await facultiesResp.json()
   
+  // Show only faculties with images
   const facultiesWithImages = faculties
     .filter((f) => facultyImages.has(f.id))
     .map((faculty: MkrApiDictionary) => {
       return ({...faculty, image: facultyImages.get(faculty.id)}) as Faculty;
     });
   
+  localCache.set('faculties', facultiesWithImages);
+
   return facultiesWithImages;
 }
 

@@ -1,9 +1,23 @@
 import { useEffect, useState } from "react";
 import type { Article } from "../../shared/models";
 import './News.css';
+// @ts-ignore We have no types for js-cache
+import cache from "js-cache";
+
+const localNewsCache = new cache.Cache({
+  max: 1,
+  ttl: 1000 * 60 * 60 // 1 hour
+});
 
 async function fetchNews(): Promise<Article[]> {
-  return fetch('/news').then(r => r.json())
+  const cached = localNewsCache.get('news');
+  
+  if (cached) return localNewsCache.get('news') as Article[];
+  
+  const result = await fetch('/news')
+  const news = await result.json() as Article[];
+  localNewsCache.set('news', news);
+  return news;
 }
 
 type ArticleProps = {

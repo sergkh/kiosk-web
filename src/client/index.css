@@ -1,7 +1,7 @@
 :root {
   --background: #21332F;
   --foreground: #ffffff;
-  --header-background: #9BB8AF;
+  --header-background: rgba(155,184,175,0.15);
   --footer-background: #333;
   --footer-foreground: #ffffff;
 }
@@ -52,11 +52,23 @@ a {
 }
 
 header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;  
   padding: 16px;
   background-color: var(--header-background);
+}
+
+header .left {
+  justify-self: start;
+}
+
+header .center {
+  justify-self: center;
+}
+
+header .right {
+  justify-self: right;
 }
 
 header nav ul {
@@ -65,20 +77,12 @@ header nav ul {
   gap: 1em;
 }
 
-header .logo-vnau-header {
-  display: flex;
-  gap: 0.5em;
-}
 
 header img {
   width: 32px;
   height: 32px;
 }
 
-header .language-header {
-  display: flex;
-  gap: 0.3em;
-}
 
 footer {
   background-color: var(--footer-background);

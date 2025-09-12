@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import type { StudentInfo } from "../../shared/models";
 import "./StudentInfoPage.css";
 import CardButton from "../components/cards/CardButton";
+import { fetchInfo } from "../lib/studinfo";
 
-async function fetchInfo(): Promise<StudentInfo[]> {
-  return fetch('/student-info').then(r => r.json())
+enum InfoSize {
+  Full = "small",
+  Minimized = "minimized"
 }
 
 function ActiveInfo({info, onClose}: {info: StudentInfo, onClose: () => void}) {
@@ -19,7 +21,7 @@ function ActiveInfo({info, onClose}: {info: StudentInfo, onClose: () => void}) {
   );
 }
 
-function InfosList({cards, onSelect}: {cards: StudentInfo[], onSelect: (info: StudentInfo) => void}) {
+function InfosList({cards, size, onSelect}: {cards: StudentInfo[], size: InfoSize, onSelect: (info: StudentInfo) => void}) {
   return <div className="student-info-cards">
   {
     cards.map((info) => (
@@ -40,10 +42,10 @@ function StudentInfoPage() {
   return (
     <div>
       <h1>Абітурієнтам</h1>
+      <InfosList cards={cards} onSelect={setActiveInfo} size={activeInfo == null ? InfoSize.Full : InfoSize.Minimized}/>
+
       {
-        activeInfo ? 
-        <ActiveInfo info={activeInfo} onClose={() => setActiveInfo(null)} /> : 
-        <InfosList cards={cards} onSelect={setActiveInfo}/>    
+        activeInfo ? <ActiveInfo info={activeInfo} onClose={() => setActiveInfo(null)} /> : <></>        
       }      
     </div>
   );

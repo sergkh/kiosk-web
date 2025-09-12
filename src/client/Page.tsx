@@ -6,18 +6,18 @@ import './Page.css'
 
 function Header() {
   return <header>
-    <div className="logo-vnau-header">
+    <div className="logo-vnau-header left">
         <img src="/img/logo.png" alt="Логотип ВНАУ|Logo VNAU"/>
         <span className="vnau">Вінницький національний <br/> аграрний університет</span>
     </div>
-    <nav>
+    <nav className="center">
         <ul>
           <li><NavLink to="/">Головна</NavLink></li>
           <li><NavLink to="/students">Студентам</NavLink></li>
           <li><NavLink to="/schedule">Розклад</NavLink></li>
         </ul>
     </nav>
-    <div className="language-header">
+    <div className="language-header right">
       <img src="/img/flags/uk.png" alt="Українська" />
       <img src="/img/flags/en.png" alt="Англійська" />
     </div>

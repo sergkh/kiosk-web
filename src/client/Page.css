@@ -9,6 +9,16 @@ header nav li a {
   transition: background-color 0.2s ease;
 }
 
-.active {
+header nav .active {
   background-color: #005b02; /* darker blue */
+}
+
+header .language-header {
+  display: flex;
+  gap: 0.3em;
+}
+
+header .logo-vnau-header {
+  display: flex;
+  gap: 0.5em;
 }

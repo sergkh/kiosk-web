@@ -1,0 +1,5 @@
+Dockerfile
+.DS_Store
+.env
+bun.lockb
+README.md

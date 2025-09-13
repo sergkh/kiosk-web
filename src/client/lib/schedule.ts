@@ -1,4 +1,4 @@
-import type { Faculty, MkrApiDictionary, MkrEvent, MkrGroup } from "../../shared/models";
+import type { Faculty, LessonTime, MkrApiDictionary, MkrEvent, MkrGroup } from "../../shared/models";
 // @ts-ignore We have no types for js-cache
 import cache from "js-cache";
 
@@ -84,5 +84,19 @@ function getCourseName(course: number): string {
   return course < 6 ? `${course}-й курс` : course === 6 ? 'Магістратура' : 'Магістратура (2й рік)';
 }
 
+const lessonHours: Array<LessonTime> = [
+    { time: "8:00",  end: "9:20", name: '1 Пара' },
+    { time: "9:30",  end: "10:50", name: '2 Пара' },
+    { time: "11:30", end: "12:50", name: '3 Пара' },
+    { time: "13:10", end: "14:30", name: '4 Пара' },
+    { time: "14:40", end: "16:00", name: '5 Пара' },
+    { time: "16:10", end: "17:30", name: '6 Пара' },
+    { time: "17:40", end: "19:00", name: '7 Пара' },
+    { time: "19:30", end: "20:50", name: '8 Пара' },
+  ]
 
-export { getFaculties, getFacutlyGroups, getGroupSchedule, getCourseName };
+function getLessonHours(): Array<LessonTime> {
+  return lessonHours;
+}
+
+export { getFaculties, getFacutlyGroups, getGroupSchedule, getCourseName, getLessonHours };

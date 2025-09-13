@@ -15,6 +15,15 @@ const resources = {
         created_pt1: "Created with",
         created_pt2: "for students. ",
         devs_link: "Development Team"
+      },
+      schedule: {
+        day_0: "Sun",
+        day_1: "Mon",
+        day_2: "Tue",
+        day_3: "Wed",
+        day_4: "Thu",
+        day_5: "Fri",
+        day_6: "Sat",
       }
     }
   },
@@ -31,6 +40,15 @@ const resources = {
         created_pt1: "Створено з ",
         created_pt2: " для студентів. ",
         devs_link: "Команда розробників"
+      },
+      schedule: {
+        day_0: "Нд",
+        day_1: "Пн",
+        day_2: "Вт",
+        day_3: "Ср",
+        day_4: "Чт",
+        day_5: "Пт",
+        day_6: "Сб",
       }
     }
   }

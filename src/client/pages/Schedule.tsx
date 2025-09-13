@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Faculty, MkrEvent, MkrGroup } from "../../shared/models";
 import './Schedule.css';
-import { getFacutlyGroups, getFaculties, getGroupSchedule, getCourseName } from "../lib/schedule";
+import { getFacutlyGroups, getFaculties, getGroupSchedule, getCourseName, getLessonHours } from "../lib/schedule";
 import CardButton, { CardSize } from "../components/cards/CardButton";
 import GroupSchedule from "../components/GroupSchedule";
 
@@ -10,6 +10,8 @@ type FacultiesListProps = {
   active?: Faculty | null,
   onSelect: (faculty: Faculty) => void
 };
+
+const lessonHours = getLessonHours();
 
 function FacultiesList({ faculties, active, onSelect }: FacultiesListProps) {
   const size = active == null ? CardSize.Full : CardSize.Minimized;
@@ -107,7 +109,7 @@ function FacultyGroups({ faculty, onBack }: { faculty: Faculty, onBack?: () => v
         }
 
         {
-          currentSchedule ? <GroupSchedule schedule={currentSchedule} /> : <></>
+          currentSchedule ? <GroupSchedule schedule={currentSchedule} lessonHours={lessonHours} /> : <></>
         }
       </div>
     </div>

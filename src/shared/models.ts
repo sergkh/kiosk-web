@@ -30,6 +30,12 @@ export type MkrGroup = {
   course: number;
 }
 
+export type LessonTime = {
+  time: string;
+  end: string;
+  name: string;
+}
+
 export type MkrEvent = {
   name: string,
   place: string,

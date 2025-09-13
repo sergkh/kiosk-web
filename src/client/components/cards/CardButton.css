@@ -1,25 +1,60 @@
 .info-card {
-  background: var(--card-bg);
+  background: rgba(162, 123, 92, 0.2);
   border-radius: 18px;
   padding: 32px 24px;
   text-align: center;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
-  border:  1px solid rgba(255,255,255,0.18);
   backdrop-filter: blur(12px);  
-  max-width: 400px;
+  width: 350px;
+  min-height: 400px;
+  max-width: 350px;
+  max-height: 400px;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start; 
+}
+
+.info-card.minimized {
+  padding: 32px 12px;
+  width: 250px;
+  min-height: 60px;
+  max-height: 80px;
+  flex-direction: row;
+}
+
+.info-card.micro {
+  padding: 14px 12px;
+  width: 150px;
+  min-height: 40px;
+  max-height: 40px;
+  flex-direction: row;
+  background: none;
+  font-size: 0.9em;
+}
+
+.info-card.active {
+  background: rgba(162, 123, 92, 0.8);
 }
 
 .info-card h3 {
   font-size: 1.18em;
   font-weight: 700;
   color: #5ed96b;
-  margin-bottom: 10px;
   letter-spacing: 0.5px;
 }
 
 .info-card img {
-  max-width: 90%;
+  max-width: 80%;
   height: auto;  
+  margin-bottom: 1.5em;
+}
+
+.info-card.minimized img {
+  max-width: 50px;
+  height: 50px;
+  margin-bottom: 0;
 }

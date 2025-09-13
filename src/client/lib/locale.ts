@@ -1,13 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-declare module 'i18next' {
-  interface CustomTypeOptions {
-    returnNull: false
-  }
-}
-
-// Use <Trans>key</Trans> for translation in components
 const resources = {
   en: {
     translation: {
@@ -49,8 +42,7 @@ i18n
     resources,
     lng: "uk",
     fallbackLng: "uk",
-    interpolation: { escapeValue: false },
-    returnNull: false
+    interpolation: { escapeValue: false }
   });
 
 export default i18n;

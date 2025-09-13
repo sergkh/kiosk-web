@@ -109,8 +109,8 @@ main {
   padding: 1em;
 }
 
-main h1 {
-  margin-bottom: 1em;
+main>div>h1 {
+  margin-bottom: 0.8em;
   display: flex;
   justify-content: center;
 }

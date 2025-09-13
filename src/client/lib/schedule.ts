@@ -32,6 +32,8 @@ async function getFaculties(): Promise<Faculty[]> {
   const facultiesWithImages = faculties
     .filter((f) => facultyImages.has(f.id))
     .map((faculty: MkrApiDictionary) => {
+      // dirty hack to fix IT faculty name to fit into the layout
+      faculty.name = faculty.name.replace('інформаційних технологій', 'ІТ');
       return ({...faculty, image: facultyImages.get(faculty.id)}) as Faculty;
     });
   
@@ -41,6 +43,9 @@ async function getFaculties(): Promise<Faculty[]> {
 }
 
 async function getFacutlyGroups(facultyId: string): Promise<Map<number, MkrGroup[]>> {
+    const cached = localCache.get(`faculty-${facultyId}-groups`);
+    if (cached) return cached as Map<number, MkrGroup[]>;
+
     const resp = await fetch(`https://mkr.sergkh.com/structures/0/faculties/${facultyId}/groups`);
       
     if (!resp.ok) {
@@ -62,6 +67,8 @@ async function getFacutlyGroups(facultyId: string): Promise<Map<number, MkrGroup
       groups.sort((a, b) => a.name.localeCompare(b.name));
     });
 
+    localCache.set(`faculty-${facultyId}-groups`, groupsByCourse);
+
     return groupsByCourse;
 }
 
@@ -73,4 +80,9 @@ async function getGroupSchedule(facultyId: string, course: number, groupId: stri
   return await resp.json() as MkrEvent[];
 }
 
-export { getFaculties, getFacutlyGroups, getGroupSchedule };
+function getCourseName(course: number): string {
+  return course < 6 ? `${course}-й курс` : course === 6 ? 'Магістратура' : 'Магістратура (2й рік)';
+}
+
+
+export { getFaculties, getFacutlyGroups, getGroupSchedule, getCourseName };

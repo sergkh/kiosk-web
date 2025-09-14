@@ -1,16 +1,9 @@
 :root {
   --background: #21332F;
-  --foreground: #ffffff;
+  --foreground: rgba(255,255,255, 0.85);
   --header-background: rgba(155,184,175,0.15);
   --footer-background: #333;
   --footer-foreground: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 html,

@@ -73,11 +73,18 @@ async function getFacutlyGroups(facultyId: string): Promise<Map<number, MkrGroup
 }
 
 async function getGroupSchedule(facultyId: string, course: number, groupId: string): Promise<MkrEvent[]> {
+  const cached = localCache.get(`faculty-${facultyId}-course-${course}-group-${groupId}-schedule`);
+  if (cached) return cached as MkrEvent[];
+
   const resp = await fetch(`${API_URL}/structures/0/faculties/${facultyId}/courses/${course}/groups/${groupId}/schedule`);
   if (!resp.ok) {
     throw new Error(`Failed to fetch schedule for group ${groupId}`);
   }
-  return await resp.json() as MkrEvent[];
+
+  const data = await resp.json() as MkrEvent[];
+  localCache.set(`faculty-${facultyId}-course-${course}-group-${groupId}-schedule`, data);
+  
+  return data;
 }
 
 function getCourseName(course: number): string {

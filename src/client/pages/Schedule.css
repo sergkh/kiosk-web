@@ -1,3 +1,7 @@
+.schedule-page {
+  height: 100%;
+}
+
 .faculties {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, auto));

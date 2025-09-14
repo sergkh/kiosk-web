@@ -3,7 +3,7 @@ import type { LessonTime, MkrEvent } from "../../shared/models";
 import './GroupSchedule.css'
 import { useTranslation } from "react-i18next";
 
-const daysToShow = 3;
+const daysToShow = import.meta.env.VITE_SCHEDULE_DAYS_TO_SHOW ? parseInt(import.meta.env.VITE_SCHEDULE_DAYS_TO_SHOW) : 3;
 
 function GroupSchedule({ schedule, lessonHours }: { schedule: MkrEvent[], lessonHours: LessonTime[] }) {
   const {t} = useTranslation();

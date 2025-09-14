@@ -4,6 +4,8 @@ import './Schedule.css';
 import { getFacutlyGroups, getFaculties, getGroupSchedule, getCourseName, getLessonHours } from "../lib/schedule";
 import CardButton, { CardSize } from "../components/cards/CardButton";
 import GroupSchedule from "../components/GroupSchedule";
+import { Loader } from "../components/Loader";
+import { ErrorOverlay } from "../components/ErrorOverlay";
 
 type FacultiesListProps = {
   faculties: Faculty[],
@@ -33,35 +35,54 @@ function FacultiesList({ faculties, active, onSelect }: FacultiesListProps) {
   </>
 }
 
-function FacultyGroups({ faculty, onBack }: { faculty: Faculty, onBack?: () => void }) {
+function FacultyGroups({ faculty }: { faculty: Faculty}) {
   const [loading, setLoading] = useState<boolean>(true);
   const [groups, setGroups] = useState<Map<number, MkrGroup[]> | null>(null);
   const [activeCourse, setActiveCourse] = useState<number | null>(null);
   const [courseGroups, setCourseGroups] = useState<MkrGroup[] | null>(null);
   const [currentGroup, setCurrentGroup] = useState<MkrGroup | null>(null);
   const [currentSchedule, setCurrentSchedule] = useState<MkrEvent[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
+    setError(null);
     setLoading(true);
     
     getFacutlyGroups(faculty.id).then(t => {
       setGroups(t);
       setLoading(false);
-    }).catch(console.error);
+    }).catch(e => {
+      setLoading(false);
+      console.error(e);
+      setCurrentSchedule(null);
+      setError(`Не вдалося завантажити розклад`);
+    });
 
   }, [faculty]);
 
   useEffect(() => {
-    setCurrentSchedule(null);
+    setCurrentSchedule(null);    
+    setError(null);
 
     if (currentGroup) {
+      setLoading(true);
       getGroupSchedule(faculty.id, currentGroup.course, currentGroup.id).then(schedule => {
+        setLoading(false);
         setCurrentSchedule(schedule);
-      }).catch(console.error);
+      }).catch(e => {
+        setLoading(false);
+        console.error(e);
+        setCurrentSchedule(null);
+        setError(`Не вдалося завантажити розклад`);
+      });
+    } else {
+      setLoading(false);
     }
   }, [currentGroup]);
 
   useEffect(() => {
+    console.log('Active course changed:', activeCourse);
+    setError(null);
     if (activeCourse !== null && groups) {
       setCourseGroups(groups.get(activeCourse) || null);
       setCurrentGroup(null);
@@ -85,9 +106,7 @@ function FacultyGroups({ faculty, onBack }: { faculty: Faculty, onBack?: () => v
               })
             }
           </div>
-        ) : (
-          loading ? <p>Завантаження груп...</p> : <p>Немає даних</p>
-        )
+        ) : <></>
       }
       <div className="groups-schedule">
   {
@@ -108,8 +127,12 @@ function FacultyGroups({ faculty, onBack }: { faculty: Faculty, onBack?: () => v
           ) : <></>
         }
 
+        <ErrorOverlay error={error} />        
+
+        { loading ? <Loader /> : <></>}
+
         {
-          currentSchedule ? <GroupSchedule schedule={currentSchedule} lessonHours={lessonHours} /> : <></>
+          currentSchedule != null ? <GroupSchedule schedule={currentSchedule} lessonHours={lessonHours} /> : <></>
         }
       </div>
     </div>
@@ -118,20 +141,25 @@ function FacultyGroups({ faculty, onBack }: { faculty: Faculty, onBack?: () => v
 
 function Schedule() {
   const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
 
   useEffect(() => {
-    getFaculties().then(setFaculties).catch(console.error);
+    setLoading(true);
+    getFaculties().then((f) => {
+      setFaculties(f);
+      setLoading(false);
+    }).catch(console.error);
   }, []);
 
   return (
-    <div>
+    <div className="schedule-page">
       {selectedFaculty == null ? <h1>Розклад занять</h1> : <></> }
       
-      <FacultiesList faculties={faculties} active={selectedFaculty} onSelect={setSelectedFaculty} />
-      
+      {loading ? <Loader /> : <></>}
+      <FacultiesList faculties={faculties} active={selectedFaculty} onSelect={setSelectedFaculty} />      
       {
-        selectedFaculty != null ? <FacultyGroups faculty={selectedFaculty} onBack={() => setSelectedFaculty(null)} /> : <></>
+        selectedFaculty != null ? <FacultyGroups faculty={selectedFaculty} /> : <></>
       }
 
     </div>

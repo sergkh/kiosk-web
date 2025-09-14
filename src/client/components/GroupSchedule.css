@@ -57,7 +57,7 @@
   left: 110px;
   right: 0;
   bottom: 100px;
-  background-image: repeating-linear-gradient(to bottom, transparent, transparent 82px, rgba(221,221,221,0.5) 83px /* thin line every 82px */);
+  background-image: repeating-linear-gradient(to bottom, transparent, transparent 82px, rgba(200,200,200,0.3) 83px /* thin line every 82px */);
   pointer-events: none;
   z-index: 0;
 }
@@ -67,6 +67,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
 }
 
 .schedule .hour span.time {
@@ -75,5 +76,5 @@
   top: 0px;
   font-size: 0.9em;
   transform: translateY(-50%);
-  
+  font-weight: 100;
 }

@@ -1,5 +1,5 @@
 .info-card {
-  background: rgba(162, 123, 92, 0.2);
+  background: var(--cards-backround);
   border-radius: 18px;
   padding: 32px 24px;
   text-align: center;
@@ -37,13 +37,12 @@
 }
 
 .info-card.active {
-  background: rgba(162, 123, 92, 0.8);
+  background: var(--cards-backround-active);
 }
 
 .info-card h3 {
-  font-size: 1.18em;
   font-weight: 700;
-  color: #5ed96b;
+  color: var(--cards-primary);
   letter-spacing: 0.5px;
 }
 

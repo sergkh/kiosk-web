@@ -5,21 +5,21 @@
 .faculties {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, auto));
-  gap: 32px;
-  padding-top: 1em;
+  gap: 2em;
+  padding: 1em;
 }
 
 .faculties.minimized {
   display: flex;
-  gap: 16px;
+  gap: 1em;
   flex-direction: row;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none; 
-  padding-left: 12px; /** To avoid cutting a shadow */
-  padding-bottom: 18px; /** To avoid cutting a shadow */  
+  padding: 1em; /** To avoid cutting a shadow */  
   scroll-snap-type: x mandatory;
 }
+
 
 .courses {
   display: flex;

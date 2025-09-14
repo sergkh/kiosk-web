@@ -1,13 +1,25 @@
 import express from "express";
 import admin, { type ServiceAccount } from "firebase-admin";
-
+import fs from "fs";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 import config from "./config";
-import serviceAccount from "./serviceAccount.json" with { type: "json" };
 import { authorized } from "./auth";
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as ServiceAccount),
-});
+const dir = dirname(fileURLToPath(import.meta.url))
+const accountFile = ['/app/data/serviceAccount.json', resolve(dir, './serviceAccount.json')].find(fs.existsSync)
+
+console.log(`Using service account from ${accountFile}`)
+
+if (!accountFile) {
+  console.warn("Service account file not found. Please provide a valid service account JSON file for Admin page to work.");
+} else {
+  const serviceAccount = JSON.parse(fs.readFileSync(accountFile, 'utf8')) as ServiceAccount
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
 
 const api = express.Router();
 

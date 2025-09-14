@@ -26,7 +26,7 @@ function News() {
   }, []);
 
   return (
-    <div>
+    <div className="news-page">
       { 
         news.map((article, index) => (
           <NewsArticle key={index} article={article} />

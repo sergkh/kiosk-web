@@ -7,7 +7,8 @@
 .student-info-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, auto));
-  gap: 32px;  
+  gap: 2em;
+  padding: 1em;
   flex: 1; 
 }
 
@@ -25,6 +26,7 @@
 
 .active-info {
   position: relative;
+  padding: 0em 2em;
 }
 
 .active-info section {
@@ -41,6 +43,6 @@
 .active-info .close-button {
   position: absolute;
   top: 1em;
-  right: 0;
+  right: 1em;
   cursor: pointer;
 }

@@ -1,7 +1,7 @@
 header nav li a {
   display: inline-block;
   padding: 0.9rem 1.2rem;
-  background-color: #018804;
+  background-color: var(--main-btn-background);
   color: white;
   border-radius: 16px;
   text-decoration: none;

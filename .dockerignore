@@ -3,3 +3,4 @@ Dockerfile
 .env
 bun.lockb
 README.md
+serviceAccount.json

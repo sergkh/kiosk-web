@@ -32,7 +32,7 @@ export const studentInfo = [
     }
   ] as StudentInfo[];
 
-async function getNewsData() {
+export async function getNewsData() {
   try {
     const scrapedNews = await parseNews();
     return scrapedNews;
@@ -42,4 +42,3 @@ async function getNewsData() {
   }
 }
 
-export const newsData = getNewsData();

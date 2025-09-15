@@ -22,7 +22,7 @@ function Header() {
         </ul>
     </nav>
    <div className="language-header right switch">
-      <input id="language-toggle" className="check-toggle check-toggle-round-flat" type="checkbox" />
+      <input id="language-toggle" className="check-toggle check-toggle-round-flat" type="checkbox" onClick={(evt) => i18n.changeLanguage(i18n.language === 'uk' ? 'en' : 'uk')} />
       <label htmlFor="language-toggle"></label>
 	    <span className="on" onClick={() => i18n.changeLanguage('uk') } >UA</span>
 	    <span className="off" onClick={() => i18n.changeLanguage('en') } >EN</span>

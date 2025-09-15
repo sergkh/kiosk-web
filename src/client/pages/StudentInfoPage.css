@@ -22,6 +22,7 @@
   padding-left: 12px; /** To avoid cutting a shadow */
   padding-bottom: 18px; /** To avoid cutting a shadow */  
   scroll-snap-type: x mandatory;
+  scroll-padding-left: 12px;
 }
 
 .active-info {

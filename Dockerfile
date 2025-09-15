@@ -2,11 +2,11 @@ FROM node:20 AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
-ENV VITE_BASE_URL=/kiosk-web/
+ENV VITE_BASE_URL=./
 COPY . .
 RUN npm run build
 
-FROM node:17 AS runner
+FROM node:20 AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 EXPOSE 3000

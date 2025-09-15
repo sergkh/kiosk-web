@@ -17,10 +17,15 @@ function Header() {
           <li><NavLink to="/schedule">Розклад</NavLink></li>
         </ul>
     </nav>
-    <div className="language-header">
-      <img src="/img/flags/uk.png" alt="Українська" />
-      <img src="/img/flags/en.png" alt="Англійська" />
-    </div>
+   <div  className="switch">
+      <input id="language-toggle" className="check-toggle check-toggle-round-flat" type="checkbox" />
+      <label htmlFor="language-toggle"></label>
+	    <span className="on">UA</span>
+	    <span className="off">EN</span>
+  	</div>
+
+
+
   </header>
 }
 

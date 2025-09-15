@@ -1,10 +1,28 @@
 .article {
-  margin: 20px;
-  padding: 20px;
+  margin: 3em;
+  padding: 2em;
+  justify-content: center;
+  align-items: center;
+  background-color: #89a098;
+  border-radius: 18px;
+  font-size: 1.2em;
 }
 
 .article img {
-  max-width: 400px;
+  max-width: 800px;
   height: auto;
-  border-radius: 8px;
+  border-radius: 20px;
+}
+
+
+
+.news-h1 {
+  text-align: center;
+}
+
+.news-content {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  gap: 2em;
 }

@@ -21,10 +21,12 @@ function Header() {
           <li><NavLink to="/schedule">{ t('header.schedule')}</NavLink></li>
         </ul>
     </nav>
-    <div className="language-header right">
-      <img src={`${baseUrl}img/flags/uk.png`} alt="Українська" onClick={() => i18n.changeLanguage('uk') } />
-      <img src={`${baseUrl}img/flags/en.png`} alt="Англійська" onClick={() => i18n.changeLanguage('en') } />
-    </div>
+   <div className="language-header right switch">
+      <input id="language-toggle" className="check-toggle check-toggle-round-flat" type="checkbox" />
+      <label htmlFor="language-toggle"></label>
+	    <span className="on" onClick={() => i18n.changeLanguage('uk') } >UA</span>
+	    <span className="off" onClick={() => i18n.changeLanguage('en') } >EN</span>
+  	</div>
   </header>
 }
 

@@ -1,0 +1,80 @@
+/* commissioner-latin-wght-normal */
+@font-face {
+  font-family: 'Commissioner Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/commissioner:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+.schedule {  
+  padding-top: 1em;
+  margin-left: 1em;
+  display: grid;
+  grid-template-columns: 110px repeat(var(--days), 1fr); /* first column = hours */
+  grid-template-rows: 110px repeat(10, 80px); /* header + time slots */
+  position: relative;
+  gap: 3px;
+}
+
+.schedule .day {
+  font-family: 'Commissioner Variable', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 400px;
+  align-items: center;
+}
+
+.schedule .lesson {
+  background-color: rgba(76,175,80,1.0);
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  padding: 6px;
+}
+
+.schedule .lesson.passed {
+  opacity: 0.5;
+}
+
+.schedule .lesson.ls-lection,.schedule .lesson.ls-lection_in_absentia {
+  background-color: rgba(255, 229, 121, 0.9);
+}
+
+.schedule .lesson.ls-practice,.schedule .lesson.ls-practice_in_absentia {
+  background-color: rgba(76,175,80,0.9);
+}
+
+.schedule .lesson.ls-exam {
+  background-color: rgba(0, 208, 198, 0.9);
+}
+
+.time-lines {
+  position: absolute;
+  top: 45px;
+  left: 110px;
+  right: 0;
+  bottom: 100px;
+  background-image: repeating-linear-gradient(to bottom, transparent, transparent 82px, rgba(200,200,200,0.3) 83px /* thin line every 82px */);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.schedule .hour {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.schedule .hour span.time {
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  font-size: 0.9em;
+  transform: translateY(-50%);
+  font-weight: 100;
+}

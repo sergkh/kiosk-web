@@ -18,7 +18,9 @@ const router = createBrowserRouter([
     path: "/admin/login",
     element: <Login />,
   }
-]);
+], {
+  basename: import.meta.env.VITE_BASE_URL
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

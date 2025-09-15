@@ -1,8 +1,8 @@
 export type Article = {
   title: string,
-  image: string,
-  content: string,
-  date: string
+  link: string,
+  image?: string,
+  content: string
 };
 
 export type Faculty = {
@@ -28,6 +28,12 @@ export type MkrGroup = {
   id: string;
   name: string;
   course: number;
+}
+
+export type LessonTime = {
+  time: string;
+  end: string;
+  name: string;
 }
 
 export type MkrEvent = {

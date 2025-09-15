@@ -1,142 +1,167 @@
 import { useEffect, useState } from "react";
 import type { Faculty, MkrEvent, MkrGroup } from "../../shared/models";
 import './Schedule.css';
-import { getFacutlyGroups, getFaculties, getGroupSchedule } from "../lib/schedule";
-import dayjs from "dayjs";
-import CardButton from "../components/cards/CardButton";
+import { getFacutlyGroups, getFaculties, getGroupSchedule, getCourseName, getLessonHours } from "../lib/schedule";
+import CardButton, { CardSize } from "../components/cards/CardButton";
+import GroupSchedule from "../components/GroupSchedule";
+import { Loader } from "../components/Loader";
+import { ErrorOverlay } from "../components/ErrorOverlay";
 
-function CourseButton({course, onClick}: {course: number, onClick: () => void}) {
-  const name = course < 6 ? `${course}-й курс` : course === 6 ? 'Магістратура' : 'Магістратура (2й рік)';
-  return (
-    <CardButton title={name} onClick={onClick}/>
-  );
-}
+type FacultiesListProps = {
+  faculties: Faculty[],
+  active?: Faculty | null,
+  onSelect: (faculty: Faculty) => void
+};
 
-function FacultiesList({ faculties, onSelect }: { faculties: Faculty[], onSelect: (faculty: Faculty) => void }) {
+const lessonHours = getLessonHours();
+
+function FacultiesList({ faculties, active, onSelect }: FacultiesListProps) {
+  const size = active == null ? CardSize.Full : CardSize.Minimized;
   return <>
-    <div className="faculties">
+    <div className={"faculties" + (size === CardSize.Minimized ? " minimized" : "")}>
       {
         faculties.map((faculty) => (
-          <CardButton key={faculty.id} title={faculty.name} image={faculty.image} onClick={() => onSelect(faculty)} />
+          <CardButton 
+            key={faculty.id} 
+            title={faculty.name}
+            active={faculty.id === active?.id}
+            size={size}
+            image={faculty.image} 
+            onClick={() => onSelect(faculty)} 
+          />
         ))
       }
     </div>
   </>
 }
 
-function GroupSchedule({ schedule }: { schedule: MkrEvent[] }) {
-  return (
-    <div>
-      {
-        schedule.length > 0 ? (
-          <ul>
-            {schedule.map((event, index) => (
-              <li key={index}>
-                {dayjs(event.start).format('HH:mm')} / {dayjs(event.end).format('HH:mm')} <strong>{event.name}</strong> {event.place}
-              </li>
-            ))}
-          </ul>
-        ) : <></>
-      }    
-    </div>
-  );
-}
-
-function FacultyGroups({ faculty, onBack }: { faculty: Faculty, onBack?: () => void }) {
+function FacultyGroups({ faculty }: { faculty: Faculty}) {
   const [loading, setLoading] = useState<boolean>(true);
   const [groups, setGroups] = useState<Map<number, MkrGroup[]> | null>(null);
+  const [activeCourse, setActiveCourse] = useState<number | null>(null);
   const [courseGroups, setCourseGroups] = useState<MkrGroup[] | null>(null);
   const [currentGroup, setCurrentGroup] = useState<MkrGroup | null>(null);
   const [currentSchedule, setCurrentSchedule] = useState<MkrEvent[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
+    setError(null);
     setLoading(true);
     
     getFacutlyGroups(faculty.id).then(t => {
       setGroups(t);
       setLoading(false);
-    }).catch(console.error);
+    }).catch(e => {
+      setLoading(false);
+      console.error(e);
+      setCurrentSchedule(null);
+      setError(`Не вдалося завантажити розклад`);
+    });
 
   }, [faculty]);
 
   useEffect(() => {
-    setCurrentSchedule(null);
+    setCurrentSchedule(null);    
+    setError(null);
 
     if (currentGroup) {
+      setLoading(true);
       getGroupSchedule(faculty.id, currentGroup.course, currentGroup.id).then(schedule => {
+        setLoading(false);
         setCurrentSchedule(schedule);
-      }).catch(console.error);
+      }).catch(e => {
+        setLoading(false);
+        console.error(e);
+        setCurrentSchedule(null);
+        setError(`Не вдалося завантажити розклад`);
+      });
+    } else {
+      setLoading(false);
     }
   }, [currentGroup]);
 
+  useEffect(() => {
+    console.log('Active course changed:', activeCourse);
+    setError(null);
+    if (activeCourse !== null && groups) {
+      setCourseGroups(groups.get(activeCourse) || null);
+      setCurrentGroup(null);
+    }
+  }, [activeCourse, groups]);
+
   return (
     <div>
-      <h2><a onClick={onBack}>←</a> Факультет {faculty.name}. Оберіть групу:</h2>
       {
         groups ? (
           <div className="courses">
             { 
               Array.from(groups.keys()).sort().map((course) => {
-                return <div key={course}>                  
-                  <CourseButton course={course} onClick={ () => {
-                    setCourseGroups(groups.get(course)!);
-                    setCurrentGroup(null);
-                  }} />
-                </div>
+                return <CardButton 
+                  title={getCourseName(course)} 
+                  size={CardSize.Micro} 
+                  key={course}
+                  active={activeCourse === course}
+                  onClick={() => setActiveCourse(course)}
+                />
               })
             }
           </div>
-        ) : (
-          loading ? <p>Завантаження груп...</p> : <p>Немає даних</p>
-        )
-      }
-
-      {
-        courseGroups ? (
-          <div className="groups">
-              {
-                courseGroups.map((group) => (
-                  <div key={group.id}>
-                    <CardButton title={group.name} onClick={() => setCurrentGroup(group)} />
-                  </div>
-                ))
-              }
-          </div>
         ) : <></>
       }
+      <div className="groups-schedule">
+  {
+          courseGroups ? (
+            <div className="groups">
+                {
+                  courseGroups.map((group) => 
+                    <CardButton 
+                        title={group.name} 
+                        size={CardSize.Micro} 
+                        key={group.id}
+                        active={currentGroup?.id === group.id}
+                        onClick={() => setCurrentGroup(group)} 
+                      />
+                  )
+                }
+            </div>
+          ) : <></>
+        }
 
-      {
-        currentSchedule ? <GroupSchedule schedule={currentSchedule} /> : <></>
-      }
+        <ErrorOverlay error={error} />        
+
+        { loading ? <Loader /> : <></>}
+
+        {
+          currentSchedule != null ? <GroupSchedule schedule={currentSchedule} lessonHours={lessonHours} /> : <></>
+        }
+      </div>
     </div>
   );
 }
 
-export function DynamicSchedule({faculties} : {faculties: Faculty[]}) {
-  const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
-
-  return (
-      <div>
-        { 
-          !selectedFaculty ?
-            <FacultiesList faculties={faculties} onSelect={setSelectedFaculty} /> :
-            <FacultyGroups faculty={selectedFaculty} onBack={() => setSelectedFaculty(null)} />        
-        }
-      </div>
-  )
-}
-
 function Schedule() {
   const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
 
   useEffect(() => {
-    getFaculties().then(setFaculties).catch(console.error);
+    setLoading(true);
+    getFaculties().then((f) => {
+      setFaculties(f);
+      setLoading(false);
+    }).catch(console.error);
   }, []);
 
   return (
-    <div>
-      <h1>Розклад занять</h1>
-      <DynamicSchedule faculties={faculties} />
+    <div className="schedule-page">
+      {selectedFaculty == null ? <h1>Розклад занять</h1> : <></> }
+      
+      {loading ? <Loader /> : <></>}
+      <FacultiesList faculties={faculties} active={selectedFaculty} onSelect={setSelectedFaculty} />      
+      {
+        selectedFaculty != null ? <FacultyGroups faculty={selectedFaculty} /> : <></>
+      }
+
     </div>
   );
 }

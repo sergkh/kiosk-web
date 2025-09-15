@@ -1,6 +1,5 @@
 import admin from "firebase-admin";
-import express, { type NextFunction, type Request, type Response } from "express";
-import config from "./config";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Tell Typescript that REquest has a user
 declare module "express-serve-static-core" {

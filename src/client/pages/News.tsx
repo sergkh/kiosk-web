@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Article } from "../../shared/models";
 import './News.css';
-
-async function fetchNews(): Promise<Article[]> {
-  return fetch('/news').then(r => r.json())
-}
+import { fetchNews } from "../lib/news";
 
 type ArticleProps = {
   article: Article

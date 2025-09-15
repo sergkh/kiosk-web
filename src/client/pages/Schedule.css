@@ -1,20 +1,47 @@
-.faculties {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 9fr));
-  gap: 32px;
-  padding-top: 1em;
+.schedule-page {
+  height: 100%;
 }
 
-.courses {
+.faculties {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  gap: 2em;
+  padding: 1em;
+}
+
+.faculties.minimized {
+  display: flex;
+  gap: 1em;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; 
+  padding: 1em; /** To avoid cutting a shadow */  
+  scroll-snap-type: x mandatory;
+}
+
+
+.courses {
+  display: flex;
   gap: 16px;
-  padding-top: 1em;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; 
+  padding-left: 12px; /** To avoid cutting a shadow */
+  scroll-snap-type: x mandatory;
+  justify-content: center;
+}
+
+.groups-schedule {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
 }
 
 .groups {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  padding-top: 1em;
+  gap: 8px;
 }

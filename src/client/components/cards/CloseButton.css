@@ -1,0 +1,9 @@
+.close-button {
+  font-size: 1.7em;
+  background-color: var(--header-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3em;
+  border-radius: 50%;
+}

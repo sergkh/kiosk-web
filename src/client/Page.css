@@ -1,7 +1,7 @@
 header nav li a {
   display: inline-block;
   padding: 0.9rem 1.2rem;
-  background-color: #018804; /* blue */
+  background-color: var(--main-btn-background);
   color: white;
   border-radius: 16px;
   text-decoration: none;
@@ -9,6 +9,22 @@ header nav li a {
   transition: background-color 0.2s ease;
 }
 
-.active {
+header nav .active {
   background-color: #005b02; /* darker blue */
+}
+
+header .language-header {
+  display: flex;
+  gap: 0.3em;
+}
+
+header .logo-vnau-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+header .logo-vnau-header img {
+  height: 46px;
+  width: auto;
 }

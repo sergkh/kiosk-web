@@ -1,6 +1,48 @@
+.student-info-page {
+  display: flex;
+  flex-direction: column;
+}
+
+
 .student-info-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 9fr));
-  gap: 32px;
-  padding-top: 1em;
+  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  gap: 2em;
+  padding: 1em;
+  flex: 1; 
+}
+
+.student-info-cards.minimized {
+  display: flex;
+  gap: 16px;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; 
+  padding-left: 12px; /** To avoid cutting a shadow */
+  padding-bottom: 18px; /** To avoid cutting a shadow */  
+  scroll-snap-type: x mandatory;
+}
+
+.active-info {
+  position: relative;
+  padding: 0em 2em;
+}
+
+.active-info section {
+  padding: 1em 2em;
+}
+
+.active-info section h1,.active-info section h2 {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.8em;
+}
+
+.active-info .close-button {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  cursor: pointer;
 }

@@ -1,6 +1,5 @@
 export type Article = {
   title: string,
-  link: string,
   image?: string,
   content: string
 };

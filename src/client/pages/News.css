@@ -4,19 +4,25 @@
 }
 
 .article {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
   margin: 3em;
   padding: 2em;
   justify-content: center;
   align-items: center;
-  background-color: #89a09887;
+  background-color: #9bb8af26;
   border-radius: 20px;
   font-size: 1.2em;
 }
 
 .article img {
-  max-width: 800px;
-  height: auto;
-  border-radius: 20px;
+  float: left;
+  /* max-width: 800px; */
+  /* height: auto; */
+
+  border-radius: 35px;
+  padding: 1em;
 }
 
 
@@ -26,7 +32,7 @@
 }
 
 .news-content {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   max-width: 100%;
   gap: 2em;

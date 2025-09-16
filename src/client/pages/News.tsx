@@ -15,7 +15,7 @@ function NewsArticle({ article }: ArticleProps) {
       </div>
       <div className="news-content">
       <img src={article.image} alt={article.title} />      
-      <p>{article.content}</p>      
+      {article.content}   
       </div>
     </div>
   );

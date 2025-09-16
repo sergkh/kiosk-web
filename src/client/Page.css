@@ -23,6 +23,17 @@ header nav ul {
   border-radius: 99px;
 }
 
+.glider {
+	position: absolute;
+	display: flex;
+	height: 54px;
+	width: 200px;
+	background-color: var(--secondary-color);
+	z-index: 1;
+	border-radius: 99px; 
+	transition: 0.25s ease-out;
+}
+
 header .language-header {
   display: flex;
   gap: 0.3em;

@@ -20,6 +20,7 @@ function Header() {
           <li><NavLink to="/students"><FontAwesomeIcon icon={faGraduationCap} />{ t('header.applicants')}</NavLink></li>
           <li><NavLink to="/schedule"><FontAwesomeIcon icon={faCalendarDays} />{ t('header.schedule')}</NavLink></li>
         </ul>
+        	<span className="glider"></span>
     </nav>
    <div className="language-header right switch">
       <input id="language-toggle" className="check-toggle check-toggle-round-flat" type="checkbox" onClick={(evt) => i18n.changeLanguage(i18n.language === 'uk' ? 'en' : 'uk')} />

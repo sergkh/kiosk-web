@@ -25,8 +25,6 @@ async function loadArticleContents(link: string): Promise<string> {
 }
 
 export async function parseAllNews(): Promise<Article[]> {
-  console.log("Loading articles");
-
   try {
     const response = await fetch(BASE_URL, { headers: { "User-Agent": "Mozilla/5.0" }});
 

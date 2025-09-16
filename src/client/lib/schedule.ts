@@ -1,23 +1,28 @@
 import type { Faculty, LessonTime, MkrApiDictionary, MkrEvent, MkrGroup } from "../../shared/models";
 // @ts-ignore We have no types for js-cache
 import cache from "js-cache";
+import agro from '../assets/faculties/agro.png';
+import ecology from '../assets/faculties/ecology.png';
+import veterinarian from '../assets/faculties/veterinarian.png';
+import economics from '../assets/faculties/economics.png';
+import itf from '../assets/faculties/itf.png';
+import management from '../assets/faculties/management.png';
+import finances from '../assets/faculties/finances.png';
 
 const API_URL = import.meta.env.VITE_MKR_API_URL || 'https://mkr.sergkh.com';
-const baseUrl = import.meta.env.VITE_BASE_URL || '/';
 
 const localCache = new cache.Cache({
   max: 100,
   ttl: 1000 * 60 * 60 // 1 hour
 });
 
-// TODO: Add more faculties
 const facultyImages: Map<string, string> = new Map([
-  ['1',  `${baseUrl}img/faculties/agro.png`],
-  ['5',  `${baseUrl}img/faculties/economics.png`],
-  ['57', `${baseUrl}img/faculties/veterinarian.png`],
-  ['7',  `${baseUrl}img/faculties/itf.png`],
-  ['6',  `${baseUrl}img/faculties/management.png`],
-  ['42', `${baseUrl}img/faculties/finances.png`],
+  ['1',  agro],
+  ['5',  economics],
+  ['57', veterinarian],
+  ['7',  itf],
+  ['6',  management],
+  ['42', finances],
 ]);
 
 async function getFaculties(): Promise<Faculty[]> {

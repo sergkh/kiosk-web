@@ -8,15 +8,16 @@ import TopNav, { type MenuItem } from './components/TopNav';
 import LangSwitch from './components/LangSwitch';
 
 const baseUrl = import.meta.env.VITE_BASE_URL || '/';
+const showStudentInfo = import.meta.env.VITE_SHOW_STUD_INFO !== 'false';
 
 function Header() {
   const {t, i18n} = useTranslation();
 
   const links: MenuItem[] = [
     { path: '/', icon: faNewspaper, label: 'header.main' },
-    { path: '/students', icon: faGraduationCap, label: 'header.applicants' },
+    showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.applicants' } : null,
     { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
-  ]    
+  ].filter(Boolean) as MenuItem[];
 
   return <header>
     <div className="logo-vnau-header left">

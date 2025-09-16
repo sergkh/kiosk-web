@@ -1,12 +1,12 @@
-FROM node:20 AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
-ENV VITE_BASE_URL=./
+ENV VITE_BASE_URL=/
 COPY . .
 RUN npm run build
 
-FROM node:20 AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 EXPOSE 3000

@@ -20,8 +20,6 @@ function TopNav({items, className = ''}: TopNavProps) {
   const location = useLocation();
   const activeIndex = items.findIndex(item => location.pathname === item.path);
 
-  console.log('Active index:', activeIndex, 'Location:', location.pathname);
-
   return (
     <nav className={"top-nav" + (className ? ` ${className}` : '')}>
       <ul>

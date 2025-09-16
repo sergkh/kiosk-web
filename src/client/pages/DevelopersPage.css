@@ -1,0 +1,14 @@
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  gap: 2em;
+  padding: 1em;
+}
+
+.teachers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  gap: 2em;
+  padding: 1em;
+}

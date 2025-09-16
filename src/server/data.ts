@@ -1,6 +1,6 @@
 import type { Article, StudentInfo } from "../shared/models";
 import config from "./config";
-import { parseNews } from "./parser";
+import { parseAllNews } from "./parser";
 
 const baseUrl = config.baseUrl;
 
@@ -418,11 +418,11 @@ export const studentInfo = [
 
 export async function getNewsData() {
   try {
-    const scrapedNews = await parseNews();
+    const scrapedNews = await parseAllNews(); // тільки title, image, content
     return scrapedNews;
   } catch (error) {
     console.error("Помилка при отриманні новин з парсера:", error);
-    return []; 
+    return [];
   }
 }
 

@@ -1,0 +1,44 @@
+nav.top-nav {
+  position: relative;
+  --item-width: 180px;  
+}
+
+nav.top-nav li {  
+  padding: 0.9rem 1.2rem;
+  z-index: 2;
+  width: var(--item-width);
+}
+
+nav.top-nav li a {
+  text-decoration: none;
+  color: var(--foreground);  
+  display: flex;
+  gap: 0.3em;
+  font-weight: 500;
+  align-items: center;
+  justify-content: center;
+}
+
+nav.top-nav a.active {
+  color: var(--background);
+}
+
+nav.top-nav ul {
+  display: flex;
+  list-style: none;
+  padding: 4px;
+  background: var(--background);
+  border-radius: 99px;
+}
+
+.glider {
+	position: absolute;
+  top: 8px;
+  left: 10px;
+	height: 40px;
+	width: calc(var(--item-width) - 4px);
+	background-color: var(--foreground);
+	z-index: 1;
+	border-radius: 99px; 
+	transition: 0.25s ease-out;
+}

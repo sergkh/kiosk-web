@@ -1,39 +1,3 @@
-header nav li a {
-  display: flex;
-  gap: 0.3em;
-  padding: 0.9rem 1.2rem;
-  /* background-color: var(--main-btn-background); */
-  color: white;
-  border-radius: 99px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-}
-
-header nav .active {
-  background-color: #005b0290; /* darker blue */
-}
-
-header nav ul {
-  display: flex;
-  list-style: none;
-  gap: 1em;
-  background: #092f259d;
-  padding: 1em 1em;
-  border-radius: 99px;
-}
-
-.glider {
-	position: absolute;
-	display: flex;
-	height: 54px;
-	width: 200px;
-	background-color: var(--secondary-color);
-	z-index: 1;
-	border-radius: 99px; 
-	transition: 0.25s ease-out;
-}
-
 header .language-header {
   display: flex;
   gap: 0.3em;

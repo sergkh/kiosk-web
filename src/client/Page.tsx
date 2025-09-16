@@ -4,30 +4,31 @@ import { faCalendarDays, faGraduationCap, faHeart, faNewspaper } from '@fortawes
 import { NavLink } from 'react-router'
 import './Page.css'
 import { useTranslation } from 'react-i18next';
+import TopNav, { type MenuItem } from './components/TopNav';
+import LangSwitch from './components/LangSwitch';
 
 const baseUrl = import.meta.env.VITE_BASE_URL || '/';
 
 function Header() {
   const {t, i18n} = useTranslation();
+
+  const links: MenuItem[] = [
+    { path: '/', icon: faNewspaper, label: 'header.main' },
+    { path: '/students', icon: faGraduationCap, label: 'header.applicants' },
+    { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
+  ]    
+
   return <header>
     <div className="logo-vnau-header left">
         <img src={`${baseUrl}img/logo.png`} alt="Логотип ВНАУ|Logo VNAU"/>
         <span className="vnau"> { t('header.title') } </span>
     </div>
-    <nav className="center">
-        <ul>
-          <li><NavLink to="/"> <FontAwesomeIcon icon={faNewspaper} />{ t('header.main')}</NavLink></li>
-          <li><NavLink to="/students"><FontAwesomeIcon icon={faGraduationCap} />{ t('header.applicants')}</NavLink></li>
-          <li><NavLink to="/schedule"><FontAwesomeIcon icon={faCalendarDays} />{ t('header.schedule')}</NavLink></li>
-        </ul>
-        	<span className="glider"></span>
-    </nav>
-   <div className="language-header right switch">
-      <input id="language-toggle" className="check-toggle check-toggle-round-flat" type="checkbox" onClick={(evt) => i18n.changeLanguage(i18n.language === 'uk' ? 'en' : 'uk')} />
-      <label htmlFor="language-toggle"></label>
-	    <span className="on" onClick={() => i18n.changeLanguage('uk') } >UA</span>
-	    <span className="off" onClick={() => i18n.changeLanguage('en') } >EN</span>
-  	</div>
+  
+    <TopNav className="center" items={links} />
+  
+    <div className="right">
+      <LangSwitch/>
+    </div>
   </header>
 }
 

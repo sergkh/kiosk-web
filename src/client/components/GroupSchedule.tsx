@@ -15,7 +15,7 @@ function GroupSchedule({ schedule, lessonHours }: { schedule: MkrEvent[], lesson
   const lessons = schedule.map((event) => {
     const start = dayjs(event.start);
     const dayIndex = displayDays.findIndex(d => d.isSame(start, 'day'));
-    const startHour = lessonHours.findIndex(h => h.time === start.format('HH:mm'));
+    const startHour = lessonHours.findIndex(h => h.time === start.format('H:mm'));
     const passed = dayjs(event.end).add(-10, 'minute').isBefore(dayjs());
 
     return Object.assign({}, event, { day: dayIndex, time: startHour, passed});
@@ -52,12 +52,13 @@ function GroupSchedule({ schedule, lessonHours }: { schedule: MkrEvent[], lesson
           className={"lesson" + (lesson.type ? ` ls-${lesson.type}` : '') + (lesson.passed ? ' passed' : '')}
           style={{
             gridColumn: lesson.day + 2,
-            gridRow: lesson.start,
+            gridRow: lesson.time + 2,
           }}
         >
           <h3>{lesson.name}</h3>
           <h4>{lesson.place}</h4>
           <small>{lesson.teacher ?? ''}</small>
+          <>{ lesson.day} / {lesson.time} </>
         </div>
       ))}
     </div>

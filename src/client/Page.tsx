@@ -1,6 +1,6 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDays, faGraduationCap, faHeart, faNewspaper } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from 'react-router'
 import './Page.css'
 import { useTranslation } from 'react-i18next';
@@ -16,9 +16,9 @@ function Header() {
     </div>
     <nav className="center">
         <ul>
-          <li><NavLink to="/">{ t('header.main')}</NavLink></li>
-          <li><NavLink to="/students">{ t('header.applicants')}</NavLink></li>
-          <li><NavLink to="/schedule">{ t('header.schedule')}</NavLink></li>
+          <li><NavLink to="/"> <FontAwesomeIcon icon={faNewspaper} />{ t('header.main')}</NavLink></li>
+          <li><NavLink to="/students"><FontAwesomeIcon icon={faGraduationCap} />{ t('header.applicants')}</NavLink></li>
+          <li><NavLink to="/schedule"><FontAwesomeIcon icon={faCalendarDays} />{ t('header.schedule')}</NavLink></li>
         </ul>
     </nav>
    <div className="language-header right switch">

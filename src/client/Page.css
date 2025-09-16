@@ -1,16 +1,26 @@
 header nav li a {
-  display: inline-block;
+  display: flex;
+  gap: 0.3em;
   padding: 0.9rem 1.2rem;
-  background-color: var(--main-btn-background);
+  /* background-color: var(--main-btn-background); */
   color: white;
-  border-radius: 16px;
+  border-radius: 99px;
   text-decoration: none;
   font-weight: 500;
   transition: background-color 0.2s ease;
 }
 
 header nav .active {
-  background-color: #005b02; /* darker blue */
+  background-color: #005b0290; /* darker blue */
+}
+
+header nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1em;
+  background: #092f259d;
+  padding: 1em 1em;
+  border-radius: 99px;
 }
 
 header .language-header {

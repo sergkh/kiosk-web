@@ -71,11 +71,6 @@ header .right {
   justify-self: right;
 }
 
-header nav ul {
-  display: flex;
-  list-style: none;
-  gap: 1em;
-}
 
 header img {
   width: 32px;

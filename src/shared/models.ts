@@ -1,16 +1,8 @@
 export type Article = {
   title: string,
-  link: string,
   image?: string,
   content: string
 };
-
-export type ArticleDetails = {
-  title: string;
-  content: string;
-  date?: string;
-  image?: string;
-}
 
 export type Faculty = {
   id: string,

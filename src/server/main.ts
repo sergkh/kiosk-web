@@ -1,8 +1,9 @@
 import express, { type Request, type Response } from "express";
 import ViteExpress from "vite-express";
-import { getNewsData, studentInfo } from "./data";
+import { studentInfo } from "./data";
 import api from "./api";
 import cookieParser from 'cookie-parser';
+import { parseAllNews } from "./parser";
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.get("/student-info", (_, res) => {
 
 app.get("/news", async (req: Request, res: Response) => {
   try {
-    const articles = await getNewsData(); 
+    const articles = await parseAllNews(); 
     res.json(articles);
   } catch (error) {
     console.error("Помилка при відправленні новин:", error);

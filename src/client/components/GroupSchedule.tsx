@@ -58,7 +58,6 @@ function GroupSchedule({ schedule, lessonHours }: { schedule: MkrEvent[], lesson
           <h3>{lesson.name}</h3>
           <h4>{lesson.place}</h4>
           <small>{lesson.teacher ?? ''}</small>
-          <>{ lesson.day} / {lesson.time} </>
         </div>
       ))}
     </div>

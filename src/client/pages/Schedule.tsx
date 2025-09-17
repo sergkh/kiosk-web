@@ -81,7 +81,6 @@ function FacultyGroups({ faculty }: { faculty: Faculty}) {
   }, [currentGroup]);
 
   useEffect(() => {
-    console.log('Active course changed:', activeCourse);
     setError(null);
     if (activeCourse !== null && groups) {
       setCourseGroups(groups.get(activeCourse) || null);

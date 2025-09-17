@@ -11,6 +11,7 @@ import DevelopersPage from "./pages/DevelopersPage.tsx";
 import ErrorBoundary from "./pages/ErrorBoundary.tsx";
 // needed for i18n to work
 import i18n from "./lib/locale.ts";
+import IdlePage from "./pages/IdlePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/developers",
     element: <Page><DevelopersPage /></Page>,
+    errorElement: <ErrorBoundary />
+  },{
+    path: "/idle",
+    element: <IdlePage />,
     errorElement: <ErrorBoundary />
   },
 ], {

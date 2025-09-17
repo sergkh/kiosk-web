@@ -4,6 +4,7 @@ import { faCalendarDays, faGraduationCap, faHeart, faNewspaper } from '@fortawes
 import { NavLink } from 'react-router'
 import './Page.css'
 import { useTranslation } from 'react-i18next';
+import IdleWatcher from './components/IdleWatcher';
 import TopNav, { type MenuItem } from './components/TopNav';
 import LangSwitch from './components/LangSwitch';
 
@@ -46,9 +47,10 @@ function Page({children}: {children?: React.ReactNode}) {
   return (
     <>
       <Header />
-        <main>
-          { children }
-        </main>
+      <IdleWatcher redirectTo="/idle" />
+      <main>
+        { children }
+      </main>
       <Footer />
     </>
   )

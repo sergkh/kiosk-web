@@ -34,9 +34,9 @@ function TopNav({items, className = ''}: TopNavProps) {
           ))
         }
       </ul>
-      <span className="glider" style={{
-        transform: `translateX(${activeIndex * 100}%)`
-      }} />
+      {
+        activeIndex != -1 ? <span className="glider" style={{transform: `translateX(${activeIndex * 100}%)`}} /> : <></>
+      }
     </nav>
   );
 }

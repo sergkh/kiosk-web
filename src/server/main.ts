@@ -1,18 +1,23 @@
 import express, { type Request, type Response } from "express";
 import ViteExpress from "vite-express";
-import { studentInfo } from "./data";
 import api from "./api";
 import cookieParser from 'cookie-parser';
 import { parseAllNews } from "./parser";
+import { getStudentInfo } from "../../data/db.ts";
+
+
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use("/img", express.static("public/img"));
 app.use("/api", api);
 
-app.get("/student-info", (_, res) => {
-  res.json(studentInfo);
+
+app.get("/student-info", async (_, res) => {
+  const data = await getStudentInfo();
+  res.json(data);
 });
 
 app.get("/news", async (req: Request, res: Response) => {

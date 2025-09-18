@@ -6,6 +6,7 @@ import { fetchInfo } from "../lib/studinfo";
 import { motion } from "motion/react";
 import CloseButton from "../components/cards/CloseButton";
 
+
 type CardsListProps = {
   cards: StudentInfo[],
   active?: StudentInfo | null,
@@ -56,6 +57,7 @@ function StudentInfoPage() {
       { (activeInfo == null) ? <h1>Абітурієнтам</h1> : <></> }
 
       <InfosList cards={cards} onSelect={setActiveInfo} active={activeInfo} />
+      {/* <InfosList cards={cards} onSelect={setActiveInfo} active={activeInfo} /> */}
 
       {
         activeInfo ? <ActiveInfo info={activeInfo} onClose={() => setActiveInfo(null)} /> : <></>        

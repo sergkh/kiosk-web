@@ -57,7 +57,6 @@ function StudentInfoPage() {
       { (activeInfo == null) ? <h1>Абітурієнтам</h1> : <></> }
 
       <InfosList cards={cards} onSelect={setActiveInfo} active={activeInfo} />
-      {/* <InfosList cards={cards} onSelect={setActiveInfo} active={activeInfo} /> */}
 
       {
         activeInfo ? <ActiveInfo info={activeInfo} onClose={() => setActiveInfo(null)} /> : <></>        

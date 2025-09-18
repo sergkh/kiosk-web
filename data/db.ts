@@ -31,7 +31,6 @@ const initialCards: StudentInfo[] = [
 
 async function initDb() {
     const newDB = !fs.existsSync("app.db");
-
     const db = await open ({
         filename: "app.db",
         driver: sqlite3.Database,
@@ -39,24 +38,24 @@ async function initDb() {
 
     if (newDB) {
         await db.exec(`
-         CREATE TABLE IF NOT EXISTS students_info (
-            id TEXT PRIMARY KEY,
-            title TEXT NOT NULL,
-            subtitle TEXT NOT NULL,
-            content TEXT NOT NULL,
-            image TEXT NOT NULL
-        ) 
-    `);     
+            CREATE TABLE IF NOT EXISTS students_info (
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                subtitle TEXT NOT NULL,
+                content TEXT NOT NULL,
+                image TEXT NOT NULL
+            ) 
+        `);
+
+        await addStudentsInfo(initialCards, db);     
     }
 
     return db;
 }
 
-async function insertDb(cards: StudentInfo[]) {
-    const db = await initDb();
-
+async function addStudentsInfo(cards: StudentInfo[], database = db) {
         for (const card of cards) {
-            await db.run (`
+            await database.run (`
                 INSERT OR REPLACE  INTO students_info (id, title, subtitle, content, image)
                 VALUES (?, ?, ?, ?, ?)`,
 
@@ -64,25 +63,16 @@ async function insertDb(cards: StudentInfo[]) {
         );
     }
     
-    await db.close()
 };
     
+const db = await initDb();
 
 export async function getStudentInfo(): Promise<StudentInfo[]> {
-    await insertDb(initialCards);
-
-    const db = await initDb();
-
-    const rows = await db.all(`SELECT * FROM students_info`); 
-    await db.close(); 
-
+    const rows = await db.all(`SELECT * FROM students_info`);
     return rows as StudentInfo[]; 
 }
 
 
-export {initDb,
-        insertDb
-};
 
 
     

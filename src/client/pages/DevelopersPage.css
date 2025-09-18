@@ -1,14 +1,58 @@
+.developers-span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1em;
+}
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  display: flex;
+  justify-content: space-around;
   gap: 2em;
-  padding: 1em;
+  padding: 3em;
+  flex-wrap: wrap;
+  border-radius: 22px;
+}
+
+.developer_stydent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  padding: 2em;
+  background-color: #9bb8af26;
+  border-radius: 22px;
+}
+
+.developer_stydent img{
+  width: 150px;
+  height: 150px;
+}
+
+.developer_teachers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  font-size: 1.5em;
+  padding: 2em;
+  background-color: #9bb8af26;
+  border-radius: 22px;
+;
 }
 
 .teachers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  display: flex;
+  justify-content: space-around;
   gap: 2em;
-  padding: 1em;
+  padding: 3em;
+  margin: 4em;
+  flex-wrap: wrap;
+}
+
+
+
+h2 {
+  text-align: center;
 }

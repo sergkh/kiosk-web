@@ -1,9 +1,8 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import fs from "fs";
-import type { StudentInfo } from "../src/shared/models";
-
-
+import type { StudentInfo } from "../shared/models";
+import path from "path"
 
 
 const initialCards: StudentInfo[] = [
@@ -23,16 +22,24 @@ const initialCards: StudentInfo[] = [
         subtitle: "Ознайомтесь з спеціальностями",
         content: `<h1>Загальні положення</h1>
                   <ol><li>Правила прийому до ВНАУ...</li></ol>
-                  <h3>Бла бла бла</h3>`,
+                  <h3>Бла бла бла бла бла бла</h3>`,
         image: "/img/student-info/diamond.png"
     }
 ];
 
 
 async function initDb() {
-    const newDB = !fs.existsSync("app.db");
+    const dbDir = "./data";
+    const dbPath = path.join(dbDir, "app.db");
+
+    
+    if (!fs.existsSync(dbDir)) {
+        fs.mkdirSync(dbDir, { recursive: true });
+    }
+
+    const newDB = !fs.existsSync(dbPath);
     const db = await open ({
-        filename: "app.db",
+        filename: dbPath,
         driver: sqlite3.Database,
     });
 
@@ -53,7 +60,7 @@ async function initDb() {
     return db;
 }
 
-async function addStudentsInfo(cards: StudentInfo[], database = db) {
+async function addStudentsInfo(cards: StudentInfo[], database: any) {
         for (const card of cards) {
             await database.run (`
                 INSERT OR REPLACE  INTO students_info (id, title, subtitle, content, image)

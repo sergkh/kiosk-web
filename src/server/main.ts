@@ -3,7 +3,7 @@ import ViteExpress from "vite-express";
 import api from "./api";
 import cookieParser from 'cookie-parser';
 import { parseAllNews } from "./parser";
-import { getStudentInfo } from "../../data/db.ts";
+import { getStudentInfo } from "./db.ts";
 
 
 

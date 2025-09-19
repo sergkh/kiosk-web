@@ -9,11 +9,13 @@ function IdleWatcher({redirectTo}: {redirectTo: string}) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const videoId = import.meta.env.VITE_IDLE_VIDEO_ID;
 
-  const resetTimer = () => {    
+  const resetTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    timerRef.current = setTimeout(() => navigate(redirectTo), idleTimeout);
+    if (idleTimeout > 0 && videoId) {
+      timerRef.current = setTimeout(() => navigate(redirectTo), idleTimeout);
+    }
   };
 
   useEffect(() => {

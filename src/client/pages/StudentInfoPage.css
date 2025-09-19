@@ -9,7 +9,7 @@
   grid-template-columns: repeat(auto-fit, minmax(320px, auto));
   gap: 2em;
   padding: 1em;
-  flex: 1; 
+  flex: 1;
 }
 
 .student-info-cards.minimized {
@@ -39,6 +39,11 @@
   display: flex;
   justify-content: center;
   margin-bottom: 0.8em;
+}
+
+.active-info hr {
+  margin: 1em auto;
+  width: 60%;
 }
 
 .active-info .close-button {

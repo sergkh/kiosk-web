@@ -3,7 +3,7 @@ import ViteExpress from "vite-express";
 import api from "./api";
 import cookieParser from 'cookie-parser';
 import { parseAllNews } from "./parser";
-import { getStudentInfo } from "./db.ts";
+import cards from "./student_api.ts";
 
 
 
@@ -12,12 +12,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", api);
+app.use(cards);
 
-
-app.get("/student-info", async (_, res) => {
-  const data = await getStudentInfo();
-  res.json(data);
-});
 
 app.get("/news", async (req: Request, res: Response) => {
   try {

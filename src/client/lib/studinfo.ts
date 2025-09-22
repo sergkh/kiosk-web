@@ -11,7 +11,7 @@ async function fetchInfo(): Promise<StudentInfo[]> {
   const cached = localCache.get('student-info');
   if (cached) return cached as StudentInfo[];
   
-  const response = await fetch('student-info');
+  const response = await fetch('/api/student-info');
   
   if (!response.ok) {
     throw new Error('Failed to fetch student info');

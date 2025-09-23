@@ -18,6 +18,14 @@ export type StudentInfo = {
   content: string  
 }
 
+export type AbiturientInfo = {
+  id: string,
+  title: string,
+  subtitle: string,
+  image: string,
+  content: string
+}
+
 export type MkrApiDictionary = {
   id: string;
   name: string;

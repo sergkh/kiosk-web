@@ -7,6 +7,7 @@ const resources = {
       header : {
         title: "Vinnytsia National Agrarian University",
         main: "News",
+        students: "For Students",
         applicants: "For Applicants",
         schedule: "Schedule"
       },
@@ -32,6 +33,7 @@ const resources = {
       header: {
         title: "Вінницький національний аграрний університет",
         main: "Новини",
+        students: "Студентам",
         applicants: "Абітурієнтам",
         schedule: "Розклад"
       },

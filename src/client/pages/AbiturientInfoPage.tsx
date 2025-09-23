@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import type { StudentInfo } from "../../shared/models";
+import type { AbiturientInfo } from "../../shared/models";
 import "./StudentInfoPage.css";
 import CardButton, { CardSize } from "../components/cards/CardButton";
-import { fetchInfo } from "../lib/studinfo";
+import { fetchInfo } from "../lib/abitinfo";
 import { motion } from "motion/react";
 import CloseButton from "../components/cards/CloseButton";
 
 
 type CardsListProps = {
-  cards: StudentInfo[],
-  active?: StudentInfo | null,
-  onSelect: (info: StudentInfo) => void
+  cards: AbiturientInfo[],
+  active?: AbiturientInfo | null,
+  onSelect: (info: AbiturientInfo) => void
 };
 
 function InfosList({cards, active, onSelect}: CardsListProps) {
@@ -33,7 +33,7 @@ function InfosList({cards, active, onSelect}: CardsListProps) {
   </motion.div>
 }
 
-function ActiveInfo({info, onClose}: {info: StudentInfo, onClose: () => void}) {
+function ActiveInfo({info, onClose}: {info: AbiturientInfo, onClose: () => void}) {
   return (
     <div className="active-info">      
       <CloseButton onClick={onClose} />
@@ -44,17 +44,17 @@ function ActiveInfo({info, onClose}: {info: StudentInfo, onClose: () => void}) {
   );
 }
 
-function StudentInfoPage() {
-  const [cards, setCards] = useState<StudentInfo[]>([]);
-  const [activeInfo, setActiveInfo] = useState<StudentInfo | null>(null);
+function AbiturientInfoPage() {
+  const [cards, setCards] = useState<AbiturientInfo[]>([]);
+  const [activeInfo, setActiveInfo] = useState<AbiturientInfo | null>(null);
 
   useEffect(() => {
     fetchInfo().then(setCards).catch(console.error);
   }, []);
 
   return (
-    <div className="student-info-page">
-      { (activeInfo == null) ? <h1>Студентам</h1> : <></> }
+    <div className="abiturient-info-page">
+      { (activeInfo == null) ? <h1>Абітурієнтам</h1> : <></> }
 
       <InfosList cards={cards} onSelect={setActiveInfo} active={activeInfo} />
 
@@ -65,4 +65,4 @@ function StudentInfoPage() {
   );
 }
 
-export default StudentInfoPage;
+export default AbiturientInfoPage;

@@ -12,7 +12,7 @@ const resources = {
         schedule: "Schedule"
       },
       footer: {
-        info: "© 2025 VNAU. Information may be updated. For current data, please contact the admissions office.",
+        info: "© 2025 VNAU. Information may be updated",
         created_pt1: "Created with",
         created_pt2: "for students. ",
         devs_link: "Development Team"
@@ -38,7 +38,7 @@ const resources = {
         schedule: "Розклад"
       },
       footer: {
-        info: "© 2025 ВНАУ. Інформація може оновлюватися. Актуальні дані уточнюйте в приймальній комісії",
+        info: "© 2025 ВНАУ. Інформація може оновлюватися",
         created_pt1: "Створено з ",
         created_pt2: " для студентів. ",
         devs_link: "Команда розробників"

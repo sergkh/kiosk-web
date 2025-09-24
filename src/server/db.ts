@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { open } from "sqlite";
+import { Database, open } from "sqlite";
 import fs from "fs";
 import type { AbiturientInfo, StudentInfo } from "../shared/models";
 import path from "path"
@@ -669,6 +669,7 @@ async function initDb() {
     }
 
     const newDB = !fs.existsSync(dbPath);
+    
     const db = await open ({
         filename: dbPath,
         driver: sqlite3.Database,
@@ -702,9 +703,6 @@ async function initDb() {
     return db;
 }
 
- 
-
-
 async function addStudentsInfo(cards: StudentInfo[], database: any) {
         for (const card of cards) {
             await database.run (`
@@ -729,7 +727,14 @@ async function addAbiturientsInfo(cards: AbiturientInfo[], database: any) {
     
 };
     
-const db = await initDb();
+let db: Database<sqlite3.Database, sqlite3.Statement>;
+
+// TODO: fix me: Hack as tsx does not support top-level await
+initDb().then((_db) => {
+  db = _db;
+}).catch((error) => {
+  console.error("Failed to initialize database:", error);
+});
 
 export async function getStudentInfo(): Promise<StudentInfo[]> {
     const stud_rows = await db.all(`SELECT * FROM students_info`);

@@ -4,3 +4,4 @@ Dockerfile
 bun.lockb
 README.md
 serviceAccount.json
+node_modules/

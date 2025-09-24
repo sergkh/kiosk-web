@@ -10,6 +10,7 @@ import LangSwitch from './components/LangSwitch';
 
 const baseUrl = import.meta.env.VITE_BASE_URL || '/';
 const showStudentInfo = import.meta.env.VITE_SHOW_STUD_INFO !== 'false';
+const showAbiturientInfo = import.meta.env.VITE_SHOW_ABITURIENT_INFO !== 'false';
 
 function Header() {
   const {t, i18n} = useTranslation();
@@ -17,7 +18,7 @@ function Header() {
   const links: MenuItem[] = [
     { path: '/', icon: faNewspaper, label: 'header.main' },
     showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.students' } : null,
-    { path: '/abiturients', icon: faGraduationCap, label: 'header.applicants' },
+    showAbiturientInfo ? { path: '/abiturients', icon: faGraduationCap, label: 'header.applicants' } : null,
     { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
   ].filter(Boolean) as MenuItem[];
 

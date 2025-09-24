@@ -6,6 +6,7 @@ import './index.css'
 import News from "./pages/News.tsx";
 import Schedule from "./pages/Schedule.tsx";
 import StudentInfoPage from "./pages/StudentInfoPage.tsx";
+import AbiturientInfoPage from "./pages/AbiturientInfoPage.tsx";
 import Page from "./Page.tsx";
 import DevelopersPage from "./pages/DevelopersPage.tsx";
 import ErrorBoundary from "./pages/ErrorBoundary.tsx";
@@ -28,7 +29,12 @@ const router = createBrowserRouter([
     path: "/students",
     element: <Page><StudentInfoPage /></Page>,
     errorElement: <ErrorBoundary />
-  },  
+  }, 
+  {
+    path: "/abiturients",
+    element: <Page><AbiturientInfoPage /></Page>,
+    errorElement: <ErrorBoundary />
+  },
   {
     path: "/developers",
     element: <Page><DevelopersPage /></Page>,

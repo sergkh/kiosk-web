@@ -16,7 +16,8 @@ function Header() {
 
   const links: MenuItem[] = [
     { path: '/', icon: faNewspaper, label: 'header.main' },
-    showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.applicants' } : null,
+    showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.students' } : null,
+    { path: '/abiturients', icon: faGraduationCap, label: 'header.applicants' },
     { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
   ].filter(Boolean) as MenuItem[];
 

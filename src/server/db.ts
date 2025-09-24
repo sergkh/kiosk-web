@@ -1,11 +1,56 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import fs from "fs";
-import type { StudentInfo } from "../shared/models";
+import type { AbiturientInfo, StudentInfo } from "../shared/models";
 import path from "path"
 
 
-const initialCards: StudentInfo[] = [
+const initialStudentCard: StudentInfo[] = [
+    {
+        id: "rectorate-info",
+        title: "Все про ректорат",
+        subtitle: "",
+        content: "",
+        image: "/img/student-info/rules.png"
+    },
+    {
+        id: "functional-parts",
+        title: "Функціональні частини",
+        subtitle: "",
+        content: "",
+        image: "/img/student-info/rules.png"
+    },
+    {
+        id: "socrates-system",
+        title: "Електронна система “Сократ”",
+        subtitle: "",
+        content: "",
+        image: "/img/student-info/rules.png"
+    },
+    {
+        id: "vnau-buildings",
+        title: "Схема розташувань будівель ВНАУ",
+        subtitle: "",
+        content: "",
+        image: "/img/student-info/rules.png"
+    },
+    {
+        id: "departments",
+        title: "Кафедри",
+        subtitle: "",
+        content: "",
+        image: "/img/student-info/rules.png"
+    },
+    {
+        id: "dean-offices",
+        title: "Деканати",
+        subtitle: "",
+        content: "",
+        image: "/img/student-info/rules.png"
+    }
+];
+
+const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "rules",
         title: "Правила вступу",
@@ -610,8 +655,8 @@ const initialCards: StudentInfo[] = [
                 <p>ВНАУ є провідним навчальним закладом України з впровадження сучасних інноваційних методик організації навчального процесу, електронних засобів навчання, тестового контролю залишкових знань тощо. Електронна система управління якістю освітньої діяльності “Сократ” є власною розробкою університету та глобальним Інформаційним базсом для управління навчальним процесом; електронної підтримки бібліотеки; репозиторію університету; науково-консультативного освітнього середовища університету.</p>
             </div>`,
         image: "/img/student-info/about.png"
-    }
-];
+    } 
+]
 
 
 async function initDb() {
@@ -640,11 +685,25 @@ async function initDb() {
             ) 
         `);
 
-        await addStudentsInfo(initialCards, db);     
+        await db.exec(`
+            CREATE TABLE IF NOT EXISTS abiturients_info (
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                subtitle TEXT NOT NULL,
+                content TEXT NOT NULL,
+                image TEXT NOT NULL
+            ) 
+        `);
+
+        await addStudentsInfo(initialStudentCard, db);
+        await addAbiturientsInfo(initialAbiturientCard, db);        
     }
 
     return db;
 }
+
+ 
+
 
 async function addStudentsInfo(cards: StudentInfo[], database: any) {
         for (const card of cards) {
@@ -657,15 +716,27 @@ async function addStudentsInfo(cards: StudentInfo[], database: any) {
     }
     
 };
+
+async function addAbiturientsInfo(cards: AbiturientInfo[], database: any) {
+        for (const card of cards) {
+            await database.run (`
+                INSERT OR REPLACE  INTO abiturients_info (id, title, subtitle, content, image)
+                VALUES (?, ?, ?, ?, ?)`,
+
+                [card.id, card.title, card.subtitle, card.content, card.image]   
+        );
+    }
+    
+};
     
 const db = await initDb();
 
 export async function getStudentInfo(): Promise<StudentInfo[]> {
-    const rows = await db.all(`SELECT * FROM students_info`);
-    return rows as StudentInfo[]; 
+    const stud_rows = await db.all(`SELECT * FROM students_info`);
+    return stud_rows as StudentInfo[]; 
 }
 
-
-
-
-    
+export async function getAbiturientInfo(): Promise<AbiturientInfo[]>{
+    const abit_rows = await db.all(`SELECT * FROM abiturients_info`);
+    return abit_rows as AbiturientInfo[];
+}

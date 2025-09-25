@@ -7,24 +7,22 @@ import { useTranslation } from 'react-i18next';
 import IdleWatcher from './components/IdleWatcher';
 import TopNav, { type MenuItem } from './components/TopNav';
 import LangSwitch from './components/LangSwitch';
-
-const baseUrl = import.meta.env.VITE_BASE_URL || '/';
-const showStudentInfo = import.meta.env.VITE_SHOW_STUD_INFO !== 'false';
-const showAbiturientInfo = import.meta.env.VITE_SHOW_ABITURIENT_INFO !== 'false';
+import config from './lib/config';
+import logo from './assets/logo.png'
 
 function Header() {
   const {t, i18n} = useTranslation();
 
   const links: MenuItem[] = [
     { path: '/', icon: faNewspaper, label: 'header.main' },
-    showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.students' } : null,
-    showAbiturientInfo ? { path: '/abiturients', icon: faGraduationCap, label: 'header.applicants' } : null,
+    config.showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.students' } : null,
+    config.showAbiturientInfo ? { path: '/abiturients', icon: faGraduationCap, label: 'header.applicants' } : null,
     { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
   ].filter(Boolean) as MenuItem[];
 
   return <header>
     <div className="logo-vnau-header left">
-        <img src={`${baseUrl}img/logo.png`} alt="Логотип ВНАУ|Logo VNAU"/>
+        <img src={logo} alt="Логотип ВНАУ|Logo VNAU"/>
         <span className="vnau"> { t('header.title') } </span>
     </div>
   

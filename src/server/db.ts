@@ -29,7 +29,7 @@ const initialStudentCard: StudentInfo[] = [
     },
     {
         id: "vnau-buildings",
-        title: "Схема розташувань будівель ВНАУ",
+        title: "Схема розташувань будівель",
         subtitle: "",
         content: "",
         image: "/img/student-info/rules.png"

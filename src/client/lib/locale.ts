@@ -5,7 +5,7 @@ const resources = {
   en: {
     translation: {
       header : {
-        title: "Vinnytsia National Agrarian University",
+        title: "VNAU",
         main: "News",
         students: "For Students",
         applicants: "For Applicants",
@@ -31,7 +31,7 @@ const resources = {
   uk: {
     translation: {
       header: {
-        title: "Вінницький національний аграрний університет",
+        title: "ВНАУ",
         main: "Новини",
         students: "Студентам",
         applicants: "Абітурієнтам",

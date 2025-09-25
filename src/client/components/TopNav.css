@@ -1,6 +1,6 @@
 nav.top-nav {
   position: relative;
-  --item-width: 180px;  
+  --item-width: 13em;  
 }
 
 nav.top-nav li {  
@@ -26,17 +26,17 @@ nav.top-nav a.active {
 nav.top-nav ul {
   display: flex;
   list-style: none;
-  padding: 4px;
+  padding: 0.1em;
   background: var(--background);
   border-radius: 99px;
 }
 
 .glider {
 	position: absolute;
-  top: 8px;
-  left: 10px;
-	height: 40px;
-	width: calc(var(--item-width) - 4px);
+  top: 0.5em;
+	bottom: 0.5em;
+  left: 0.5em;
+	width: calc(var(--item-width) - 0.2em);
 	background-color: var(--foreground);
 	z-index: 1;
 	border-radius: 99px; 

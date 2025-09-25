@@ -1,20 +1,19 @@
-import { use, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-
-let idleTimeout = import.meta.env.VITE_IDLE_TIMEOUT || 10*60*1000; // Default to 10 minutes if not set
+import config from "../lib/config";
 
 
 function IdleWatcher({redirectTo}: {redirectTo: string}) {
   const navigate = useNavigate();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const videoId = import.meta.env.VITE_IDLE_VIDEO_ID;
+  const videoId = config.idleVideoId;
 
   const resetTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    if (idleTimeout > 0 && videoId) {
-      timerRef.current = setTimeout(() => navigate(redirectTo), idleTimeout);
+    if (config.idleTimeout > 0 && videoId) {
+      timerRef.current = setTimeout(() => navigate(redirectTo), config.idleTimeout);
     }
   };
 
@@ -27,7 +26,7 @@ function IdleWatcher({redirectTo}: {redirectTo: string}) {
     });
 
     // start only if idleTimeout and videoId are set
-    if (idleTimeout > 0 && videoId) {
+    if (config.idleTimeout > 0 && videoId) {
       resetTimer();
     }
 
@@ -38,7 +37,7 @@ function IdleWatcher({redirectTo}: {redirectTo: string}) {
         window.removeEventListener(event, resetTimer);
       });
     };
-  }, [idleTimeout, navigate]);
+  }, [navigate]);
 
   return null;
 }

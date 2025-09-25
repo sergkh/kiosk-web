@@ -6,7 +6,6 @@ import { fetchInfo } from "../lib/abitinfo";
 import { motion } from "motion/react";
 import CloseButton from "../components/cards/CloseButton";
 
-
 type CardsListProps = {
   cards: AbiturientInfo[],
   active?: AbiturientInfo | null,

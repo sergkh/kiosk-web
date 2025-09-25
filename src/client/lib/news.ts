@@ -1,12 +1,13 @@
 // @ts-ignore We have no types for js-cache
 import cache from "js-cache";
 import type { Article } from "../../shared/models";
+import config from "./config";
 
 const baseUrl = import.meta.env.VITE_BASE_URL || '/';
 
 const localNewsCache = new cache.Cache({
   max: 1,
-  ttl: 1000 * 60 * 60 // 1 hour
+  ttl: config.cacheTime
 });
 
 async function fetchNews(): Promise<Article[]> {

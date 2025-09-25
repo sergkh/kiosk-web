@@ -9,7 +9,7 @@
 .team-grid {
   display: flex;
   justify-content: space-around;
-  gap: 2em;
+  gap: 1em;
   padding: 3em;
   flex-wrap: wrap;
   border-radius: 22px;

@@ -2,8 +2,9 @@ import dayjs, { Dayjs } from "dayjs";
 import type { LessonTime, MkrEvent } from "../../shared/models";
 import './GroupSchedule.css'
 import { useTranslation } from "react-i18next";
+import config from "../lib/config";
 
-const daysToShow = import.meta.env.VITE_SCHEDULE_DAYS_TO_SHOW ? parseInt(import.meta.env.VITE_SCHEDULE_DAYS_TO_SHOW) : 3;
+const daysToShow = config.scheduleDays;
 
 function GroupSchedule({ schedule, lessonHours }: { schedule: MkrEvent[], lessonHours: LessonTime[] }) {
   const {t} = useTranslation();

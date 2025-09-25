@@ -7,12 +7,13 @@
 .student-info-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, auto));
-  gap: 2em;
-  padding: 1em;
+  gap: 1em;
+  padding: 0 1em;
   flex: 1;
 }
 
 .student-info-cards.minimized {
+  padding: 1em 1em;
   display: flex;
   gap: 16px;
   flex-direction: row;
@@ -31,11 +32,11 @@
 }
 
 .active-info section {
-  padding: 1em 2em;
+  padding: 0.5em 2em;
 }
 
 .active-info section h1,.active-info section h2 {
-  margin-top: 1em;
+  margin-top: 0.5em;
   display: flex;
   justify-content: center;
   margin-bottom: 0.8em;
@@ -51,4 +52,14 @@
   top: 1em;
   right: 1em;
   cursor: pointer;
+}
+
+.active-info table {
+  margin: 1em auto;
+  border-collapse: collapse;
+}
+
+.active-info table td {
+  padding: 0.5em;
+  border-bottom: 1px solid rgba(88, 88, 88, 0.25)
 }

@@ -14,22 +14,24 @@ function DevelopersPage() {
 
       <div className="team-grid">
         <div className='developer_stydent'>
+          <img src={back} alt="Front-end developer|Front-end розробник" />
+          <p>Сторожук Артем</p>
+          <p>Back-end</p>
+        </div>
+        <div className='developer_stydent'>
           <img src={front} alt="Front-end developer|Front-end розробник" />
           <p>Конопліцький Іоанн</p>
           <p>Front-end</p>
         </div>
         <div className='developer_stydent'>
-          <img src={back} alt="Front-end developer|Front-end розробник" />
-          <p>Сторожук Артем</p>
-          <p>Back-end</p>
-        </div>  <div className='developer_stydent'>
-          <img src={design} alt="Front-end developer|Front-end розробник" />
-          <p>Папіровий Сергій</p>
-          <p>Designer</p>
-        </div>  <div className='developer_stydent'>
           <img src={research} alt="Front-end developer|Front-end розробник" />
           <p>Салій Катерина</p>
           <p>Content Researcher</p>
+        </div>
+        <div className='developer_stydent'>
+          <img src={design} alt="Front-end developer|Front-end розробник" />
+          <p>Папіровий Сергій</p>
+          <p>Designer</p>
         </div>
       </div>
 
@@ -37,10 +39,6 @@ function DevelopersPage() {
 
 
       <div className="teachers-grid">
-        <div className='developer_teachers'>
-          <p>Бойко Олексій Романович</p>
-          <p>Старший викладач</p>
-        </div>
         <div className='developer_teachers'>
           <p>Хрущак Сергій Вікторович</p>
           <p>Старший викладач</p>

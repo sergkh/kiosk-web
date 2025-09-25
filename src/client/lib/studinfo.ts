@@ -1,10 +1,11 @@
 // @ts-ignore We have no types for js-cache
 import cache from "js-cache";
 import type { StudentInfo } from "../../shared/models";
+import config from "./config";
 
 const localCache = new cache.Cache({
   max: 10,
-  ttl: 1000 * 60 * 60 // 1 hour
+  ttl: config.cacheTime
 });
 
 async function fetchInfo(): Promise<StudentInfo[]> {

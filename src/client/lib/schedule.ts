@@ -8,12 +8,11 @@ import economics from '../assets/faculties/economics.png';
 import itf from '../assets/faculties/itf.png';
 import management from '../assets/faculties/management.png';
 import finances from '../assets/faculties/finances.png';
-
-const API_URL = import.meta.env.VITE_MKR_API_URL || 'https://mkr.sergkh.com';
+import config from "./config";
 
 const localCache = new cache.Cache({
   max: 100,
-  ttl: 1000 * 60 * 60 // 1 hour
+  ttl: config.cacheTime
 });
 
 const facultyImages: Map<string, string> = new Map([
@@ -30,7 +29,7 @@ async function getFaculties(): Promise<Faculty[]> {
   
   if (cached) return cached as Faculty[];
 
-  const facultiesResp = await fetch(`${API_URL}/structures/0/faculties`)
+  const facultiesResp = await fetch(`${config.mkrApiUrl}/structures/0/faculties`)
   const faculties: [MkrApiDictionary] = await facultiesResp.json()
   
   // Show only faculties with images
@@ -51,7 +50,7 @@ async function getFacutlyGroups(facultyId: string): Promise<Map<number, MkrGroup
     const cached = localCache.get(`faculty-${facultyId}-groups`);
     if (cached) return cached as Map<number, MkrGroup[]>;
 
-    const resp = await fetch(`https://mkr.sergkh.com/structures/0/faculties/${facultyId}/groups`);
+    const resp = await fetch(`${config.mkrApiUrl}/structures/0/faculties/${facultyId}/groups`);
       
     if (!resp.ok) {
       throw new Error(`Failed to fetch groups for faculty ${facultyId}`);
@@ -81,7 +80,7 @@ async function getGroupSchedule(facultyId: string, course: number, groupId: stri
   const cached = localCache.get(`faculty-${facultyId}-course-${course}-group-${groupId}-schedule`);
   if (cached) return cached as MkrEvent[];
 
-  const resp = await fetch(`${API_URL}/structures/0/faculties/${facultyId}/courses/${course}/groups/${groupId}/schedule`);
+  const resp = await fetch(`${config.mkrApiUrl}/structures/0/faculties/${facultyId}/courses/${course}/groups/${groupId}/schedule`);
   if (!resp.ok) {
     throw new Error(`Failed to fetch schedule for group ${groupId}`);
   }

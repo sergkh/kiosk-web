@@ -5,11 +5,12 @@
 
 
 .student-info-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1em;
+  padding: 1em;
   gap: 1em;
-  padding: 0 1em;
-  flex: 1;
 }
 
 .student-info-cards.minimized {

@@ -45,8 +45,8 @@ cards.delete("/api/abiturient-info/:id", async (req: Request, res: Response) => 
     try {
         const card = { id: req.params.id } as AbiturientInfo;
 
-        await deleteAbiturientInfo(card);
-        res.json({ message: "Картку успішно видалено" });
+        const delcard = await deleteAbiturientInfo(card);
+        res.status(204).json(delcard);
     } catch (err: any) {
         console.error(err);
         

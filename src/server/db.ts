@@ -18,10 +18,14 @@ export async function initDb() {
 
     const newDB = !fs.existsSync(dbPath);
     
+
+    console.log('Initializing db');
     const db = await open ({
         filename: dbPath,
         driver: sqlite3.Database,
     });
+
+    dbInstance = db;
 
     if (newDB) {
         await db.exec(`
@@ -48,11 +52,13 @@ export async function initDb() {
         await addAbiturientsInfo(initialAbiturientCard);        
     }
 
-    dbInstance = db;
+    console.log('Initialized db');
+
+
     return db;
 }
 
-async function getDbInstance(): Promise<Database> {
+function getDbInstance(): Database<sqlite3.Database, sqlite3.Statement>{
     if (!dbInstance) {
         throw new Error("База даних не ініціалізована");
     }
@@ -60,7 +66,7 @@ async function getDbInstance(): Promise<Database> {
 }
 
 export async function getAbiturientInfo(): Promise<AbiturientInfo[]>{
-    const db = await getDbInstance();
+    const db = getDbInstance();
     const abit_rows = await db.all(`SELECT * FROM abiturients_info`);
     return abit_rows as AbiturientInfo[];
 };
@@ -68,13 +74,8 @@ export async function getAbiturientInfo(): Promise<AbiturientInfo[]>{
 async function addAbiturientsInfo(cards: AbiturientInfo[]) {
     const db = await getDbInstance();
         for (const card of cards) {
-            await db.run (`
-                INSERT OR REPLACE  INTO abiturients_info (id, title, subtitle, content, image)
-                VALUES (?, ?, ?, ?, ?)`,
-
-                [card.id, card.title, card.subtitle, card.content, card.image]   
-        );
-    }  
+            await createAbiturientsInfo(card);
+        }  
 };
 
 export async function createAbiturientsInfo(card: AbiturientInfo): Promise<AbiturientInfo> {

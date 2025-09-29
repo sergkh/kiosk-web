@@ -18,8 +18,6 @@ export async function initDb() {
 
     const newDB = !fs.existsSync(dbPath);
     
-
-    console.log('Initializing db');
     const db = await open ({
         filename: dbPath,
         driver: sqlite3.Database,
@@ -51,9 +49,6 @@ export async function initDb() {
         await addStudentsInfo(initialStudentCard);
         await addAbiturientsInfo(initialAbiturientCard);        
     }
-
-    console.log('Initialized db');
-
 
     return db;
 }

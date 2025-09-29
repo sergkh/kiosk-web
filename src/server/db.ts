@@ -67,14 +67,14 @@ export async function getAbiturientInfo(): Promise<AbiturientInfo[]>{
 };
 
 async function addAbiturientsInfo(cards: AbiturientInfo[]) {
-    const db = await getDbInstance();
+    const db = getDbInstance();
         for (const card of cards) {
             await createAbiturientsInfo(card);
         }  
 };
 
 export async function createAbiturientsInfo(card: AbiturientInfo): Promise<AbiturientInfo> {
-    const db = await getDbInstance();
+    const db = getDbInstance();
     const existingCard = await db.get(`SELECT id FROM abiturients_info WHERE id = ?`, [card.id]);
     if (existingCard) {
         throw new Error(`ID '${card.id}' вже використовується. Будь ласка, введіть інший.`);
@@ -90,7 +90,7 @@ export async function createAbiturientsInfo(card: AbiturientInfo): Promise<Abitu
 };
 
 export async function updateAbiturientInfo(card: AbiturientInfo) {
-    const db = await getDbInstance();
+    const db = getDbInstance();
     await db.run(`
         UPDATE abiturients_info
         SET title = ?, subtitle = ?, content = ?, image = ?
@@ -101,7 +101,7 @@ export async function updateAbiturientInfo(card: AbiturientInfo) {
 };
 
 export async function deleteAbiturientInfo(card: AbiturientInfo): Promise<void> {
-    const db = await getDbInstance();
+    const db = getDbInstance();
     
     const existingCard = await db.get(`SELECT id FROM abiturients_info WHERE id = ?`, [card.id]);
     if (!existingCard) {
@@ -112,7 +112,7 @@ export async function deleteAbiturientInfo(card: AbiturientInfo): Promise<void> 
 }
 
 async function addStudentsInfo(cards: StudentInfo[]) {
-    const db = await getDbInstance();
+    const db = getDbInstance();
         for (const card of cards) {
             await db.run (`
                 INSERT OR REPLACE  INTO students_info (id, title, subtitle, content, image)
@@ -127,7 +127,7 @@ async function addStudentsInfo(cards: StudentInfo[]) {
     
 
 export async function getStudentInfo(): Promise<StudentInfo[]> {
-    const db = await getDbInstance();
+    const db = getDbInstance();
     const stud_rows = await db.all(`SELECT * FROM students_info`);
     return stud_rows as StudentInfo[];
 };

@@ -29,9 +29,11 @@ export default function CardButton({ title, subtitle, image, active, onClick, si
       onClick={ () => {        
         if (onClick) onClick()
       }}>      
-        { image ? <img src={image} alt={title} /> : <></> }      
-        <h3>{title}</h3>      
-        { (size != CardSize.Minimized && subtitle) ? <p className="subtitle">{subtitle}</p> : <></> }
+        { image ? <img src={image} alt={title} /> : <></> }   
+        <div className="card-text">
+          <h3>{title}</h3>      
+          { (size != CardSize.Minimized && subtitle) ? <p className="subtitle">{subtitle}</p> : <></> }
+        </div>
     </motion.div>
   );
 }

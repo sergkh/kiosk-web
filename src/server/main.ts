@@ -32,10 +32,8 @@ async function startServer() {
     ViteExpress.listen(app, 3000, () =>
       console.log("Server is listening on http://localhost:3000/")
     );
-
-    console.log("БД ініціалізовано та сервер запущено");
   } catch (err) {
-    console.error("Помилка ініціалізації БД або сервера:", err);
+    console.error("Failed to initialize server:", err);
     process.exit(1); 
   }
 }

@@ -6,42 +6,35 @@ export const initialStudentCard: StudentInfo[] = [
         title: "Все про ректорат",
         subtitle: "",
         content: "",
-        image: "/img/student-info/rules.png"
+        image: ""
     },
     {
         id: "functional-parts",
         title: "Функціональні частини",
         subtitle: "",
         content: "",
-        image: "/img/student-info/rules.png"
-    },
-    {
-        id: "socrates-system",
-        title: "Електронна система “Сократ”",
-        subtitle: "",
-        content: "",
-        image: "/img/student-info/rules.png"
+        image: ""
     },
     {
         id: "vnau-buildings",
         title: "Схема розташувань будівель ВНАУ",
         subtitle: "",
         content: "",
-        image: "/img/student-info/rules.png"
+        image: ""
     },
     {
         id: "departments",
         title: "Кафедри",
         subtitle: "",
-        content: "",
-        image: "/img/student-info/rules.png"
+        content: "/img/student-info/rules.png",
+        image: ""
     },
     {
         id: "dean-offices",
         title: "Деканати",
         subtitle: "",
         content: "",
-        image: "/img/student-info/rules.png"
+        image: ""
     }
 ];
 

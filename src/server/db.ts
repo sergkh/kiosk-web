@@ -111,26 +111,57 @@ export async function deleteAbiturientInfo(card: AbiturientInfo): Promise<void> 
     await db.run(`DELETE FROM abiturients_info WHERE id = ?`, [card.id]);
 }
 
-async function addStudentsInfo(cards: StudentInfo[]) {
-    const db = getDbInstance();
-        for (const card of cards) {
-            await db.run (`
-                INSERT OR REPLACE  INTO students_info (id, title, subtitle, content, image)
-                VALUES (?, ?, ?, ?, ?)`,
-
-                [card.id, card.title, card.subtitle, card.content, card.image]   
-        );
-    }
-    
-};
-
-    
-
-export async function getStudentInfo(): Promise<StudentInfo[]> {
+export async function getStudentsInfo(): Promise<StudentInfo[]> {
     const db = getDbInstance();
     const stud_rows = await db.all(`SELECT * FROM students_info`);
     return stud_rows as StudentInfo[];
 };
 
+async function addStudentsInfo(cards: StudentInfo[]) {
+    const db = getDbInstance();
+        for (const card of cards) {
+            await createStudentsInfo(card);  
+    }
+    
+};
 
+export async function createStudentsInfo(card: StudentInfo): Promise<StudentInfo> {
+    const db = getDbInstance();
+    const existingCard = await db.get(`SELECT id FROM students_info WHERE id = ?`, [card.id]);
+    if (existingCard) {
+        throw new Error(`ID '${card.id}' вже використовується. Будь ласка, введіть інший.`); 
+    }
 
+    await db.run(`
+           INSERT INTO students_info (id, title, subtitle, content, image) 
+           VALUES (?, ?, ?, ?, ?)`,
+
+           [card.id, card.title, card.subtitle, card.content, card.image]
+);
+    return card;
+};
+
+export async function updateStudentsInfo(card: StudentInfo) {
+    const db = getDbInstance();
+    await db.run(`
+       UPDATE students_info
+       SET title = ?, subtitle = ?, content = ?, image = ?
+       WHERE id = ?`, 
+
+       [card.title, card.subtitle, card.content, card.image, card.id]
+    );
+    
+    return card;
+};
+
+export async function deleteStudentsInfo(card: StudentInfo): Promise<void> {
+    const db = getDbInstance();
+
+    const existingCard = await db.get(`SELECT id FROM students_info WHERE id = ?`, [card.id]);
+    if (!existingCard) {
+        throw new Error(`Картку з ID '${card.id}' не знайдено`);
+    }
+
+    await db.run(`DELETE FROM students_info WHERE id = ?`, [card.id]
+    );
+};

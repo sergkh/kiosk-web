@@ -1,61 +1,53 @@
 import express, { type Request, type Response } from "express";
-import {createAbiturientsInfo, getAbiturientInfo, updateAbiturientInfo, deleteAbiturientInfo} from "./db.ts"
-import type { AbiturientInfo } from "../shared/models.ts";
-
+import {abiturients} from "./db.ts"
+import { authorized } from "./auth.ts";
+import { imageUrl, singleImageUpload } from "./upload.ts";
 
 const cards = express.Router();
 
-cards.use(express.json());
-
 cards.get("/api/abiturient-info", async (req, res) => {
-    try {
-        const data = await getAbiturientInfo();
-        res.json(data);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Дані не отримано" });
-    }       
+    res.json(await abiturients.all());
 });
 
-cards.post("/api/abiturient-info", async (req, res) => {
-    try {
-        const card = req.body;
-        const newCard = await createAbiturientsInfo(card);
-        res.status(201).json(newCard);
-    } catch(err) {
-        console.error(err);
-        res.status(500).json({error: "Помилка додавання картки"})
+cards.get("/api/abiturient-info/:id", async (req, res) => {
+    const info = await abiturients.get(req.params.id)
+
+    if (!info) {
+        return res.status(404).json({ error: "Картку не знайдено" });
     }
+    
+    res.json(info);
 });
 
-cards.put("/api/abiturient-info/:id", async (req: Request, res: Response) => {
-    try {
-        const card = req.body;   
-        card.id = req.params.id;     
-
-        const updateCard = await updateAbiturientInfo(card);
-        res.json(updateCard);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Дані не оновлено" });
-    }
+cards.post("/api/abiturient-info", authorized, singleImageUpload, async (req, res) => {
+    const card = req.body;
+    console.log('Creating new abiturient card:', card);
+    card.id = crypto.randomUUID();
+    card.image = imageUrl((req.file as Express.Multer.File)?.filename);
+    const newCard = await abiturients.create(card);
+    res.status(201).json(newCard);
 });
 
-cards.delete("/api/abiturient-info/:id", async (req: Request, res: Response) => {
-    try {
-        const card = { id: req.params.id } as AbiturientInfo;
+cards.put("/api/abiturient-info/:id", authorized, singleImageUpload, async (req: Request, res: Response) => {    
+    const card = req.body;  
+    card.id = req.params.id;
+    
+    console.log('Updating abiturient card:', card);
 
-        const delcard = await deleteAbiturientInfo(card);
-        res.status(204).json(delcard);
-    } catch (err: any) {
-        console.error(err);
-        
-        if (err.message && err.message.includes('не знайдено')) {
-            res.status(404).json({ error: err.message });
-        } else {
-            res.status(500).json({ error: "Помилка видалення картки" });
-        }
+    const oldCard = await abiturients.get(card.id);
+    if (!oldCard) {
+        return res.status(404).json({ error: "Картку не знайдено" });
     }
+    
+    card.image = imageUrl((req.file as Express.Multer.File)?.filename) || oldCard.image;
+
+    const updateCard = await abiturients.update(card);
+    res.json(updateCard);
+});
+
+cards.delete("/api/abiturient-info/:id", authorized, async (req: Request, res: Response) => {
+    await abiturients.delete(req.params.id);
+    res.status(204);
 });
 
 export default cards;

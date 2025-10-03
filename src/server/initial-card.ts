@@ -306,7 +306,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
 
     {
         id: "contacts",
-        title: "Контактни приймальної комісії",
+        title: "Контакти приймальної комісії",
         subtitle: "",
         content: `<div class="contact-info">
                 <p><strong>Місцезнаходження:</strong> м. Вінниця, вул. Сонячна 3, корпус 1</p>

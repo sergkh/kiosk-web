@@ -1,0 +1,19 @@
+header nav ul {
+  display: flex;
+  gap: 0.5rem;
+
+  li {
+    list-style: none;
+  }
+}
+
+header .admin-avatar img {
+  width: auto;
+  height: 2.5em;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+main {
+  padding: 1em;
+}

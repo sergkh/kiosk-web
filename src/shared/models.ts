@@ -10,21 +10,16 @@ export type Faculty = {
   image: string
 };
 
-export type StudentInfo = {
-  id: string,
-  title: string,
-  subtitle: string,
-  image: string,
-  content: string  
-}
-
-export type AbiturientInfo = {
+export type Info = {
   id: string,
   title: string,
   subtitle: string,
   image: string,
   content: string
 }
+
+export type StudentInfo = Info
+export type AbiturientInfo = Info
 
 export type MkrApiDictionary = {
   id: string;

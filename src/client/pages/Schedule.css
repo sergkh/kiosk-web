@@ -4,9 +4,10 @@
 
 .faculties {
   display: grid;
+  justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(320px, auto));
   gap: 1em;
-  padding: 0 1em;
+  padding: 1em;
 }
 
 .faculties.minimized {

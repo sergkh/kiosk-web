@@ -5,17 +5,17 @@ import cookieParser from 'cookie-parser';
 import { parseAllNews } from "./news-parser";
 import studApi from "./student_api.ts";
 import abitApi from "./abiturient_api.ts";
-import { initDb } from "./db"; 
+import { initDb } from "./db";
 
-
-    
 const app = express();
 
-  app.use(express.json());
-  app.use(cookieParser());
-  app.use("/api", login);
-  app.use(studApi);
-  app.use(abitApi);
+app.use(express.json());
+app.use(cookieParser());
+app.use("/uploads", express.static("data/public/uploads"));
+
+app.use("/api", login);
+app.use(studApi);
+app.use(abitApi);
 
 app.get("/news", async (req: Request, res: Response) => {
   res.json(await parseAllNews());

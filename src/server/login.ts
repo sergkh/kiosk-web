@@ -28,6 +28,8 @@ api.post("/auth", async (req, res) => {
     const { token } = req.body;
     const decoded = await admin.auth().verifyIdToken(token);
     
+    console.log(`Token verified for ${decoded.email}`); 
+
     if (!config.admins.includes(decoded.email!)) {
       console.error(`Unauthorized access attempt by ${decoded.email}`);
       return res.status(403).json({ error: "Access denied" });

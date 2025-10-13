@@ -5,7 +5,8 @@ import CardButton, { CardSize } from "../components/cards/CardButton";
 import { fetchInfo } from "../lib/studinfo";
 import { motion } from "motion/react";
 import CloseButton from "../components/cards/CloseButton";
-
+import FacultiesModal from "./FacultuInfo";
+import { facultiesList } from "../../shared/facultiesList";
 
 type CardsListProps = {
   cards: StudentInfo[],
@@ -34,6 +35,9 @@ function InfosList({cards, active, onSelect}: CardsListProps) {
 }
 
 function ActiveInfo({info, onClose}: {info: StudentInfo, onClose: () => void}) {
+  if (info.id === "faculties") {
+    return null;
+  }
   return (
     <div className="active-info">      
       <CloseButton onClick={onClose} />
@@ -54,13 +58,21 @@ function StudentInfoPage() {
 
   return (
     <div className="student-info-page">
-      { (activeInfo == null) ? <h1>Студентам</h1> : <></> }
+      {activeInfo == null ? <h1>Студентам</h1> : null}
 
       <InfosList cards={cards} onSelect={setActiveInfo} active={activeInfo} />
 
-      {
-        activeInfo ? <ActiveInfo info={activeInfo} onClose={() => setActiveInfo(null)} /> : <></>        
-      }      
+      {activeInfo ? (
+        activeInfo.id === "faculties" ? (
+          <FacultiesModal
+            isOpen={true}
+            onClose={() => setActiveInfo(null)}
+            faculties={facultiesList}
+          />
+        ) : (
+          <ActiveInfo info={activeInfo} onClose={() => setActiveInfo(null)} />
+        )
+      ) : null}
     </div>
   );
 }

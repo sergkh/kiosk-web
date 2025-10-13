@@ -2,10 +2,11 @@ import express, { type Request, type Response } from "express";
 import ViteExpress from "vite-express";
 import api from "./api";
 import cookieParser from 'cookie-parser';
-import { parseAllNews } from "./parser";
+import { parseAllNews } from "./news-parser.ts";
 import stud_cards from "./student_api.ts";
 import abit_cards from "./abiturient_api.ts";
 import { initDb } from "./db"; 
+import facultiesApi from "./faculties_api";
 
 async function startServer() {
   try {
@@ -18,6 +19,7 @@ async function startServer() {
     app.use("/api", api);
     app.use(stud_cards);
     app.use(abit_cards);
+    app.use("/api/faculties", facultiesApi);
 
     app.get("/news", async (req: Request, res: Response) => {
       try {

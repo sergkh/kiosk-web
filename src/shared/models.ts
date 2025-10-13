@@ -10,6 +10,14 @@ export type Faculty = {
   image: string
 };
 
+export type FacultyInfo = {
+  id: string;
+  name: string;
+  link: string;
+  image: string;
+  description: string;
+};
+
 export type StudentInfo = {
   id: string,
   title: string,
@@ -52,3 +60,20 @@ export type MkrEvent = {
   start: string,
   end: string
 }
+
+// Model for faculties page
+
+export type ContactInfo = {
+  location: string,    
+  cabNo: string,    
+  phone: string,       
+  email: string
+}
+
+export type Leadership = {
+  fullName: string,    
+  position: string,    
+  degree: string,      
+  imageUrl?: string   
+}
+

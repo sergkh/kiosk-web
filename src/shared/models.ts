@@ -61,19 +61,4 @@ export type MkrEvent = {
   end: string
 }
 
-// Model for faculties page
-
-export type ContactInfo = {
-  location: string,    
-  cabNo: string,    
-  phone: string,       
-  email: string
-}
-
-export type Leadership = {
-  fullName: string,    
-  position: string,    
-  degree: string,      
-  imageUrl?: string   
-}
 

@@ -7,14 +7,14 @@
 .student-info-cards {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  grid-template-columns: repeat(auto-fit, minmax(18em, auto));
   gap: 1em;
   padding: 1em;
   flex: 1;
 }
 
 .student-info-cards.minimized {
-  padding: 1em 1em;
+  margin: 1em 1em;
   display: flex;
   gap: 16px;
   flex-direction: row;

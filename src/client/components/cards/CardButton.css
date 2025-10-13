@@ -18,7 +18,7 @@
 
 .info-card.minimized {
   padding: 2em 1em;
-  width: 15em;
+  min-width: 15em;
   min-height: 5em;
   max-height: 5em;
   flex-direction: row;

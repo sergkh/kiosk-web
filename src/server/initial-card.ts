@@ -23,10 +23,10 @@ export const initialStudentCard: StudentInfo[] = [
         image: ""
     },
     {
-        id: "departments",
-        title: "Кафедри",
+        id: "faculties",
+        title: "Факультети",
         subtitle: "",
-        content: "/img/student-info/rules.png",
+        content: "",
         image: ""
     },
     {

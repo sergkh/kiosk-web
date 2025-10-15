@@ -10,6 +10,15 @@ export type Faculty = {
   image: string
 };
 
+
+export type FacultyInfo = {
+  id: string;
+  name: string;
+  link: string;
+  image: string;
+  description: string;
+};
+
 export type Info = {
   id: string,
   title: string,
@@ -47,3 +56,5 @@ export type MkrEvent = {
   start: string,
   end: string
 }
+
+

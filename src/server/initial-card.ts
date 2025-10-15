@@ -42,7 +42,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "rules",
         title: "Правила вступу",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<h2>Загальні положення</h2>
                   <div class="list-item">
                     <p>1. Правила прийому до Вінницького національного аграрного університету на навчання для здобуття
@@ -109,7 +109,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "specialities",
         title: "Спеціальності та освітні програми",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<div class="program-list">
                     <div class="accredited-section">АКРЕДИТОВАНІ:</div>
                         <ol class="accredited-list">
@@ -195,7 +195,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "admission",
         title: "Вступна кампанія",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<h2 class="section-title">Основні дати вступної кампанії 2025</h2>
 
             <div class="info-section">
@@ -281,7 +281,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "documents",
         title: "Необхідні документи",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<div class="doc-section">
                 <h3>Основні документи:</h3>
                 <ul>
@@ -307,7 +307,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "contacts",
         title: "Контактни приймальної комісії",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<div class="contact-info">
                 <p><strong>Місцезнаходження:</strong> м. Вінниця, вул. Сонячна 3, корпус 1</p>
                 <p><strong>Телефон:</strong> (0432) 46-74-37, 57-44-42</p>
@@ -319,7 +319,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "tution",
         title: "Вартість навчання",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<div class="table-caption">
                 Вартість надання освітніх послуг понад державне (регіональне) замовлення в межах ліцензійного обсягу
                 (розмір щомісячної плати протягом передбаченого терміну навчання)
@@ -568,7 +568,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "student-life",
         title: "Студентське життя",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<hr class="hr-separator">
             <h2>Студентське життя у ВНАУ — це більше, ніж навчання!</h2>
 
@@ -620,7 +620,7 @@ export const initialAbiturientCard: AbiturientInfo[] = [
     {
         id: "about",
         title: "Про університет ",
-        subtitle: "Ознайомтесь з актуальною інформацією",
+        subtitle: "",
         content: `<hr class="hr-separator">
             <div class="info-section">
                 <p>Нині українська земля потребує кваліфікованих аграріїв, людей, які розуміють і поважають її. Саме таких фахівців готує у своїх стінах Вінницький національний аграрний університет.</p>

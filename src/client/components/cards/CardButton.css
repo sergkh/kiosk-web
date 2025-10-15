@@ -44,6 +44,10 @@
   background: var(--cards-backround-active);
 }
 
+.info-card.full .card-text {
+  min-height: 2.5em;
+}
+
 .info-card h3 {
   font-weight: 700;
   font-size: 1.1em;
@@ -52,7 +56,7 @@
 }
 
 .info-card img {
-  max-width: 80%;
+  max-width: 120px;
   height: auto;  
   margin-bottom: 1em;
 }

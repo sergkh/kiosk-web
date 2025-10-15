@@ -18,4 +18,6 @@ const config = {
   sessionExpiration: 60 * 60 * 1 * 1000, // 1 hour
 };
 
+console.log("Configuration loaded:", config);
+
 export default config;

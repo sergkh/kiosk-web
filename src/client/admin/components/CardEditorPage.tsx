@@ -4,6 +4,7 @@ import { useLoaderData, useNavigate } from 'react-router';
 import {useDropzone} from 'react-dropzone';
 import toast, { Toaster } from 'react-hot-toast';
 import './CardEditorPage.css';
+import Editor from 'react-simple-wysiwyg';
 
 export enum EditCardType {
   Abiturient = 'abiturient',
@@ -19,7 +20,7 @@ async function updateInfo(id: string, title: string, subtitle: string, content: 
   formData.append('title', title);
   formData.append('subtitle', subtitle);
   formData.append('content', content);
-    
+
   if (imageFile) {
     formData.append('image', imageFile);
   }
@@ -114,14 +115,7 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
         </div>
 
         <div>
-          <label>HTML контент:</label>
-          <textarea 
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={15}
-            style={{ fontFamily: 'monospace' }}
-            placeholder="Введіть HTML контент"
-          />
+          <Editor value={content} onChange={evt => setContent(evt.target.value)} />
         </div>
       </div>
 
@@ -170,3 +164,7 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
 }
 
 export default CardEditorPage;
+
+
+
+

@@ -5,7 +5,7 @@
 .faculties {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(320px, auto));
+  grid-template-columns: repeat(auto-fit, minmax(18em, auto));
   gap: 1em;
   padding: 1em;
 }
@@ -16,8 +16,8 @@
   flex-direction: row;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none; 
-  padding: 1em; /** To avoid cutting a shadow */  
+  scrollbar-width: none;  
+  margin: 1em 1em;
   scroll-snap-type: x mandatory;
 }
 

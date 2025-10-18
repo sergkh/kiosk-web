@@ -21,16 +21,10 @@ export default function AdminLayout() {
       <header>
         <span className="left"></span>
         <nav className="center">
-        <NavLink to="/admin/" end className={({isActive, isPending}) =>  isActive ? 'nav-link-active' :isPending ? 'nav-link-pending'  : ''}> Студентам </NavLink>
-        <NavLink to="./abiturients" end className={({isActive, isPending }) =>  isActive ? 'nav-link-active':  isPending ? 'nav-link-pending' : ''}> Абітурієнтам </NavLink>
+          <NavLink to="/admin/categories/students" end className={({isActive}) =>  isActive ? 'nav-link-active': 'nav-link'}>Студентам</NavLink>
+          <NavLink to="/admin/categories/abiturients" end className={({isActive }) =>  isActive ? 'nav-link-active' : 'nav-link'}>Абітурієнтам</NavLink>
+          <NavLink to="/admin/categories/news" end className={({isActive }) =>  isActive ? 'nav-link-active' : 'nav-link'}>Новини</NavLink>
         </nav>
-        {/* <nav className="center">
-          <ul>
-            <li><NavLink to="/admin/" className="nav-link">Студентам</NavLink></li>
-            <li><NavLink to="/admin/abiturients" className="nav-link">Абітурієнтам</NavLink></li>
-          </ul>
-        </nav> */}
-
         <div className="right">
           <AdminAvatar/>
         </div>

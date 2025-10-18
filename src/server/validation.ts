@@ -28,3 +28,15 @@ export const validatePublished = [
     .isBoolean()
     .withMessage('Published must be a boolean value')
 ]
+
+export const validateOrderRequest = [
+  body('order')
+    .isArray()
+    .withMessage('Order must be an array of card IDs')    
+    .custom((value) => {
+      if (value.length === 0) {
+        throw new Error('Order array cannot be empty');
+      }
+      return true;
+    })
+];

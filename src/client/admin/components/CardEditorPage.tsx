@@ -1,15 +1,10 @@
 import { useCallback, useState } from 'react';
 import type { InfoCard } from "../../../shared/models";
-import { useLoaderData, useNavigate } from 'react-router';
+import { useLoaderData, useNavigate, useParams } from 'react-router';
 import {useDropzone} from 'react-dropzone';
 import toast, { Toaster } from 'react-hot-toast';
 import './CardEditorPage.css';
 import Editor from 'react-simple-wysiwyg';
-
-export enum EditCardType {
-  Abiturient = 'abiturient',
-  Student = 'student'
-}
 
 type PreviewFile = {
   preview: string;
@@ -39,10 +34,12 @@ async function updateInfo(id: string, title: string, subtitle: string | null, co
   }    
 }
 
-function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean }) {
+function CardEditorPage({create}: { create?: boolean }) {
+  const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
   const card = useLoaderData() as InfoCard;
-  const url = type === EditCardType.Abiturient ? '/api/abiturient-info' : '/api/student-info';
+
+  const url = `/api/info/${category}`;
 
   const [title, setTitle] = useState(card.title);
   const [subtitle, setSubtitle] = useState(card.subtitle);
@@ -93,7 +90,7 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
 
   return (
     <div className="card-editor-page">
-      <h3>Редагування інформації для { type == EditCardType.Abiturient ? 'абітурієнтів' : 'студентів' } </h3>
+      <h3>Редагування інформації</h3>
       <Toaster position="top-center"/>
       <div>
         <div>

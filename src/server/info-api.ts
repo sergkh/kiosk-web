@@ -2,7 +2,7 @@ import express, { type Request, type Response } from "express";
 import { infoCards } from "./db.ts";
 import { authorized } from "./auth.ts";
 import { imageUrl, singleImageUpload } from "./upload.ts";
-import { validateCategory, validatePublished, rejectInvalid } from "./validation.ts";
+import { validateCategory, validateOrderRequest, validatePublished, rejectInvalid } from "./validation.ts";
 
 const cards = express.Router();
 
@@ -36,6 +36,33 @@ cards.post("/:category", validateCategory, rejectInvalid, authorized, singleImag
   const newCard = await infoCards.create(card);
   res.status(201).json(newCard);
 });
+
+cards.put("/:category/reorder", validateCategory, validateOrderRequest, rejectInvalid, async (req: Request, res: Response) => {
+  const { order } = req.body;
+  
+  console.log(`Updating cards order for category ${req.params.category}:` + order.join(', '));
+  
+  const allCards = await infoCards.all({
+    category: req.params.category,    
+    includeUnpublished: req.query.all === 'true'    
+  });
+
+  const updatedCards = allCards.map((card) => {
+    const newPosition = order.indexOf(card.id);
+    
+    if (newPosition !== -1) {
+      card.position = newPosition;
+      return infoCards.update(card);
+    } else {
+      return Promise.resolve(card);
+    }
+  });
+
+  await Promise.all(updatedCards);
+
+  res.status(204).send();
+});
+
 
 cards.put("/:category/:id", validateCategory, rejectInvalid, authorized, singleImageUpload, async (req: Request, res: Response) => {
   const card = req.body;   

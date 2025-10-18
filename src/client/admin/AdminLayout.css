@@ -1,17 +1,3 @@
-/* header nav ul {
-  display: flex;
-  gap: 1rem;
-  background-color: #092f25;
-  padding: 1em;
-  border-radius: 3em;
-  justify-content: center;
-  align-items: center;
-
-  li {
-    list-style: none;
-  }
-} */
-
 .center {
   display: flex;
   gap: 1rem;
@@ -30,20 +16,10 @@
   color: black;
 }
 
-.nav-link-pending {
-   background-color: #092f25;
-}
-
-
-
-/* .nav-link:active{
+.nav-link {
+  background-color: #092f25;
   padding: 0.5em;
-  background-color: white;
-  border-radius: 3em;
-  color: black;
-  cursor: default;
-
-} */
+}
 
 header .admin-avatar img {
   width: auto;

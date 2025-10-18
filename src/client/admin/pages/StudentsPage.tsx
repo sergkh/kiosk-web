@@ -6,7 +6,7 @@ function StudentsPage() {
       <h2>Картки студентів</h2>      
       <InfoManagementTable 
           adminUrlPrefix="/admin/students"
-          apiUrl="/api/student-info" 
+          apiUrl="/api/info/students" 
       />
     </div>
   )

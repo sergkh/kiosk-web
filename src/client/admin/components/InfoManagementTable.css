@@ -1,20 +1,15 @@
-.cards-table {
+.cards-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.cards-table table {
+.cards-list ul {
   width: 100%;
   border-collapse: collapse;
 }
 
-.cards-table th, .cards-table td {
-  padding: 0.5em;
-  text-align: left;
-}
-
-.cards-table .main-controls {
+.cards-list .main-controls {
   display: flex;
   justify-content: flex-end;
   width: 100%;

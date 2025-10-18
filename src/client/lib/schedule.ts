@@ -1,13 +1,6 @@
 import type { Faculty, LessonTime, MkrApiDictionary, MkrEvent, MkrGroup } from "../../shared/models";
 // @ts-ignore We have no types for js-cache
 import cache from "js-cache";
-import agro from '../assets/faculties/agro.png';
-import ecology from '../assets/faculties/ecology.png';
-import veterinarian from '../assets/faculties/veterinarian.png';
-import economics from '../assets/faculties/economics.png';
-import itf from '../assets/faculties/itf.png';
-import management from '../assets/faculties/management.png';
-import finances from '../assets/faculties/finances.png';
 import config from "./config";
 
 const localCache = new cache.Cache({
@@ -16,12 +9,12 @@ const localCache = new cache.Cache({
 });
 
 const facultyImages: Map<string, string> = new Map([
-  ['1',  agro],
-  ['5',  economics],
-  ['57', veterinarian],
-  ['7',  itf],
-  ['6',  management],
-  ['42', finances],
+  ['1',  '/img/faculties/agro.png'],
+  ['5',  '/img/faculties/economics.png'],
+  ['57', '/img/faculties/veterinarian.png'],
+  ['7',  '/img/faculties/itf.png'],
+  ['6',  '/img/faculties/management.png'],
+  ['42', '/img/faculties/finances.png'],
 ]);
 
 async function getFaculties(): Promise<Faculty[]> {
@@ -37,7 +30,11 @@ async function getFaculties(): Promise<Faculty[]> {
     .filter((f) => facultyImages.has(f.id))
     .map((faculty: MkrApiDictionary) => {
       // dirty hack to fix IT faculty name to fit into the layout
+      faculty.name = faculty.name.replace('Факультет ', '');
       faculty.name = faculty.name.replace('інформаційних технологій', 'ІТ');
+      // Capitalize first letter of faculty name
+      faculty.name = faculty.name.charAt(0).toUpperCase() + faculty.name.slice(1);
+      
       return ({...faculty, image: facultyImages.get(faculty.id)}) as Faculty;
     });
   

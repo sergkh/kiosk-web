@@ -14,6 +14,7 @@ if (!process.env.ADMIN_EMAILS) {
 const config = {
   baseUrl: process.env.VITE_BASE_URL || '/',
   admins: (process.env.ADMIN_EMAILS ?? '').split(',').map(email => email.trim()).filter(email => email.length > 0),
+  newsBaseUrl: process.env.NEWS_BASE_URL || 'https://vsau.org/novini',
   secureCookie: process.env.NODE_ENV === 'production',
   sessionExpiration: 60 * 60 * 1 * 1000, // 1 hour
 };

@@ -1,34 +1,27 @@
-export type Article = {
-  title: string,
-  image?: string,
-  content: string
-};
-
 export type Faculty = {
   id: string,
   name: string,
   image: string
 };
 
-
-export type FacultyInfo = {
-  id: string;
-  name: string;
-  link: string;
-  image: string;
-  description: string;
-};
-
-export type Info = {
+export type InfoCard = {
   id: string,
   title: string,
-  subtitle: string,
-  image: string,
-  content: string
+  subtitle?: string | null,
+  image?: string | null,
+  content?: string | null,
+  
+  // Category of the info, e.g. "students", "abiturients", "faculties"
+  category: string,  
+  
+  // If set show the list of categories instead of content
+  subcategory?: string | null,
+  
+  // Opitional link to an external resource for syncing the info
+  resource?: string,
+  position: number,
+  published: boolean
 }
-
-export type StudentInfo = Info
-export type AbiturientInfo = Info
 
 export type MkrApiDictionary = {
   id: string;

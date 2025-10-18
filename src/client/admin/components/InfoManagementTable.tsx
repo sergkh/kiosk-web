@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import type { Info } from "../../../shared/models";
+import type { InfoCard } from "../../../shared/models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePen, faSquarePlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import toast, { Toaster } from 'react-hot-toast';
 import './InfoManagementTable.css';
 import { NavLink } from "react-router";
+import { Reorder } from "motion/react";
+import { ReordeableInfoCard } from "./ReordeableInfoCard";
 
 type InfoManagementTableProps = {
   adminUrlPrefix: string;
@@ -12,8 +14,10 @@ type InfoManagementTableProps = {
 };
 
 function InfoManagementTable({adminUrlPrefix, apiUrl}: InfoManagementTableProps) {
-  const [entries, setEntries] = useState<Info[]>([]);
+  const [entries, setEntries] = useState<InfoCard[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  const [items, setItems] = useState([0, 1, 2, 3]);
 
   useEffect(() => {
     fetch(apiUrl).then(res => res.json())
@@ -27,7 +31,7 @@ function InfoManagementTable({adminUrlPrefix, apiUrl}: InfoManagementTableProps)
     });
   }, []);
 
-  const deleteCard = async (card: Info) => {
+  const deleteCard = async (card: InfoCard) => {
     if (!confirm(`Ви впевнені, що хочете видалити картку ${card.title}?`)) {
         return;
     }
@@ -47,8 +51,9 @@ function InfoManagementTable({adminUrlPrefix, apiUrl}: InfoManagementTableProps)
     }
   };
 
+
   return (
-    <div className="cards-table">
+    <div className="cards-list">
       <div className="main-controls"> 
         
         <NavLink to={`${adminUrlPrefix}/create`} className="action-btn">
@@ -58,32 +63,12 @@ function InfoManagementTable({adminUrlPrefix, apiUrl}: InfoManagementTableProps)
       
       {loading && <p>Завантаження...</p>}
       <Toaster position="top-center"/>
-      <table>
-        <thead>
-          <tr>
-            <th>Назва</th>
-            <th>Підзаголовок</th>
-            <th>Контент</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {entries.map(card => (
-            <tr key={card.id}>
-              <td>{card.title}</td>
-              <td>{card.subtitle}</td>
-              <td>{card.content ? card.content.substring(0, 100) + '...' : 'Немає'}</td>
-              <td className='right'>
-                  <NavLink to={`${adminUrlPrefix}/edit/${card.id}`} className="action-btn">
-                    <FontAwesomeIcon className="action-btn" icon={faFilePen} />
-                  </NavLink>
-                  &nbsp;
-                  <FontAwesomeIcon className="action-btn" icon={faTrash} onClick={() => deleteCard(card)} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
+      <Reorder.Group axis="y" values={entries} onReorder={setEntries}>
+        {entries.map((card) => (
+          <ReordeableInfoCard key={card.id} card={card} adminUrlPrefix={adminUrlPrefix} onDelete={() => deleteCard(card) }/>
+        ))}
+      </Reorder.Group>
     </div>
   );
 }

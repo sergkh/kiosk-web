@@ -5,20 +5,21 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import News from "./pages/News.tsx";
 import Schedule from "./pages/Schedule.tsx";
-import StudentInfoPage from "./pages/StudentInfoPage.tsx";
-import AbiturientInfoPage from "./pages/AbiturientInfoPage.tsx";
+import InfoCardsPage from "./pages/InfoCardsPage.tsx";
 import Page from "./Page.tsx";
 import DevelopersPage from "./pages/DevelopersPage.tsx";
 import ErrorBoundary from "./pages/ErrorBoundary.tsx";
 // needed for i18n to work
 import i18n from "./lib/locale.ts";
 import IdlePage from "./pages/IdlePage.tsx";
+import { infoCardsLoader } from "./lib/loaders.ts";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Page><News /></Page>,
-    errorElement: <ErrorBoundary />
+    errorElement: <ErrorBoundary />,
+    loader: infoCardsLoader('news')
   },
   {
     path: "/schedule",
@@ -27,13 +28,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/students",
-    element: <Page><StudentInfoPage /></Page>,
-    errorElement: <ErrorBoundary />
+    element: <Page><InfoCardsPage key="students" title="title.students" /></Page>,
+    errorElement: <ErrorBoundary />,
+    loader: infoCardsLoader('students')
   }, 
   {
     path: "/abiturients",
-    element: <Page><AbiturientInfoPage /></Page>,
-    errorElement: <ErrorBoundary />
+    element: <Page><InfoCardsPage key="abiturients" title="title.abiturients" /></Page>,
+    errorElement: <ErrorBoundary />,
+    loader: infoCardsLoader('abiturients')
   },
   {
     path: "/developers",

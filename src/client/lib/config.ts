@@ -31,6 +31,7 @@ const config = {
   idleTimeout: parseInt(kioskConf.get('idle_timeout') ?? import.meta.env.VITE_IDLE_TIMEOUT ?? "600000"),
   mkrApiUrl: kioskConf.get('mkr_api_url') ?? import.meta.env.VITE_MKR_API_URL ?? 'https://mkr.sergkh.com',
   scheduleDays: parseInt(kioskConf.get('schedule_days') ?? import.meta.env.VITE_SCHEDULE_DAYS_TO_SHOW ?? "3"),
+  numberOfNews: parseInt(kioskConf.get('number_of_news') ?? import.meta.env.VITE_NUMBER_OF_NEWS ?? "3"),
 }
 
 console.log('Site config: ' + JSON.stringify(config))

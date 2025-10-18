@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import type { Info } from "../../../shared/models";
+import type { InfoCard } from "../../../shared/models";
 import { useLoaderData, useNavigate } from 'react-router';
 import {useDropzone} from 'react-dropzone';
 import toast, { Toaster } from 'react-hot-toast';
@@ -15,11 +15,11 @@ type PreviewFile = {
   preview: string;
 }
 
-async function updateInfo(id: string, title: string, subtitle: string, content: string, imageFile: File | null, create: boolean, url: string): Promise<boolean> {
+async function updateInfo(id: string, title: string, subtitle: string | null, content: string | null, imageFile: File | null, create: boolean, url: string): Promise<boolean> {
   const formData = new FormData();
   formData.append('title', title);
-  formData.append('subtitle', subtitle);
-  formData.append('content', content);
+  if (subtitle) formData.append('subtitle', subtitle);
+  if (content) formData.append('content', content);
 
   if (imageFile) {
     formData.append('image', imageFile);
@@ -41,7 +41,7 @@ async function updateInfo(id: string, title: string, subtitle: string, content: 
 
 function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean }) {
   const navigate = useNavigate();
-  const card = useLoaderData() as Info;
+  const card = useLoaderData() as InfoCard;
   const url = type === EditCardType.Abiturient ? '/api/abiturient-info' : '/api/student-info';
 
   const [title, setTitle] = useState(card.title);
@@ -71,7 +71,7 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
   );
 
   const handleSave = () => {
-    updateInfo(card.id, title, subtitle, content, imageFile, create || false, url).then((success) => {
+    updateInfo(card.id, title, subtitle ?? null, content ?? null, imageFile, create || false, url).then((success) => {
       if (success) {
         navigate(-1);
       }
@@ -108,14 +108,14 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
         <div>
           <label>Підзаголовок:</label>
           <input 
-            value={subtitle} 
+            value={subtitle ?? ""} 
             onChange={(e) => setSubtitle(e.target.value)}
             placeholder="Введіть підзаголовок"
           />
         </div>
 
         <div>
-          <Editor value={content} onChange={evt => setContent(evt.target.value)} />
+          <Editor value={content ?? ""} onChange={evt => setContent(evt.target.value)} />
         </div>
       </div>
 
@@ -145,14 +145,6 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
           </div>
         </div>
 
-      </div>
-
-      <div>
-        <h3>Превью</h3>        
-        <div 
-          className="preview"
-          dangerouslySetInnerHTML={{ __html: content }}          
-        />
       </div>
 
       <div className="action-buttons">

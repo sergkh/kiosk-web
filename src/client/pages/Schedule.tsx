@@ -6,6 +6,7 @@ import CardButton, { CardSize } from "../components/cards/CardButton";
 import GroupSchedule from "../components/GroupSchedule";
 import { Loader } from "../components/Loader";
 import { ErrorOverlay } from "../components/ErrorOverlay";
+import { useTranslation } from "react-i18next";
 
 type FacultiesListProps = {
   faculties: Faculty[],
@@ -142,6 +143,7 @@ function Schedule() {
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
+  const {t} = useTranslation();
 
   useEffect(() => {
     setLoading(true);
@@ -153,7 +155,7 @@ function Schedule() {
 
   return (
     <div className="schedule-page">
-      {selectedFaculty == null ? <h1>Розклад занять</h1> : <></> }
+      {selectedFaculty == null ? <h1>{t('title.schedule')}</h1> : <></> }
       
       {loading ? <Loader /> : <></>}
       <FacultiesList faculties={faculties} active={selectedFaculty} onSelect={setSelectedFaculty} />      

@@ -7,11 +7,13 @@ function AdminAvatar() {
   const { user } = useAuth();
   return (
     <div className="admin-avatar">
-      {user?.picture ? (
-        <img src={user.picture} alt={user.email || "Admin Avatar"} />
-      ) : (
-        <span className="default-avatar">A</span>
-      )}
+      <a href="/api/auth/logout" className="logout">
+        {user?.picture ? (
+          <img src={user.picture} alt={user.email || "Admin Avatar"} />
+        ) : (
+          <span className="default-avatar">A</span>
+        )}
+      </a>
     </div>
   );
 }

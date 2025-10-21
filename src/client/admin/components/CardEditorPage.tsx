@@ -112,7 +112,7 @@ function CardEditorPage({create}: { create?: boolean }) {
         </div>
 
         <div>
-          <Editor value={content ?? ""} onChange={evt => setContent(evt.target.value)} />
+          <Editor value={content ?? ""} onChange={evt => setContent(evt.target.value)} containerProps={{ style: { resize: 'vertical' } }} />
         </div>
       </div>
 

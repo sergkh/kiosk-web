@@ -19,8 +19,6 @@ const config = {
   sessionExpiration: 60 * 60 * 1 * 1000, // 1 hour
 };
 
-console.log("Tst: " + process.env.SECURE_SESSION);
-
 console.log("Configuration loaded:", config);
 
 export default config;

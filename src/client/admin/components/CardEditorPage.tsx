@@ -1,25 +1,20 @@
 import { useCallback, useState } from 'react';
-import type { Info } from "../../../shared/models";
-import { useLoaderData, useNavigate } from 'react-router';
+import type { InfoCard } from "../../../shared/models";
+import { useLoaderData, useNavigate, useParams } from 'react-router';
 import {useDropzone} from 'react-dropzone';
 import toast, { Toaster } from 'react-hot-toast';
 import './CardEditorPage.css';
 import Editor from 'react-simple-wysiwyg';
 
-export enum EditCardType {
-  Abiturient = 'abiturient',
-  Student = 'student'
-}
-
 type PreviewFile = {
   preview: string;
 }
 
-async function updateInfo(id: string, title: string, subtitle: string, content: string, imageFile: File | null, create: boolean, url: string): Promise<boolean> {
+async function updateInfo(id: string, title: string, subtitle: string | null, content: string | null, imageFile: File | null, create: boolean, url: string): Promise<boolean> {
   const formData = new FormData();
   formData.append('title', title);
-  formData.append('subtitle', subtitle);
-  formData.append('content', content);
+  if (subtitle) formData.append('subtitle', subtitle);
+  if (content) formData.append('content', content);
 
   if (imageFile) {
     formData.append('image', imageFile);
@@ -39,10 +34,12 @@ async function updateInfo(id: string, title: string, subtitle: string, content: 
   }    
 }
 
-function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean }) {
+function CardEditorPage({create}: { create?: boolean }) {
+  const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
-  const card = useLoaderData() as Info;
-  const url = type === EditCardType.Abiturient ? '/api/abiturient-info' : '/api/student-info';
+  const card = useLoaderData() as InfoCard;
+
+  const url = `/api/info/${category}`;
 
   const [title, setTitle] = useState(card.title);
   const [subtitle, setSubtitle] = useState(card.subtitle);
@@ -71,7 +68,7 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
   );
 
   const handleSave = () => {
-    updateInfo(card.id, title, subtitle, content, imageFile, create || false, url).then((success) => {
+    updateInfo(card.id, title, subtitle ?? null, content ?? null, imageFile, create || false, url).then((success) => {
       if (success) {
         navigate(-1);
       }
@@ -93,7 +90,7 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
 
   return (
     <div className="card-editor-page">
-      <h3>Редагування інформації для { type == EditCardType.Abiturient ? 'абітурієнтів' : 'студентів' } </h3>
+      <h3>Редагування інформації</h3>
       <Toaster position="top-center"/>
       <div>
         <div>
@@ -108,14 +105,14 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
         <div>
           <label>Підзаголовок:</label>
           <input 
-            value={subtitle} 
+            value={subtitle ?? ""} 
             onChange={(e) => setSubtitle(e.target.value)}
             placeholder="Введіть підзаголовок"
           />
         </div>
 
         <div>
-          <Editor value={content} onChange={evt => setContent(evt.target.value)} />
+          <Editor value={content ?? ""} onChange={evt => setContent(evt.target.value)} />
         </div>
       </div>
 

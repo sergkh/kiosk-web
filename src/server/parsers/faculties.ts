@@ -1,9 +1,13 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
-import type { FacultyInfo } from "./../shared/models";
-import { facultiesList } from "../shared/facultiesList";
+import { infoCards } from "../db";
 
-export async function parseFacultyInfo(url: string) {
+type FacultyInfo = {
+  title: string,
+  description: string
+};
+
+async function parseFacultyInfo(url: string): Promise<FacultyInfo> {
 
   const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
   if (!response.ok) {
@@ -13,7 +17,9 @@ export async function parseFacultyInfo(url: string) {
   const html = await response.text();
   const $ = cheerio.load(html);
 
-  const title = $("h1").first().text().trim();
+  let title = $("h1").first().text().trim();
+  title = title.replace('Факультет ', '');
+  title = title.charAt(0).toUpperCase() + title.slice(1);
 
   const selectors = [
     "div.col-lg-8.mb-3",
@@ -39,43 +45,47 @@ export async function parseFacultyInfo(url: string) {
             $(img).attr("src", `${baseUrl.origin}/${src}`);
           }
         }
-});
+      });
 
       const blockHtml = $(el).html();
       if (blockHtml) combinedHtml += blockHtml + "\n\n";
     });
   }
 
-  if (!combinedHtml.trim()) {
+  combinedHtml = combinedHtml.trim();
+
+  if (!combinedHtml) {
     console.warn(`[ПОПЕРЕДЖЕННЯ]: Не знайдено контент у ${url}`);
     combinedHtml = $("body").html() || "";
   }
 
-  return {
-    title,
-    description: combinedHtml,
-    image: null, 
-  };
+  return { title, description: combinedHtml } as FacultyInfo;
 }
 
-export async function loadAllFaculties(): Promise<FacultyInfo[]> {
-  const faculties = await Promise.all(
-    facultiesList.map(async (faculty) => {
+export async function loadAllFaculties(): Promise<void> {
+  const facultyCards = await infoCards.all({ category: "faculties", includeUnpublished: true});
+
+  const allLoaded = facultyCards
+    .filter(faculty => faculty.resource)
+    .map(async (faculty) => {
       try {
-        const info = await parseFacultyInfo(faculty.link);
-        return {
-          id: faculty.id,
-          name: info.title || faculty.name,
-          link: faculty.link,
-          image: info.image || faculty.image, 
-          description: info.description,
-        } as FacultyInfo;
+        const info = await parseFacultyInfo(faculty.resource!);
+
+        if (faculty.content != info.description || faculty.title != info.title) {
+          console.log(`Оновлення інформації про факультет ${faculty.title}`);
+          const updatedFaculty = {
+            ...faculty,
+            title: info.title,
+            content: info.description
+          };
+
+          return await infoCards.update(updatedFaculty);
+        }
       } catch (error) {
-        console.warn(`Помилка при парсингу ${faculty.name}:`, error);
+        console.warn(`Помилка при парсингу інформації про ${faculty.title}:`, error);
         return null;
       }
     })
-  );
 
-  return faculties.filter(Boolean) as FacultyInfo[];
+  await Promise.all(allLoaded);
 }

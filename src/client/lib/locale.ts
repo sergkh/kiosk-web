@@ -11,6 +11,11 @@ const resources = {
         applicants: "For Applicants",
         schedule: "Schedule"
       },
+      title: {
+        students: "Information for Students",
+        abiturients: "Information for Applicants",
+        schedule: "Schedule"
+      },
       footer: {
         info: "© 2025 VNAU. Information may be updated",
         created_pt1: "Created with",
@@ -36,6 +41,11 @@ const resources = {
         students: "Студентам",
         applicants: "Абітурієнтам",
         schedule: "Розклад"
+      },
+      title: {
+        students: "Інформація для студентів",
+        abiturients: "Інформація для абітурієнтів",
+        schedule: "Розклад занять"
       },
       footer: {
         info: "© 2025 ВНАУ. Інформація може оновлюватися",

@@ -1,48 +1,64 @@
-import type { AbiturientInfo, StudentInfo } from "../shared/models";
+import type { InfoCard } from "../shared/models";
 
-export const initialStudentCard: StudentInfo[] = [
+export const initialCards: InfoCard[] = [
+    ///////////////////
+    // Student cards //
+    ///////////////////
     {
         id: "rectorate-info",
         title: "Все про ректорат",
         subtitle: "",
-        content: "",
-        image: ""
+        category: "students",
+        position: 0,
+        published: true
     },
     {
         id: "functional-parts",
         title: "Функціональні частини",
         subtitle: "",
-        content: "",
-        image: ""
+        content: "no info",
+        category: "students",
+        position: 1,
+        published: true
     },
     {
         id: "vnau-buildings",
         title: "Схема розташувань будівель ВНАУ",
         subtitle: "",
-        content: "",
-        image: ""
+        content: "no info",
+        category: "students",
+        position: 2,
+        published: true
     },
     {
         id: "faculties",
         title: "Факультети",
         subtitle: "",
-        content: "",
-        image: ""
+        category: "students",
+        subcategory: "faculties", // requires an API /api/faculties returning Info objects
+        position: 3,
+        published: true
     },
     {
         id: "dean-offices",
         title: "Деканати",
         subtitle: "",
-        content: "",
-        image: ""
-    }
-];
+        content: "no info",
+        category: "students",
+        position: 4,
+        published: true
+    },
 
-export const initialAbiturientCard: AbiturientInfo[] = [
+    ///////////////////////
+    // Abiturient cards  //
+    //////////////////////
     {
         id: "rules",
         title: "Правила вступу",
         subtitle: "",
+        category: "abiturients",
+        subcategory: null,
+        position: 0,
         content: `<h2>Загальні положення</h2>
                   <div class="list-item">
                     <p>1. Правила прийому до Вінницького національного аграрного університету на навчання для здобуття
@@ -103,13 +119,15 @@ export const initialAbiturientCard: AbiturientInfo[] = [
                             спеціальність.</p>
                     </div>
                 </div>`,
-        image: "/img/student-info/rules.png"
+        image: "/img/students/rules.png",
+        published: true
     },
-
     {
         id: "specialities",
         title: "Спеціальності та освітні програми",
         subtitle: "",
+        category: "abiturients",
+        position: 1,
         content: `<div class="program-list">
                     <div class="accredited-section">АКРЕДИТОВАНІ:</div>
                         <ol class="accredited-list">
@@ -189,13 +207,15 @@ export const initialAbiturientCard: AbiturientInfo[] = [
                         <li>Ветеринарна гігієна, санітарія і експертиза</li>
                     </ol>
             </div>`,
-        image: "/img/student-info/specialities.png"
+        image: "/img/students/specialities.png",
+        published: true
     },
-
     {
         id: "admission",
         title: "Вступна кампанія",
         subtitle: "",
+        category: "abiturients",
+        position: 2,
         content: `<h2 class="section-title">Основні дати вступної кампанії 2025</h2>
 
             <div class="info-section">
@@ -275,13 +295,16 @@ export const initialAbiturientCard: AbiturientInfo[] = [
                 </li>
             </ul>
         </div>`,
-        image: "/img/student-info/admission.png"
+        image: "/img/students/admission.png",
+        published: true
     },
 
     {
         id: "documents",
         title: "Необхідні документи",
         subtitle: "",
+        category: "abiturients",
+        position: 3,
         content: `<div class="doc-section">
                 <h3>Основні документи:</h3>
                 <ul>
@@ -301,25 +324,31 @@ export const initialAbiturientCard: AbiturientInfo[] = [
                 </ul>
             </div>
         </div>`,
-        image: "/img/student-info/documents.png"
+        image: "/img/students/documents.png",
+        published: true
     },
 
     {
         id: "contacts",
         title: "Контакти приймальної комісії",
         subtitle: "",
+        category: "abiturients",
+        position: 4,
         content: `<div class="contact-info">
                 <p><strong>Місцезнаходження:</strong> м. Вінниця, вул. Сонячна 3, корпус 1</p>
                 <p><strong>Телефон:</strong> (0432) 46-74-37, 57-44-42</p>
                 <p><strong>Email:</strong> pk_vnau@ukr.net</p>
             </div>`,
-        image: "/img/student-info/contacts.png"
+        image: "/img/students/contacts.png",
+        published: true
     },
 
     {
         id: "tution",
         title: "Вартість навчання",
         subtitle: "",
+        category: "abiturients",
+        position: 5,
         content: `<div class="table-caption">
                 Вартість надання освітніх послуг понад державне (регіональне) замовлення в межах ліцензійного обсягу
                 (розмір щомісячної плати протягом передбаченого терміну навчання)
@@ -562,13 +591,15 @@ export const initialAbiturientCard: AbiturientInfo[] = [
                 *Вартість навчання сформовано відповідно до Постанови Кабінету Міністрів України від 26 березня 2020 р.
                 № 191 "Деякі питання підвищення кваліфікації".
             </div>`,
-        image: "/img/student-info/tution.png"
+        image: "/img/students/tution.png",
+        published: true
     },
-
     {
         id: "student-life",
         title: "Студентське життя",
         subtitle: "",
+        category: "abiturients",
+        position: 6,
         content: `<hr class="hr-separator">
             <h2>Студентське життя у ВНАУ — це більше, ніж навчання!</h2>
 
@@ -614,13 +645,15 @@ export const initialAbiturientCard: AbiturientInfo[] = [
                 <p>ВНАУ — це місце, де поєднуються комфорт, знання та розвиток. Тут студенти не лише отримують якісну
                     освіту, а й живуть щасливим та продуктивним життям!</p>
             </div>`,
-        image: "/img/student-info/student-life.png"
+        image: "/img/students/student-life.png",
+        published: true
     },
-
     {
         id: "about",
         title: "Про університет ",
         subtitle: "",
+        category: "abiturients",
+        position: 7,
         content: `<hr class="hr-separator">
             <div class="info-section">
                 <p>Нині українська земля потребує кваліфікованих аграріїв, людей, які розуміють і поважають її. Саме таких фахівців готує у своїх стінах Вінницький національний аграрний університет.</p>
@@ -642,6 +675,89 @@ export const initialAbiturientCard: AbiturientInfo[] = [
             <div class="info-section">
                 <p>ВНАУ є провідним навчальним закладом України з впровадження сучасних інноваційних методик організації навчального процесу, електронних засобів навчання, тестового контролю залишкових знань тощо. Електронна система управління якістю освітньої діяльності “Сократ” є власною розробкою університету та глобальним Інформаційним базсом для управління навчальним процесом; електронної підтримки бібліотеки; репозиторію університету; науково-консультативного освітнього середовища університету.</p>
             </div>`,
-        image: "/img/student-info/about.png"
-    } 
-]
+        image: "/img/students/about.png",
+        published: true
+    },
+  /////////////////
+  // Faculties.  //
+  /////////////////
+    {
+        id: "agronomichnij-fakultet",
+        title: "Факультет агрономії, садівництва та захисту рослин",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/agronomichnij-fakultet",
+        image: "/img/faculties/agro.png",
+        position: 0,
+        published: true
+    },
+    {
+        id: "2",
+        title: "Факультет екології, лісівництва та садово-паркового господарства",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/fakultet-ekologiii-lisnicztva-ta-sadovo-parkovogo-gospodarstva",
+        image: "/img/faculties/ecology.png",
+        position: 1,
+        published: true
+    },
+    {
+        id: "3",
+        title: "Інженерно-технологічний факультет",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/inzhenerno-tekhnolohichnyi-fakultet",
+        image: "/img/faculties/itf.png",
+        content: "no info",
+        position: 2,
+        published: true
+    },
+    {
+        id: "4",
+        title: "Факультет економіки, інформаційних технологій та сфери обслуговування",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/fakultet-ekonomiky-informatsiinykh-tekhnolohii-ta-sfery-obsluhovuvannia",
+        image: "/img/faculties/economics.png",
+        content: "no info",
+        position: 3,
+        published: true
+    },
+    {
+        id: "5",
+        title: "Факультет обліку, фінансів та аудиту",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/fakultet-obliku-finansiv-ta-audytu",
+        image: "/img/faculties/finances.png",
+        content: "no info",
+        position: 4,
+        published: true
+    },
+    {
+        id: "6",
+        title: "Факультет менеджменту та права",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/fakultet-menedzhmentu-ta-prava",
+        image: "/img/faculties/management.png",
+        content: "no info",
+        position: 5,
+        published: true
+    },
+    {
+        id: "7",
+        title: "Факультет технології виробництва, переробки та робототехніки у тваринництві",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/fakultet-texnologiii-virobnicztva",
+        image: "/img/faculties/plants.png",
+        content: "no info",
+        position: 6,
+        published: true
+    },
+    {
+        id: "8",
+        title: "Факультет ветеринарної медицини",
+        category: "faculties",
+        resource: "https://vsau.org/fakulteti/fakultet-veterinarnoii-mediczini",
+        image: "/img/faculties/veterinarian.png",
+        content: "no info",
+        position: 7,
+        published: true
+    }
+
+];

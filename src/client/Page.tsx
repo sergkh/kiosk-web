@@ -1,6 +1,6 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faGraduationCap, faHeart, faNewspaper } from '@fortawesome/free-solid-svg-icons'
+import { faAddressCard, faCalendarDays, faGraduationCap, faHeart, faNewspaper } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from 'react-router'
 import './Page.css'
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ function Header() {
   const links: MenuItem[] = [
     { path: '/', icon: faNewspaper, label: 'header.main' },
     config.showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.students' } : null,
-    config.showAbiturientInfo ? { path: '/abiturients', icon: faGraduationCap, label: 'header.applicants' } : null,
+    config.showAbiturientInfo ? { path: '/abiturients', icon: faAddressCard, label: 'header.applicants' } : null,
     { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
   ].filter(Boolean) as MenuItem[];
 

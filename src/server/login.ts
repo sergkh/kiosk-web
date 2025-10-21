@@ -1,10 +1,10 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import admin, { type ServiceAccount } from "firebase-admin";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
 import config from "./config";
-import { authorized } from "./auth";
+import { authorized, firebaseConfig } from "./auth";
 
 const dir = dirname(fileURLToPath(import.meta.url))
 const accountFile = ['/app/data/serviceAccount.json', resolve(dir, './serviceAccount.json')].find(fs.existsSync)
@@ -23,7 +23,7 @@ if (!accountFile) {
 
 const api = express.Router();
 
-api.post("/auth", async (req, res) => {
+api.post("/auth", async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
     const decoded = await admin.auth().verifyIdToken(token);
@@ -48,14 +48,19 @@ api.post("/auth", async (req, res) => {
   }
 });
 
-api.get("/user", authorized, async (req, res) => {
+api.get("/auth/firebase-config.json", (req: Request, res: Response) => {
+  res.json(firebaseConfig);
+});
+
+api.get("/user", authorized, async (req: Request, res: Response) => {
   console.log(`Fetching user profile for ${req.user?.email}`);
   res.json(req.user);
 });
 
-api.get("/auth/logout", (req, res) => {
+api.get("/auth/logout", (req: Request, res: Response) => {
+  console.log(`Logging out user ${req.user?.email}`);
   res.clearCookie("session");
-  res.json({ message: "Logged out successfully" });
+  res.redirect("/admin/");
 });
 
 

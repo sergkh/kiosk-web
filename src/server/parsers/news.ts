@@ -1,9 +1,12 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { URL } from "url";
-import type { Article } from "../shared/models";
+import type { InfoCard } from "../../shared/models";
+import { infoCards } from "../db";
+import config from "../config";
+import crypto from 'crypto';
 
-const BASE_URL = "https://vsau.org/novini";
+const BASE_URL = config.newsBaseUrl;
 
 async function loadArticleContents(link: string): Promise<string> {
   const detailsResponse = await fetch(link, {
@@ -24,7 +27,7 @@ async function loadArticleContents(link: string): Promise<string> {
   return content;
 }
 
-export async function parseAllNews(): Promise<Article[]> {
+async function parseCurrentNewsPage(): Promise<InfoCard[]> {
   try {
     const response = await fetch(BASE_URL, { headers: { "User-Agent": "Mozilla/5.0" }});
 
@@ -37,34 +40,61 @@ export async function parseAllNews(): Promise<Article[]> {
     const newsContainers = $("div.node.clearfix");
     const elements = newsContainers.toArray();
 
-
-    const articles: Article[] = await Promise.all(
+    return await Promise.all(
       elements
       .filter(el => $(el).find("a[href]").first().length > 0)
       .map(async (el) => {
         const titleLinkElement = $(el).find("a[href]").first();
         const imageElement = $(el).find("img.logo").first();
 
-        const link = new URL(titleLinkElement.attr("href") || "", BASE_URL).href;
+        const relLink = titleLinkElement.attr("href");
+        const link = new URL(relLink || "", BASE_URL).href;
+        
         const image = imageElement.length
           ? new URL(imageElement.attr("src") || "", BASE_URL).href
-          : undefined;
+          : null;
+
+        const dateTextWithViews = $(el).find("p.my-2").text();
+        const date = /(\d{2}\.\d{2}\.\d{4})/.exec(dateTextWithViews)?.[0];
 
         const content = await loadArticleContents(link);
 
+        var shasum = crypto.createHash('sha1');
+        shasum.update(link);
+        const id = shasum.digest('hex');
+
         return ({
+          id: `news_${id}`,
           title: titleLinkElement.text().trim(),
-          link,
+          resource: link,
           content,
           image,
-        }) as Article;
-    })); 
-
-    
-    return articles; // .filter(Boolean) as Pick<Article & ArticleDetails, "title" | "image" | "content">[]
+          category: "news",
+          position: 0,
+          published: true,
+          date: date ? new Date(date) : new Date(),
+        }) as InfoCard;
+    }));
 
   } catch (error) {
     console.error(`Під час парсингу новин сталася помилка:`, error);
     return [];
   }
+}
+
+// Load news from the public site and save to the database
+// If the article already exists, it will be skipped
+export async function updateNews(): Promise<void> {
+  const articles = await parseCurrentNewsPage();
+
+  Promise.all(articles.map(async (article) => {
+    const existing = await infoCards.get(article.id);
+
+    if (!existing) {      
+      await infoCards.create(article);
+      console.log(`Додано новину: ${article.title}`);
+    }
+  })).catch((err) => {
+    console.error(`Помилка при оновленні новин:`, err);
+  });
 }

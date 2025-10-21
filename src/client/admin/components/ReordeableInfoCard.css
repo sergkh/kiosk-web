@@ -1,0 +1,33 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  padding: 1em;
+  margin: 0.5em;
+  background-color: var(--cards-backround);
+  border-radius: 8px;
+  cursor: grab;
+}
+
+.card-data {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: flex-start;
+}
+
+.card-content {
+  margin-top: 0.5em;
+  font-size: 0.8em;
+}
+
+.ext-link {
+  margin-bottom: 0.5em;
+}
+
+.card-image {
+  width: auto;
+  height: 4em;
+  border-radius: 8px;
+  object-fit: cover;
+}

@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import type { Article } from "../../shared/models";
+import type { InfoCard } from "../../shared/models";
 import './News.css';
-import { fetchNews } from "../lib/news";
+import { useLoaderData } from "react-router";
 
 type ArticleProps = {
-  article: Article
+  article: InfoCard
 };
 
 function NewsArticle({ article }: ArticleProps) {
@@ -14,7 +13,7 @@ function NewsArticle({ article }: ArticleProps) {
       <h1>{article.title}</h1>
       </div>
       <div className="news-content">
-      <img src={article.image} alt={article.title} />      
+      { article.image && <img src={article.image} alt={article.title} /> }
       {article.content}   
       </div>
     </div>
@@ -23,11 +22,7 @@ function NewsArticle({ article }: ArticleProps) {
 
 
 function News() {
-  const [news, setNews] = useState<Article[]>([]);
-
-  useEffect(() => {
-    fetchNews().then(setNews).catch(console.error);
-  }, []);
+  const news = useLoaderData() as InfoCard[];
 
   return (
     <div className="news-container">

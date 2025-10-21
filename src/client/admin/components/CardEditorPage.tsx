@@ -147,14 +147,6 @@ function CardEditorPage({type, create}: { type?: EditCardType, create?: boolean 
 
       </div>
 
-      <div>
-        <h3>Превью</h3>        
-        <div 
-          className="preview"
-          dangerouslySetInnerHTML={{ __html: content }}          
-        />
-      </div>
-
       <div className="action-buttons">
         <button onClick={handleSave}>{create ? 'Створити' : 'Зберегти'}</button>
         <button onClick={handleCancel}>Скасувати</button>

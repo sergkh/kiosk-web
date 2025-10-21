@@ -62,4 +62,5 @@
 .rsw-editor {
  margin: 0.5em;
  height: 13em;
+ max-width:100%;
 }

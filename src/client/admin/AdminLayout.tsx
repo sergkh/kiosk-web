@@ -23,6 +23,7 @@ export default function AdminLayout() {
         <nav className="center">
         <NavLink to="/admin/" end className={({isActive, isPending}) =>  isActive ? 'nav-link-active' :isPending ? 'nav-link-pending'  : ''}> Студентам </NavLink>
         <NavLink to="./abiturients" end className={({isActive, isPending }) =>  isActive ? 'nav-link-active':  isPending ? 'nav-link-pending' : ''}> Абітурієнтам </NavLink>
+        
         </nav>
         {/* <nav className="center">
           <ul>

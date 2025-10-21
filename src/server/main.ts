@@ -1,4 +1,5 @@
 import express, { type NextFunction, type Request, type Response } from "express";
+import morgan from "morgan";
 import ViteExpress from "vite-express";
 import login from "./login.ts";
 import cookieParser from 'cookie-parser';
@@ -9,6 +10,10 @@ import { loadAllFaculties } from "./parsers/faculties.ts";
 import path from "path";
 
 const app = express();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan('dev'));
+}
 
 app.use(express.json());
 app.use(cookieParser());

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import type { InfoCard } from "../../../shared/models";
 import { useLoaderData, useNavigate, useParams } from 'react-router';
-import {useDropzone} from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import toast, { Toaster } from 'react-hot-toast';
 import './CardEditorPage.css';
 import Editor from 'react-simple-wysiwyg';
@@ -22,7 +22,7 @@ async function updateInfo(id: string, title: string, subtitle: string | null, co
 
   const method = create ? 'POST' : 'PUT';
   const urlWithId = create ? url : `${url}/${id}`;
-  const resp = await fetch(urlWithId, { method: method, body: formData});
+  const resp = await fetch(urlWithId, { method: method, body: formData });
 
   if (!resp.ok) {
     const error = await resp.json();
@@ -31,10 +31,10 @@ async function updateInfo(id: string, title: string, subtitle: string | null, co
   } else {
     toast.success(`Інформацію ${create ? 'створено' : 'оновлено'} успішно!`);
     return true;
-  }    
+  }
 }
 
-function CardEditorPage({create}: { create?: boolean }) {
+function CardEditorPage({ create }: { create?: boolean }) {
   const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
   const card = useLoaderData() as InfoCard;
@@ -55,7 +55,7 @@ function CardEditorPage({create}: { create?: boolean }) {
   } = useDropzone({
     multiple: false,
     accept: { 'image/png': ['.png'] },
-    onDrop: (files) => { setImageFile(Object.assign(files[0], { preview: URL.createObjectURL(files[0])})) }
+    onDrop: (files) => { setImageFile(Object.assign(files[0], { preview: URL.createObjectURL(files[0]) })) }
   });
 
   const [previewFileData, setPreviewFileData] = useState(
@@ -90,13 +90,19 @@ function CardEditorPage({create}: { create?: boolean }) {
 
   return (
     <div className="card-editor-page">
-      <h3>Редагування інформації</h3>
-      <Toaster position="top-center"/>
+      <div className='container-action-buttons'>
+          <h3>Редагування інформації</h3>
+        <div className="action-buttons">
+        <button onClick={handleSave}>{create ? 'Створити' : 'Зберегти'}</button>
+        <button onClick={handleCancel}>Скасувати</button>
+        </div>
+      </div>
+      <Toaster position="top-center" />
       <div>
         <div>
           <label>Назва:</label>
-          <input 
-            value={title} 
+          <input
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Введіть назву"
           />
@@ -104,8 +110,8 @@ function CardEditorPage({create}: { create?: boolean }) {
 
         <div>
           <label>Підзаголовок:</label>
-          <input 
-            value={subtitle ?? ""} 
+          <input
+            value={subtitle ?? ""}
             onChange={(e) => setSubtitle(e.target.value)}
             placeholder="Введіть підзаголовок"
           />
@@ -117,22 +123,22 @@ function CardEditorPage({create}: { create?: boolean }) {
       </div>
 
       <div className="image-upload">
-        { imageFile ? <img
-            src={imageFile.preview}
-            // Revoke data uri after image is loaded
-            onLoad={() => { URL.revokeObjectURL(imageFile.preview) }}
-          /> : image && (
-            <div style={{ marginBottom: '10px' }}>
-              <img 
-                src={image} 
-                alt="Preview" 
-                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
-            </div>
-          )
+        {imageFile ? <img
+          src={imageFile.preview}
+          // Revoke data uri after image is loaded
+          onLoad={() => { URL.revokeObjectURL(imageFile.preview) }}
+        /> : image && (
+          <div style={{ marginBottom: '10px' }}>
+            <img
+              src={image}
+              alt="Preview"
+              style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          </div>
+        )
         }
 
         <div>
@@ -144,10 +150,7 @@ function CardEditorPage({create}: { create?: boolean }) {
 
       </div>
 
-      <div className="action-buttons">
-        <button onClick={handleSave}>{create ? 'Створити' : 'Зберегти'}</button>
-        <button onClick={handleCancel}>Скасувати</button>
-      </div>
+
     </div>
   );
 }

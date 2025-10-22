@@ -23,14 +23,14 @@ export async function authorized(req: Request, res: Response, next: NextFunction
 }
 
 export const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY,
-  authDomain: `${process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: `${process.env.VITE_FIREBASE_PROJECT_ID}.appspot.com`,
-  messagingSenderId: process.env.VITE_FIREBASE_SENDER_ID,
-  appId: process.env.VITE_FIREBASE_APP_ID
+  apiKey: process.env.FIREBASE_API_KEY ?? process.env.VITE_FIREBASE_API_KEY,
+  authDomain: `${process.env.FIREBASE_PROJECT_ID ?? process.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+  projectId: process.env.FIREBASE_PROJECT_ID ?? process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: `${process.env.FIREBASE_PROJECT_ID ?? process.env.VITE_FIREBASE_PROJECT_ID}.appspot.com`,
+  messagingSenderId: process.env.FIREBASE_SENDER_ID ?? process.env.VITE_FIREBASE_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID ?? process.env.VITE_FIREBASE_APP_ID
 }
 
 if (!firebaseConfig.apiKey) {
-  console.warn("Firebase client configuration is missing. Please set the environment variables: VITE_FIREBASE_API_KEY, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_SENDER_ID, and VITE_FIREBASE_APP_ID.");
+  console.warn("Firebase client configuration is missing. Please set the environment variables: FIREBASE_API_KEY, FIREBASE_PROJECT_ID, FIREBASE_SENDER_ID, and FIREBASE_APP_ID.");
 }

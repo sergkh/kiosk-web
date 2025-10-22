@@ -38,6 +38,7 @@
   flex-direction: row;
   background: none;
   font-size: 0.9em;
+  border-radius: 9px;
 }
 
 .info-card.active {

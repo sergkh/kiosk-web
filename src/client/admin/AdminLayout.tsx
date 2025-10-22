@@ -20,7 +20,7 @@ function AdminAvatar() {
 
 export default function AdminLayout() {
   return (<AuthorizedRoute>
-      <header>
+      <header className="admin">
         <span className="left"></span>
         <nav className="center">
           <NavLink to="/admin/categories/students" end className={({isActive}) =>  isActive ? 'nav-link-active': 'nav-link'}>Студентам</NavLink>
@@ -31,7 +31,7 @@ export default function AdminLayout() {
           <AdminAvatar/>
         </div>
       </header>
-      <main>
+      <main className="admin">
         <Outlet />
       </main>
     </AuthorizedRoute>);

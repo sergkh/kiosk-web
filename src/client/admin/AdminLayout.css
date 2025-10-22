@@ -1,4 +1,4 @@
-.center {
+header.admin .center {
   display: flex;
   gap: 1rem;
   background-color: #092f25;
@@ -9,25 +9,25 @@
 
 }
 
-.nav-link-active {
+header.admin .nav-link-active {
   background-color: white;
   padding: 0.5em;
   border-radius: 3em;
   color: black;
 }
 
-.nav-link {
+header.admin .nav-link {
   background-color: #092f25;
   padding: 0.5em;
 }
 
-header .admin-avatar img {
+header.admin .admin-avatar img {
   width: auto;
   height: 2.5em;
   border-radius: 50%;
   overflow: hidden;
 }
 
-main {
+main.admin {
   padding: 1em;
 }

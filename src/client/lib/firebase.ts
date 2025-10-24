@@ -38,7 +38,7 @@ export async function logPageOpenedEvent(location: string): Promise<void> {
 export async function logItemShown(id: string, category?: string): Promise<void> {
   try {
     const analyticsInstance = await loadAnalytics();
-    logEvent(analyticsInstance, 'select_content', { content_id: location, content_type: category, app_id: config.appId });
+    logEvent(analyticsInstance, 'select_content', { content_id: id, content_type: category, app_id: config.appId });
   } catch (error) {
     console.error("Failed to log item shown event:", error);
   }

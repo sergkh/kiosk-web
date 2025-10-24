@@ -1,7 +1,7 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAddressCard, faCalendarDays, faGraduationCap, faHeart, faNewspaper } from '@fortawesome/free-solid-svg-icons'
-import { NavLink } from 'react-router'
+import { NavLink, useLocation } from 'react-router'
 import './Page.css'
 import { useTranslation } from 'react-i18next';
 import IdleWatcher from './components/IdleWatcher';
@@ -9,6 +9,8 @@ import TopNav, { type MenuItem } from './components/TopNav';
 import LangSwitch from './components/LangSwitch';
 import config from './lib/config';
 import logo from './assets/logo.png'
+import { logPageOpenedEvent } from './lib/firebase';
+import { useEffect } from 'react';
 
 function Header() {
   const {t, i18n} = useTranslation();
@@ -44,6 +46,12 @@ function Footer() {
 }
 
 function Page({children}: {children?: React.ReactNode}) {
+  const location = useLocation();
+
+  useEffect(() => {
+    logPageOpenedEvent(location.pathname);
+  }, [location.pathname]);
+  
   return (
     <>
       <Header />

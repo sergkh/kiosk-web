@@ -18,6 +18,7 @@ export const initialCards: InfoCard[] = [
         subtitle: "",
         content: "no info",
         category: "students",
+        image: "/img/students/list.png",
         position: 1,
         published: true
     },
@@ -37,6 +38,7 @@ export const initialCards: InfoCard[] = [
         category: "students",
         subcategory: "faculties", // requires an API /api/faculties returning Info objects
         position: 3,
+        image: "/img/students/building.png",
         published: true
     },
     {
@@ -46,6 +48,7 @@ export const initialCards: InfoCard[] = [
         content: "no info",
         category: "students",
         position: 4,
+        image: "/img/students/journal.png",
         published: true
     },
 

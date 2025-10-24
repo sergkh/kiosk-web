@@ -23,6 +23,7 @@ function boolParam(confKey: string, env: string | null, fallback: Boolean): Bool
 }
 
 const config = {
+  appId: kioskConf.get('app_id') ?? import.meta.env.VITE_APP_ID,
   baseUrl: import.meta.env.VITE_BASE_URL || '/',
   cacheTime: parseInt(kioskConf.get('cache_ttl') ?? "3600000"),
   showStudentInfo: boolParam('show_students_page', import.meta.env.VITE_SHOW_STUD_INFO, true),

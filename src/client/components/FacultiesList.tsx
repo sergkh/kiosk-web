@@ -1,10 +1,10 @@
 import CardButton, { CardSize } from "../components/cards/CardButton";
-import type { FacultyInfo } from "../../shared/models";
+import type { Faculty } from "../../shared/models";
 
 type FacultiesListProps = {
-  faculties: FacultyInfo[],
-  active?: FacultyInfo | null,
-  onSelect: (faculty: FacultyInfo) => void
+  faculties: Faculty[],
+  active?: Faculty | null,
+  onSelect: (faculty: Faculty) => void
 };
 
 function FacultiesList({ faculties, active, onSelect }: FacultiesListProps) {

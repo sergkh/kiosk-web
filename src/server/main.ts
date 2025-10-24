@@ -5,9 +5,8 @@ import login from "./login.ts";
 import cookieParser from 'cookie-parser';
 import { updateNews } from "./parsers/news.ts";
 import infoApi from "./info-api.ts";
-import { initDb, infoCards } from "./db";
+import { initDb } from "./db";
 import { loadAllFaculties } from "./parsers/faculties.ts";
-import path from "path";
 
 const app = express();
 

@@ -1,12 +1,16 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
-
+import { useLocation, useNavigate } from 'react-router';
+import { logPageOpenedEvent } from '../lib/firebase';
+import config from '../lib/config';
 
 
 function IdlePage() {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();  
+
+  logPageOpenedEvent(location.pathname);
   
-  const videoId = import.meta.env.VITE_IDLE_VIDEO_ID;
+  const videoId = config.idleVideoId;
   const videoSrc = useMemo(() => {
     const params = new URLSearchParams({
       autoplay: '1',

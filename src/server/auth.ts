@@ -28,6 +28,7 @@ export const firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID ?? process.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: `${process.env.FIREBASE_PROJECT_ID ?? process.env.VITE_FIREBASE_PROJECT_ID}.appspot.com`,
   messagingSenderId: process.env.FIREBASE_SENDER_ID ?? process.env.VITE_FIREBASE_SENDER_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID ?? process.env.VITE_FIREBASE_MEASUREMENT_ID,
   appId: process.env.FIREBASE_APP_ID ?? process.env.VITE_FIREBASE_APP_ID
 }
 

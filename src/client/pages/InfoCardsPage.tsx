@@ -7,6 +7,7 @@ import CloseButton from "../components/cards/CloseButton";
 import { useLoaderData } from "react-router";
 import { useTranslation } from "react-i18next";
 import { loadCategory } from "../lib/loaders";
+import { logItemShown } from "../lib/firebase";
 
 type CardsListProps = {
   cards: InfoCard[],
@@ -84,6 +85,10 @@ function InfoCardsPage({title}: InfoCardsPageProps) {
   const [activeInfo, setActiveInfo] = useState<CardWithSubItems | null>(null);
 
   useEffect(() => loadSubItems(activeInfo, setActiveInfo), [activeInfo]);
+
+  useEffect(() => {
+    if (activeInfo) logItemShown(activeInfo.id);
+  }, [activeInfo]);
 
   return (
     <div className="info-page">

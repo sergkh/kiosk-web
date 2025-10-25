@@ -1,10 +1,11 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { infoCards } from "../db";
+import type { InfoCard } from "../../shared/models";
 
 type FacultyInfo = {
   title: string,
-  description: string
+  content: string
 };
 
 async function parseFacultyInfo(url: string): Promise<FacultyInfo> {
@@ -19,6 +20,7 @@ async function parseFacultyInfo(url: string): Promise<FacultyInfo> {
 
   let title = $("h1").first().text().trim();
   title = title.replace('Факультет ', '');
+  title = title.replace('інформаційних технологій', 'ІТ');
   title = title.charAt(0).toUpperCase() + title.slice(1);
 
   const selectors = [
@@ -59,7 +61,12 @@ async function parseFacultyInfo(url: string): Promise<FacultyInfo> {
     combinedHtml = $("body").html() || "";
   }
 
-  return { title, description: combinedHtml } as FacultyInfo;
+  return { title, content: combinedHtml } as FacultyInfo;
+}
+
+export async function syncFacultyInfo(faculty: InfoCard): Promise<InfoCard> {
+  const {title, content } = await parseFacultyInfo(faculty.resource!);
+  return {...faculty, title, content};
 }
 
 export async function loadAllFaculties(): Promise<void> {
@@ -71,12 +78,12 @@ export async function loadAllFaculties(): Promise<void> {
       try {
         const info = await parseFacultyInfo(faculty.resource!);
 
-        if (faculty.content != info.description || faculty.title != info.title) {
+        if (faculty.content != info.content || faculty.title != info.title) {
           console.log(`Оновлення інформації про факультет ${faculty.title}`);
           const updatedFaculty = {
             ...faculty,
             title: info.title,
-            content: info.description
+            content: info.content
           };
 
           return await infoCards.update(updatedFaculty);

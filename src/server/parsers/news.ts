@@ -82,6 +82,13 @@ async function parseCurrentNewsPage(): Promise<InfoCard[]> {
   }
 }
 
+export async function syncNewsArticle(info: InfoCard): Promise<InfoCard> {
+  if (!info.resource) throw new Error("Resource link is missing for the news article.");
+  const content = await loadArticleContents(info.resource);    
+  
+  return {...info, content };
+}
+
 // Load news from the public site and save to the database
 // If the article already exists, it will be skipped
 export async function updateNews(): Promise<void> {

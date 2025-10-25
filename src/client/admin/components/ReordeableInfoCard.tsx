@@ -3,7 +3,7 @@ import { useRaisedShadow } from "../lib/raised-shadow";
 import type { InfoCard } from "../../../shared/models";
 import './ReordeableInfoCard.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash, faFilePen, faLink, faList, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faFilePen, faLink, faList, faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router";
 
 interface Props {
@@ -11,9 +11,10 @@ interface Props {
   adminUrlPrefix: string;
   onDelete?: () => void;
   onPublishingChanged: () => void;
+  onSync: () => void;
 }
 
-export const ReordeableInfoCard = ({ card, adminUrlPrefix, onDelete, onPublishingChanged }: Props) => {
+export const ReordeableInfoCard = ({ card, adminUrlPrefix, onDelete, onPublishingChanged, onSync }: Props) => {
   const y = useMotionValue(0);
   const boxShadow = useRaisedShadow(y);
 
@@ -24,7 +25,10 @@ export const ReordeableInfoCard = ({ card, adminUrlPrefix, onDelete, onPublishin
           card.image && <img src={card.image} alt={card.title} className="card-image" />
           }
         <div> 
-          <h3>{card.title}</h3>
+          
+          <NavLink to={`${adminUrlPrefix}/edit/${card.id}`}>
+            <h3>{card.title}</h3>
+          </NavLink>
 
           { card.subtitle && <h4>{card.subtitle}</h4> }
           
@@ -50,6 +54,10 @@ export const ReordeableInfoCard = ({ card, adminUrlPrefix, onDelete, onPublishin
           icon={card.published ? faEye : faEyeSlash } 
           onClick={onPublishingChanged} />
         &nbsp;
+        { card.resource && <>
+          <FontAwesomeIcon title="Синхронізувати" className="action-btn" icon={faRotate} onClick={onSync} />&nbsp;
+          </>
+        }
         <NavLink to={`${adminUrlPrefix}/edit/${card.id}`} className="action-btn">
             <FontAwesomeIcon title="Редагувати картку" className="action-btn" icon={faFilePen} />
         </NavLink>

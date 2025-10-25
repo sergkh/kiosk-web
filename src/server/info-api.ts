@@ -3,6 +3,8 @@ import { infoCards } from "./db.ts";
 import { authorized } from "./auth.ts";
 import { imageUrl, singleImageUpload } from "./upload.ts";
 import { validateCategory, validateOrderRequest, validatePublished, rejectInvalid } from "./validation.ts";
+import { syncNewsArticle } from "./parsers/news.ts";
+import { syncFacultyInfo } from "./parsers/faculties.ts";
 
 const cards = express.Router();
 
@@ -63,7 +65,6 @@ cards.put("/:category/reorder", validateCategory, validateOrderRequest, rejectIn
   res.status(204).send();
 });
 
-
 cards.put("/:category/:id", validateCategory, rejectInvalid, authorized, singleImageUpload, async (req: Request, res: Response) => {
   const card = req.body;   
   card.id = req.params.id;
@@ -95,6 +96,30 @@ cards.put("/:category/:id/published", validateCategory, validatePublished, rejec
   await infoCards.update(info);
 
   res.json(info);
+});
+
+cards.post("/:category/:id/sync", validateCategory, rejectInvalid, async (req: Request, res: Response) => {
+  console.log(`Resyncing item '${req.params.id}' in '${req.params.category}' category`);
+  const info = await infoCards.get(req.params.id, req.params.category);
+
+  if (!info) {
+      return res.status(404).json({ error: "Картку не знайдено" });
+  }
+
+  if (!info.resource) {
+      return res.status(400).json({ error: "Картку було додано вручну" });
+  }
+
+  let updatedInfo = info;
+
+  switch (req.params.category) {
+    case 'news': updatedInfo = await syncNewsArticle(info); break;
+    case 'faculties': updatedInfo = await syncFacultyInfo(info); break;
+  }
+
+  await infoCards.update(updatedInfo)
+
+  res.json(updatedInfo);
 });
 
 cards.delete("/:category/:id", validateCategory, rejectInvalid, authorized, async (req: Request, res: Response) => {

@@ -2,7 +2,7 @@ import { use, useEffect, useState } from "react";
 import type { InfoCard } from "../../../shared/models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { NavLink, useLoaderData, useParams } from "react-router";
 import { Reorder } from "motion/react";
 import { ReordeableInfoCard } from "../components/ReordeableInfoCard";
@@ -78,6 +78,23 @@ function InfoManagementTable() {
     updateCard(!card.published);
   };
 
+  const syncCard = (card: InfoCard) => {
+    const syncAction = async () => {
+      const syncResp = await fetch(`${apiUrl}/${card.id}/sync`, { method: 'POST' });
+
+      if (!syncResp.ok) {
+        const errorData = await syncResp.json();
+        toast.error(errorData.error || `Помилка синхронізації: ${syncResp.status}`);        
+      }
+      
+      const updatedCard = await syncResp.json();
+      setEntries((prev) => prev.map(c => c.id === card.id ? updatedCard : c));
+      toast.success(`Картку "${updatedCard.title}" синхронізовано`);
+    };
+
+    syncAction()
+  };
+
   const reorderCards = (entries: InfoCard[]) => {
     setEntries(entries);
     delayedAction('reorder-cards', async () => {
@@ -116,6 +133,7 @@ function InfoManagementTable() {
               adminUrlPrefix={adminUrlPrefix} 
               onDelete={() => deleteCard(card)} 
               onPublishingChanged={() => togglePublishing(card)}
+              onSync={() => syncCard(card)}
             />
           ))}
         </Reorder.Group>

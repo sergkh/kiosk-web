@@ -2,8 +2,6 @@
   padding: 1em;
 }
 
-
-
 .card-editor-page input,textarea {
   border-style: none;
   background-color: var(--header-background);
@@ -19,6 +17,16 @@
   display: flex;
   justify-content: flex-end;
   gap: 1em;
+
+  button {
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #008397;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 1em;
+  }
 }
 
 .card-editor-page .preview {
@@ -55,14 +63,37 @@
   margin-bottom: 1em;  
 }
 
-
-.rsw-editor {
- margin: 0.5em;
- height: 13em;
- max-width:100%;
+.card-editor-page .card-resource {
+  margin: 1em 0;
+  font-size: 0.9em;
+  color: var(--foreground);
 }
 
-.container-action-buttons {
+.card-editor-page .rsw-editor {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  border: 1px solid var(--header-background);
+
+  .rsw-toolbar {
+    background-color: var(--header-background);
+    border-bottom: unset;
+    color: var(--foreground);
+
+    button.rsw-btn {
+      color: var(--foreground);
+    }
+
+    button.rsw-btn[data-active=true] {
+      background-color: var(--cards-backround);
+    }
+  }
+
+  .rsw-separator {
+    border-right: 1px solid var(--header-background);
+  }
+}
+
+.card-editor-page .container-action-buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -19,8 +19,9 @@ export const rejectInvalid = (req: Request, res: Response, next: NextFunction) =
 
 export const validateCategory = [
   param('category')
-    .isIn(['students', 'abiturients', 'faculties', 'news'])
-    .withMessage('Invalid category')
+  .isString()
+  .isLength({ min: 1, max: 50 })
+  .withMessage('Invalid category')
 ];
 
 export const validatePublished = [

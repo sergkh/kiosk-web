@@ -5,6 +5,8 @@ import { useDropzone } from 'react-dropzone';
 import toast, { Toaster } from 'react-hot-toast';
 import './CardEditorPage.css';
 import Editor from 'react-simple-wysiwyg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChain } from '@fortawesome/free-solid-svg-icons';
 
 type PreviewFile = {
   preview: string;
@@ -91,14 +93,18 @@ function CardEditorPage({ create }: { create?: boolean }) {
   return (
     <div className="card-editor-page">
       <div className='container-action-buttons'>
-          <h3>Редагування інформації</h3>
+        <h3>Редагування інформації</h3>
         <div className="action-buttons">
-        <button onClick={handleSave}>{create ? 'Створити' : 'Зберегти'}</button>
-        <button onClick={handleCancel}>Скасувати</button>
+          <button onClick={handleSave}>{create ? 'Створити' : 'Зберегти'}</button>
+          <button onClick={handleCancel}>Скасувати</button>
         </div>
       </div>
       <Toaster position="top-center" />
       <div>
+        { card.resource && <div className="card-resource">
+          <span>Згенеровано на основі: <FontAwesomeIcon icon={faChain}/> <a href={card.resource}>{card.resource}</a></span>
+          </div>
+        }
         <div>
           <label>Назва:</label>
           <input
@@ -118,7 +124,16 @@ function CardEditorPage({ create }: { create?: boolean }) {
         </div>
 
         <div>
-          <Editor value={content ?? ""} onChange={evt => setContent(evt.target.value)} containerProps={{ style: { resize: 'vertical' } }} />
+          <Editor 
+            value={content ?? ""} 
+            onChange={evt => setContent(evt.target.value)} 
+            containerProps={{ 
+              style: { 
+                resize: 'vertical',
+                minHeight: '500px',
+              }
+            }} 
+          />
         </div>
       </div>
 

@@ -30,6 +30,21 @@ const resources = {
         day_4: "Thu",
         day_5: "Fri",
         day_6: "Sat",
+      },
+      developers: {
+        title: "Development Team",
+        teachers_title: "Teachers who helped creating the project",
+        senior_teacher: "Senior Teacher",
+        students: {
+          artem: "Storozhuk Artem",
+          ioann: "Konoplytskyi Ioann",
+          kateryna: "Salij Kateryna",
+          serhii: "Papirovyi Serhii"
+        },
+        teachers: {
+          serhii: "Khryschak Serhii",
+          alexander: "Lebid Oleksandr"
+        }
       }
     }
   },
@@ -61,6 +76,21 @@ const resources = {
         day_4: "Чт",
         day_5: "Пт",
         day_6: "Сб",
+      },
+      developers: {
+        title: "Команда розробників",
+        teachers_title: "Викладачі, які допомагали у створенні проєкту",
+        senior_teacher: "Cтарший викладач",
+        students: {
+          artem: "Сторожук Артем",
+          ioann: "Конопліцький Іоанн",
+          kateryna: "Салій Катерина",
+          serhii: "Папіровий Сергій"
+        },
+        teachers: {
+          serhii: "Хрущак Сергій Вікторович",
+          alexander: "Лебідь Олександр Васильович"
+        }
       }
     }
   }

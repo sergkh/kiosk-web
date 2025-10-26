@@ -17,16 +17,16 @@
   display: flex;
   justify-content: flex-end;
   gap: 1em;
+}
 
-  button {
-    font-size: 1em;
-    font-weight: bold;
-    background-color: #008397;
-    color: white;
-    border: none;
-    padding: 0.5em 1em;
-    border-radius: 1em;
-  }
+.card-editor-page .action-buttons button {
+  font-size: 1em;
+  font-weight: bold;
+  background-color: #008397;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 1em;
 }
 
 .card-editor-page .preview {
@@ -73,24 +73,24 @@
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   border: 1px solid var(--header-background);
+}
 
-  .rsw-toolbar {
-    background-color: var(--header-background);
-    border-bottom: unset;
-    color: var(--foreground);
+.card-editor-page .rsw-editor .rsw-toolbar {
+  background-color: var(--header-background);
+  border-bottom: unset;
+  color: var(--foreground);
+}
 
-    button.rsw-btn {
-      color: var(--foreground);
-    }
+.card-editor-page .rsw-editor .rsw-toolbar button.rsw-btn {
+  color: var(--foreground);
+}
 
-    button.rsw-btn[data-active=true] {
-      background-color: var(--cards-backround);
-    }
-  }
+.card-editor-page .rsw-editor .rsw-toolbar button.rsw-btn[data-active=true] {
+  background-color: var(--cards-backround);
+}
 
-  .rsw-separator {
-    border-right: 1px solid var(--header-background);
-  }
+.card-editor-page .rsw-editor .rsw-toolbar .rsw-separator {
+  border-right: 1px solid var(--header-background);
 }
 
 .card-editor-page .container-action-buttons {

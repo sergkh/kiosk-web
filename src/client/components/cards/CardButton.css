@@ -18,16 +18,19 @@
 
 .info-card.minimized {
   padding: 2em 1em;
-  min-width: 15em;
   min-height: 5em;
   max-height: 5em;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.info-card.minimized>h3 {
+.info-card.minimized>.card-text h3 {
   flex: 1;
   font-size: 0.9em;
+}
+
+.info-card.minimized .card-text {
+  width: 15em;
 }
 
 .info-card.micro {

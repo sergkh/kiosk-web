@@ -16,24 +16,19 @@
   font-size: 1.2em;
 }
 
-
-
 .article img {
   float: left;
-  /* max-width: 800px; */
-  /* height: auto; */
-
   border-radius: 35px;
   padding: 1em;
   margin: 0 1.2em 0 0 ;
 }
 
-
-
-
-
 .news-h1 {
   text-align: center;
+}
+
+.news-h1 h1 {
+  font-size: 1.5em;
 }
 
 .news-content {

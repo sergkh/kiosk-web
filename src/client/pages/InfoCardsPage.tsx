@@ -39,17 +39,17 @@ function InfosList({cards, active, onSelect}: CardsListProps) {
     className={ "student-info-cards" + (size === CardSize.Minimized ? " minimized" : "") }
     transition={{ duration: 0.6, ease: "easeInOut" }}>
   {
-    cards.map((info) => (
-      <CardButton 
-        key={info.id} 
-        title={info.title} 
-        subtitle={info.subtitle} 
-        image={info.image} 
-        size={size}
-        active={info.id === active?.id} 
-        onClick={() => onSelect(info)} />
-    ))
-  }
+      cards.map((info) => (
+        <CardButton 
+          key={info.id} 
+          title={info.title} 
+          subtitle={info.subtitle} 
+          image={info.image} 
+          size={size}
+          active={info.id === active?.id} 
+          onClick={() => onSelect(info)} />
+      ))
+    }
   </motion.div>
 }
 

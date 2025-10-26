@@ -1,4 +1,4 @@
-.developers-span {
+.developers-page .developers-span {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,16 +6,16 @@
   padding-bottom: 1em;
 }
 
-.team-grid {
+.developers-page .team-grid {
   display: flex;
   justify-content: space-around;
   gap: 1em;
-  padding: 3em;
+  padding: 1em;
   flex-wrap: wrap;
   border-radius: 22px;
 }
 
-.developer_stydent {
+.developers-page .developer_stydent {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,14 +25,12 @@
   border-radius: 22px;
 }
 
-
-
-.developer_stydent img{
+.developers-page .developer_stydent img{
   width: 150px;
   height: 150px;
 }
 
-.developer_teachers {
+.developers-page .developer_teachers {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,17 +42,16 @@
 ;
 }
 
-.teachers-grid {
+.developers-page .teachers-grid {
   display: flex;
   justify-content: space-around;
   gap: 2em;
-  padding: 3em;
-  margin: 4em;
+  padding: 1pc;
+  margin: 1em;
   flex-wrap: wrap;
 }
 
-
-
-h2 {
+.developers-page h2 {
+  padding-top: 1em;
   text-align: center;
 }

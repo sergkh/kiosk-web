@@ -16,9 +16,9 @@
   flex-direction: row;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none;  
-  margin: 1em 1em;
+  scrollbar-width: none;
   scroll-snap-type: x mandatory;
+  justify-content: left;
 }
 
 
@@ -44,5 +44,5 @@
   display: flex;
   flex-direction: column;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  margin: 1em;
+  padding: 1em;
 }

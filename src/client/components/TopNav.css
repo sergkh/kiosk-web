@@ -26,19 +26,24 @@ nav.top-nav a.active {
 nav.top-nav ul {
   display: flex;
   list-style: none;
-  padding: 0.1em;
   background: var(--background);
   border-radius: 99px;
 }
 
-.glider {
+div.glider {
 	position: absolute;
-  top: 0.5em;
-	bottom: 0.5em;
-  left: 0.5em;
-	width: calc(var(--item-width) - 0.2em);
-	background-color: var(--foreground);
+  top: 0;
+	bottom: 0;
+  left: 0;
+	width: var(--item-width);
 	z-index: 1;
-	border-radius: 99px; 
 	transition: 0.25s ease-out;
+  padding: 0.4em;
+}
+
+div.glider>div {
+  background-color: var(--foreground);
+  border-radius: 99px;
+  height: 100%;
+  width: 100%;
 }

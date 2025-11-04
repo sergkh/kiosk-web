@@ -19,6 +19,7 @@ function Header() {
     { path: '/', icon: faNewspaper, label: 'header.main' },
     config.showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.students' } : null,
     config.showAbiturientInfo ? { path: '/abiturients', icon: faAddressCard, label: 'header.applicants' } : null,
+    { path: '/deligate', icon: faNewspaper, label: 'header.deligate' },
     { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
   ].filter(Boolean) as MenuItem[];
 

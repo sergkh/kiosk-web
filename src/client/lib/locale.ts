@@ -9,6 +9,7 @@ const resources = {
         main: "News",
         students: "For Students",
         applicants: "For Applicants",
+        deligate: "Deligate",
         schedule: "Schedule"
       },
       title: {
@@ -55,6 +56,7 @@ const resources = {
         main: "Новини",
         students: "Студентам",
         applicants: "Абітурієнтам",
+        deligate: "Делегати",
         schedule: "Розклад"
       },
       title: {

@@ -8,6 +8,7 @@ import Schedule from "./pages/Schedule.tsx";
 import InfoCardsPage from "./pages/InfoCardsPage.tsx";
 import Page from "./Page.tsx";
 import DevelopersPage from "./pages/DevelopersPage.tsx";
+import DeligatePage from "./pages/DeligatePage.tsx";
 import ErrorBoundary from "./pages/ErrorBoundary.tsx";
 // needed for i18n to work
 import i18n from "./lib/locale.ts";
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     element: <Page><InfoCardsPage key="abiturients" title="title.abiturients" /></Page>,
     errorElement: <ErrorBoundary />,
     loader: infoCardsLoader('abiturients')
+  },
+  {
+    path: "/deligate",
+    element: <Page><DeligatePage /></Page>
   },
   {
     path: "/developers",

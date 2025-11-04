@@ -4,7 +4,6 @@ COPY package.json package-lock.json ./
 RUN npm install
 ENV VITE_BASE_URL=/
 COPY . .
-COPY data/delegates_data.ts ./data/delegates_data.ts
 RUN npm run build
 
 FROM node:24-alpine AS runner

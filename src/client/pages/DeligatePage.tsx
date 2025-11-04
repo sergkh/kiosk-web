@@ -1,6 +1,6 @@
 import './DeligatePage.css';
 import DelegateTable from '../components/DelegatesTable';
-import { VnauStateDelegates, LadizhinStateDelegates, MohylivStateDelegates, NemyrivStateDeligates, ChernyatynStateDeligates, TechnologicalStateDeligates, TechnologicalStudentsDeligates, VnauStudentsDeligates, LadyzhynStudentsDeligates, MohylivStudentsDeligates, NemyrivStudentsDeligates, ChernyatynStudentsDeligates } from '../../../data/delegates_data.ts';
+import { VnauStateDelegates, LadizhinStateDelegates, MohylivStateDelegates, NemyrivStateDeligates, ChernyatynStateDeligates, TechnologicalStateDeligates, TechnologicalStudentsDeligates, VnauStudentsDeligates, LadyzhynStudentsDeligates, MohylivStudentsDeligates, NemyrivStudentsDeligates, ChernyatynStudentsDeligates } from '../assets/delegates_data.ts';
 
 function DeligatePage() {
   return (

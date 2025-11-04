@@ -56,7 +56,7 @@ const resources = {
         main: "Новини",
         students: "Студентам",
         applicants: "Абітурієнтам",
-        deligate: "Делігація",
+        deligate: "Делегати",
         schedule: "Розклад"
       },
       title: {

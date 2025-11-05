@@ -59,9 +59,11 @@
 }
 
 .delegate-table th {
-  padding: 20px 8px;
+  padding: 12px 8px;
   border: 1px solid #1e4d44;
   text-align: center;
+  white-space: pre-line;
+  line-height: 1.2;
 }
 
 .delegate-table td {

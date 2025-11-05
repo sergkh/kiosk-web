@@ -38,11 +38,13 @@
 .table-wrapper {
   overflow: hidden;
   border-radius: 10px;
-  border: 2px solid #1e4d44; 
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
 .delegate-table {
-  width: 100%;
+  width: 1200px;
   border-collapse: collapse;
   font-size: 22px;
   background-color: #12463e; 
@@ -57,17 +59,24 @@
 }
 
 .delegate-table th {
-  padding: 20px 12px;
+  padding: 20px 8px;
   border: 1px solid #1e4d44;
   text-align: center;
 }
 
 .delegate-table td {
-  padding: 18px 12px;
+  padding: 18px 8px;
   border: 1px solid #1e4d44;
   text-align: center;
   color: #f8fafc;
   background-color: #12463e;
+}
+
+.delegate-table th:first-child,
+.delegate-table td:first-child {
+  padding: 18px 4px;
+  width: 60px;
+  min-width: 60px;
 }
 
 .delegate-table tr:nth-child(even) td {

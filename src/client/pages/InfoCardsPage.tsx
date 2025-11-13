@@ -8,80 +8,94 @@ import { useLoaderData } from "react-router";
 import { useTranslation } from "react-i18next";
 import { loadCategory } from "../lib/loaders";
 import { logItemShown } from "../lib/firebase";
+import DOMPurify from "dompurify";
 
 type CardsListProps = {
-  cards: InfoCard[],
-  active?: InfoCard | null,
-  onSelect: (info: InfoCard) => void
+  cards: InfoCard[];
+  active?: InfoCard | null;
+  onSelect: (info: InfoCard) => void;
 };
 
-type CardWithSubItems = InfoCard & {  
-  subItems?: InfoCard[]
+type CardWithSubItems = InfoCard & {
+  subItems?: InfoCard[];
 };
 
 export type InfoCardsPageProps = {
-  title: string
+  title: string;
 };
 
-// load subcategories for cards if present or do nothing
-function loadSubItems(card: CardWithSubItems | null, update: (i: CardWithSubItems) => void): void {  
+function decodeHtml(html: string): string {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+}
+
+function loadSubItems(card: CardWithSubItems | null, update: (i: CardWithSubItems) => void): void {
   if (card && card.subcategory && !card.subItems) {
     loadCategory(card.subcategory).then((data) => {
       card.subItems = data;
-      update({...card}); // trigger re-render
+      update({ ...card }); // trigger re-render
     });
   }
 }
 
-function InfosList({cards, active, onSelect}: CardsListProps) {
+function InfosList({ cards, active, onSelect }: CardsListProps) {
   const size = active == null ? CardSize.Full : CardSize.Minimized;
-  return <motion.div 
-    className={ "student-info-cards" + (size === CardSize.Minimized ? " minimized" : "") }
-    transition={{ duration: 0.6, ease: "easeInOut" }}>
-  {
-      cards.map((info) => (
-        <CardButton 
-          key={info.id} 
-          title={info.title} 
-          subtitle={info.subtitle} 
-          image={info.image} 
+  return (
+    <motion.div
+      className={"student-info-cards" + (size === CardSize.Minimized ? " minimized" : "")}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+    >
+      {cards.map((info) => (
+        <CardButton
+          key={info.id}
+          title={info.title}
+          subtitle={info.subtitle}
+          image={info.image}
           size={size}
-          active={info.id === active?.id} 
-          onClick={() => onSelect(info)} />
-      ))
-    }
-  </motion.div>
+          active={info.id === active?.id}
+          onClick={() => onSelect(info)}
+        />
+      ))}
+    </motion.div>
+  );
 }
 
-// Active info component can have sub categories whaich are displayed as buttons 
-// or content that is displayed when a card is selected
-function ActiveInfo({info, onClose}: {info: CardWithSubItems, onClose: () => void}) {
+function ActiveInfo({ info, onClose }: { info: CardWithSubItems; onClose: () => void }) {
   const [activeInfo, setActiveInfo] = useState<CardWithSubItems | null>(info);
 
-  // reset active info when info changes, otherwise when swithcing tabs some remaining opened
   useEffect(() => setActiveInfo(info), [info]);
 
-  return (<>
-    { 
-      info.subcategory ? 
-        <InfosList cards={info.subItems ?? []} onSelect={setActiveInfo} active={activeInfo == info ? null : activeInfo} /> : null
-    }
+  const renderContent = () => {
+    if (!activeInfo?.content) return null;
 
-    {
-      activeInfo && activeInfo.content && <div className="active-info">
-        <CloseButton onClick={onClose} />
-        <section>              
-          <div className="content" dangerouslySetInnerHTML={{__html: activeInfo.content }} />
-        </section>
-      </div>
-    }
-  </>);
+    const decoded = decodeHtml(activeInfo.content);
+    const safeHtml = DOMPurify.sanitize(decoded);
+
+    return <div dangerouslySetInnerHTML={{ __html: safeHtml }} />;
+  };
+
+  return (
+    <>
+      {info.subcategory ? (
+        <InfosList cards={info.subItems ?? []} onSelect={setActiveInfo} active={activeInfo === info ? null : activeInfo} />
+      ) : null}
+
+      {activeInfo && activeInfo.content && (
+        <div className="active-info">
+          <CloseButton onClick={onClose} />
+          <section>
+            <div className="content">{renderContent()}</div>
+          </section>
+        </div>
+      )}
+    </>
+  );
 }
 
-
-function InfoCardsPage({title}: InfoCardsPageProps) {
+function InfoCardsPage({ title }: InfoCardsPageProps) {
   const cards = useLoaderData() as CardWithSubItems[];
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [activeInfo, setActiveInfo] = useState<CardWithSubItems | null>(null);
 
   useEffect(() => loadSubItems(activeInfo, setActiveInfo), [activeInfo]);

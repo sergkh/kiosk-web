@@ -39,10 +39,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     loader: infoCardsLoader('abiturients')
   },
-  {
-    path: "/deligate",
-    element: <Page><DeligatePage /></Page>
-  },
+  // {
+  //   path: "/deligate",
+  //   element: <Page><DeligatePage /></Page>
+  // },
   {
     path: "/developers",
     element: <Page><DevelopersPage /></Page>,

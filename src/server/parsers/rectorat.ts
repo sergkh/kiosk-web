@@ -1,0 +1,109 @@
+import fetch from "node-fetch";
+import * as cheerio from "cheerio";
+import { URL } from "url";
+import crypto from 'crypto';
+import { infoCards } from "../db"; 
+import type { InfoCard } from "../../shared/models";
+import config from "../config";
+
+const BASE_URL = config.rectoratBaseUrl;
+const TARGET_CATEGORY = "rectorat_members"; 
+
+const NBSP = '\u00A0'; 
+
+type RectoratCard = {
+  id: string;
+  title: string;
+  position: string;
+  phone: string;
+  image: string | null;
+};
+
+async function parseRectorPage(): Promise<RectoratCard[]> {
+  const response = await fetch(BASE_URL, { headers: { "User-Agent": "Mozilla/5.0" } });
+  if (!response.ok) throw new Error(`Status: ${response.status}`);
+
+  const html = await response.text();
+  const $ = cheerio.load(html);
+  const cards: RectoratCard[] = [];
+  
+  $("div.row.mb-2.py-2").each((_, el) => {
+    const name = $(el).find("p.h5.font-weight-bold").text().trim();
+    const allTexts = $(el).find("div.col p").toArray().map(p => $(p).text().trim()).filter(Boolean);
+
+    let position = allTexts.find(text => text !== name && !text.toLowerCase().includes("тел")) || "";
+    
+    position = position.replace(/^[\(\)]+|[\(\)]+$/g, "").trim();
+
+    const phoneRaw = allTexts.find(text => text.toLowerCase().startsWith("тел")) || "";
+    
+    let phone = phoneRaw.replace(/^(тел\.|тел|tel\.|tel|факс)\s*:?\s*/gi, "").trim();
+    
+    phone = phone.split(' ').join(NBSP).split('-').join(`-${NBSP}`); 
+
+    const imageSrc = $(el).find("img.img-fluid").attr("src");
+    let image: string | null = null;
+    if (imageSrc) {
+        image = new URL(imageSrc, BASE_URL).href;
+        if (image.includes('/pro-universitet/assets')) {
+            image = image.replace('/pro-universitet/assets', '/assets');
+        }
+    }
+
+    const id = crypto.createHash("sha1").update(name || "unknown").digest("hex");
+
+    if (name) {
+      cards.push({ id: `rector_${id}`, title: name, position, phone, image });
+    }
+  });
+
+  return cards;
+}
+
+export async function syncRectoratData() {
+  console.log(" Оновлюємо склад ректорату...");
+
+  try {
+    const parsedCards = await parseRectorPage();
+
+    if (parsedCards.length === 0) console.log(" Карток не знайдено.");
+
+    for (const [index, card] of parsedCards.entries()) {
+      
+      const cleanTitle = card.title;
+
+      let subtitleContent = card.position;
+      
+      if (card.phone) {
+          subtitleContent += ` | 📞${NBSP}${card.phone}`;
+      }
+
+      const memberCard: InfoCard = {
+        id: card.id,
+        title: cleanTitle, 
+        subtitle: subtitleContent,
+        content: "", 
+        image: card.image,
+        category: TARGET_CATEGORY,
+        subcategory: null,
+        resource: "parser_rectorat",
+        position: index, 
+        published: true
+      };
+
+      const existing = await infoCards.get(card.id);
+      if (existing) {
+          await infoCards.update({ ...memberCard, published: existing.published });
+      } else {
+          await infoCards.create(memberCard);
+      }
+    }
+
+    console.log(` Записано ${parsedCards.length} карток.`);
+    return parsedCards.length;
+
+  } catch (error) {
+    console.error(" Помилка:", error);
+    return 0;
+  }
+}

@@ -54,7 +54,13 @@ function InfosList({ cards, active, onSelect }: CardsListProps) {
           image={info.image}
           size={size}
           active={info.id === active?.id}
-          onClick={() => onSelect(info)}
+          onClick={() => {
+            // ignore clicks on empty cards
+            if (info.content || info.subcategory) { 
+              onSelect(info) 
+            } 
+          }}
+          empty={!info.content && !info.subcategory}
         />
       ))}
     </motion.div>
@@ -93,6 +99,7 @@ function ActiveInfo({ info, onClose }: { info: CardWithSubItems; onClose: () => 
   );
 }
 
+// Generic Info cards page that able to display any category of info cards with sub categories
 function InfoCardsPage({ title }: InfoCardsPageProps) {
   const cards = useLoaderData() as CardWithSubItems[];
   const { t } = useTranslation();

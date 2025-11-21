@@ -1,10 +1,13 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { URL } from "url";
+import fs from "fs/promises";
+import path from "path";
 import crypto from 'crypto';
 import { infoCards } from "../db"; 
 import type { InfoCard } from "../../shared/models";
 import config from "../config";
+import { imageUrl } from "../upload";
 
 const BASE_URL = config.rectoratBaseUrl;
 const TARGET_CATEGORY = "rectorat_members"; 
@@ -18,6 +21,32 @@ type RectoratCard = {
   phone: string;
   image: string | null;
 };
+
+const UPLOADS_DIR = "./data/public/uploads";
+
+async function downloadAndSaveImage(imageUrl: string): Promise<string | null> {
+  try {
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      console.warn(`Failed to download image from ${imageUrl}: ${response.statusText}`);
+      return null;
+    }
+
+    const buffer = await response.arrayBuffer();
+    const hash = crypto.createHash("sha1").update(Buffer.from(buffer)).digest("hex");
+    const ext = path.extname(new URL(imageUrl).pathname);
+    const filename = `${hash}${ext}`;
+    const filePath = path.join(UPLOADS_DIR, filename);
+
+    await fs.mkdir(UPLOADS_DIR, { recursive: true });
+    await fs.writeFile(filePath, Buffer.from(buffer));
+
+    return `/uploads/${filename}`;
+  } catch (error) {
+    console.error(`Error downloading or saving image ${imageUrl}:`, error);
+    return null;
+  }
+}
 
 async function parseRectorPage(): Promise<RectoratCard[]> {
   const response = await fetch(BASE_URL, { headers: { "User-Agent": "Mozilla/5.0" } });
@@ -75,12 +104,17 @@ export async function syncRectoratData() {
         subtitleContent += ` | 📞${NBSP}${card.phone}`;
       }
 
+      let localImage: string | null = null;
+      if (card.image) {
+        localImage = await downloadAndSaveImage(card.image);
+      }
+
       const memberCard: InfoCard = {
         id: card.id,
         title: cleanTitle, 
         subtitle: subtitleContent,
         content: "", 
-        image: card.image,
+        image: localImage,
         category: TARGET_CATEGORY,
         subcategory: null,
         resource: `${BASE_URL}`,

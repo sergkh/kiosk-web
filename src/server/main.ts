@@ -48,14 +48,7 @@ async function startServer() {
     setInterval(updateNews, 1000 * 60 * 60 * 6); // TODO: put into config
     
     await updateNews();
-
-    await syncRectoratData()
-      .then((count) => {
-        console.log(` Синхронізація завершена успішно. Оброблено: ${count}`);
-      })
-      .catch((err) => {
-        console.error(" Помилка синхронізації при старті:", err);
-      });
+    await syncRectoratData();
 
     ViteExpress.listen(app, 3000, () =>
       console.log("Server is listening on http://localhost:3000/")

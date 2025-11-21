@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { InfoCard } from "../../../shared/models";
 import { useLoaderData, useNavigate, useParams } from 'react-router';
 import { useDropzone } from 'react-dropzone';
@@ -7,23 +7,52 @@ import './CardEditorPage.css';
 import Editor from 'react-simple-wysiwyg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChain } from '@fortawesome/free-solid-svg-icons';
+import { categoriesLoader } from '../lib/loaders';
 
 type PreviewFile = {
   preview: string;
 }
 
-async function updateInfo(id: string, title: string, subtitle: string | null, content: string | null, imageFile: File | null, create: boolean, url: string): Promise<boolean> {
+function SubcategoryEdit({ subcategory, onChange, suggestions }: { subcategory: string, onChange: (subcategory: string) => void, suggestions: string[] }) {
+  const handleSubcategoryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;    
+    onChange(value);
+  }, [onChange]);
+
+  const datalistId = "subcategory-suggestions";
+
+  return (
+    <div>
+      <label title="Картки дочірньої категорії будуть відображені при натисненні на дану">Дочірня категорія:</label>
+      <input
+        list={datalistId}
+        value={subcategory}
+        onChange={handleSubcategoryChange}
+        placeholder="Введіть підкатегорію"
+      />
+      <datalist id={datalistId}>
+        {suggestions.map((item) => (
+          <option key={item} value={item} />
+        ))}
+      </datalist>
+    </div>
+  );
+}
+
+async function updateInfo(card: InfoCard, imageFile: File | null, create: boolean, url: string): Promise<boolean> {
   const formData = new FormData();
-  formData.append('title', title);
-  if (subtitle) formData.append('subtitle', subtitle);
-  if (content) formData.append('content', content);
+  formData.append('title', card.title);
+  if (card.category) formData.append('category', card.category);
+  if (card.subtitle) formData.append('subtitle', card.subtitle);
+  if (card.content) formData.append('content', card.content);
+  if (card.subcategory) formData.append('subcategory', card.subcategory);
 
   if (imageFile) {
     formData.append('image', imageFile);
   }
 
   const method = create ? 'POST' : 'PUT';
-  const urlWithId = create ? url : `${url}/${id}`;
+  const urlWithId = create ? url : `${url}/${card.id}`;
   const resp = await fetch(urlWithId, { method: method, body: formData });
 
   if (!resp.ok) {
@@ -36,18 +65,28 @@ async function updateInfo(id: string, title: string, subtitle: string | null, co
   }
 }
 
+async function fetchSubcategories(setAvailableSubcategories: (categories: string[]) => void) {
+  try {
+    setAvailableSubcategories(await categoriesLoader());
+  } catch (error) {
+    console.error('Unable to load subcategory suggestions', error);
+  }
+}
+
 function CardEditorPage({ create }: { create?: boolean }) {
-  const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
   const card = useLoaderData() as InfoCard;
 
-  const url = `/api/info/${category}`;
+  const url = `/api/info/${card.category}`;
 
   const [title, setTitle] = useState(card.title);
   const [subtitle, setSubtitle] = useState(card.subtitle);
-  const [content, setContent] = useState(card.content);
+  const [content, setContent] = useState<string | null>(card.content ?? null);
   const [image, setImage] = useState(card.image);
+  const [category, setCategory] = useState(card.category ?? '');
+  const [subcategory, setSubcategory] = useState<string | null>(card.subcategory ?? null);
   const [imageFile, setImageFile] = useState<File & PreviewFile | null>(null);
+  const [availableSubcategories, setAvailableSubcategories] = useState<string[]>([]);
 
   const {
     acceptedFiles,
@@ -60,6 +99,10 @@ function CardEditorPage({ create }: { create?: boolean }) {
     onDrop: (files) => { setImageFile(Object.assign(files[0], { preview: URL.createObjectURL(files[0]) })) }
   });
 
+  useEffect(() => {  
+    fetchSubcategories(setAvailableSubcategories);
+  }, []);
+
   const [previewFileData, setPreviewFileData] = useState(
     {} as {
       previewType: string;
@@ -70,10 +113,11 @@ function CardEditorPage({ create }: { create?: boolean }) {
   );
 
   const handleSave = () => {
-    updateInfo(card.id, title, subtitle ?? null, content ?? null, imageFile, create || false, url).then((success) => {
-      if (success) {
-        navigate(-1);
-      }
+    updateInfo(
+      {...card, title, subtitle, content, subcategory, category},
+      imageFile,
+      create || false, url).then((success) => {
+      if (success) navigate(-1);
     });
   }
 
@@ -90,10 +134,33 @@ function CardEditorPage({ create }: { create?: boolean }) {
     });
   };
 
+  const handleModeToggle = () => {
+    if (subcategory != null) {
+      // switch to content mode
+      setSubcategory(null);
+      setContent('');
+    } else {
+      // switch to menu mode
+      setContent(null);
+      setSubcategory(card.subcategory ?? '');
+    }
+  };
+
   return (
     <div className="card-editor-page">
-      <div className='container-action-buttons'>
-        <h3>Редагування інформації</h3>
+      <div className='header-container'>
+        <div className="right-header">
+          <h3>Редагування інформації</h3>
+          <div className="mode-toggle">
+            <button 
+              className="small" 
+              onClick={handleModeToggle}
+              title={subcategory != null ? 'Зараз кнопка відображає меню для вказаної підкатегорії' : 'Зараз кнопка відображає заданий контент'}
+            >
+              {subcategory != null ? 'Перейти в режим картки' : 'Перейти в режим меню'}
+            </button>
+          </div>
+        </div>
         <div className="action-buttons">
           <button onClick={handleSave}>{create ? 'Створити' : 'Зберегти'}</button>
           <button onClick={handleCancel}>Скасувати</button>
@@ -106,7 +173,7 @@ function CardEditorPage({ create }: { create?: boolean }) {
           </div>
         }
         <div>
-          <label>Назва:</label>
+          <label title="Основна назва картки">Назва:</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -115,7 +182,7 @@ function CardEditorPage({ create }: { create?: boolean }) {
         </div>
 
         <div>
-          <label>Підзаголовок:</label>
+          <label title="Додаткова інформація під основним заголовком">Підзаголовок:</label>
           <input
             value={subtitle ?? ""}
             onChange={(e) => setSubtitle(e.target.value)}
@@ -124,17 +191,38 @@ function CardEditorPage({ create }: { create?: boolean }) {
         </div>
 
         <div>
-          <Editor 
-            value={content ?? ""} 
-            onChange={evt => setContent(evt.target.value)} 
-            containerProps={{ 
-              style: { 
-                resize: 'vertical',
-                minHeight: '500px',
-              }
-            }} 
+          <label title="Визначає в якому меню відображатиметься дана картка">Категорія:</label>
+          <input
+            value={category}
+            list="category-suggestions"
+            onChange={(e) => setCategory(e.target.value)}
+            placeholder="Введіть підзаголовок"
           />
+          <datalist id="category-suggestions">
+            {availableSubcategories.map((item) => (<option key={item} value={item} />))}
+          </datalist>
         </div>
+
+        {subcategory != null ? (
+          <SubcategoryEdit
+            subcategory={subcategory}
+            onChange={(value) => setSubcategory(value)}
+            suggestions={availableSubcategories}
+          />
+        ) : (
+          <div>
+            <Editor
+              value={content ?? ''}
+              onChange={evt => setContent(evt.target.value)}
+              containerProps={{
+                style: {
+                  resize: 'vertical',
+                  minHeight: '500px',
+                }
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <div className="image-upload">

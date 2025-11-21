@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './CardButton.css';
 import { motion } from "motion/react";
 
@@ -14,18 +13,19 @@ type ButtonProps = {
   image?: string | null,
   active?: boolean,
   size?: CardSize | null,
+  empty?: boolean,
   onClick?: () => void
 };
 
-export default function CardButton({ title, subtitle, image, active, onClick, size }: ButtonProps) {
+export default function CardButton({ title, subtitle, image, active, onClick, size, empty }: ButtonProps) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
       whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className={"info-card" + (active ? " active" : "") + (size ? ` ${size}` : "")}
+      whileTap={ empty ? {} : { scale: 0.95 }}
+      className={"info-card" + (active ? " active" : "") + (size ? ` ${size}` : "") + (empty ? " empty" : " actionable")}
       onClick={ () => {        
         if (onClick) onClick()
       }}>      

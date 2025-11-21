@@ -1,6 +1,7 @@
 import multer, { type FileFilterCallback } from "multer";
 import path from "path";
 import fs from "fs";
+import fsAsync from "fs/promises";
 import { type Request } from "express";
 import crypto from "crypto";
 
@@ -11,7 +12,7 @@ if (!fs.existsSync(uploadDir)) {
 
 const storage = multer.diskStorage({
   destination: (req: Request, file, cb) => {
-    cb(null, "data/public/uploads");
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     const name = crypto.randomBytes(64).toString("hex");
@@ -33,3 +34,28 @@ const upload = multer({
 
 export const singleImageUpload = upload.single("image");
 export const imageUrl = (fileName?: string | null): string | null => fileName ? `/uploads/${fileName}` : null;
+
+// Download external asset into uploads directory
+// returns the relative URL to the saved image
+export async function downloadedAsset(assetUrl: string): Promise<string | null> {
+  try {
+    const response = await fetch(assetUrl);
+    if (!response.ok) {
+      console.warn(`Failed to download image from ${assetUrl}: ${response.statusText}`);
+      return null;
+    }
+
+    const buffer = await response.arrayBuffer();
+    const hash = crypto.createHash("sha1").update(Buffer.from(buffer)).digest("hex");
+    const ext = path.extname(new URL(assetUrl).pathname);
+    const filename = `${hash}${ext}`;
+    const filePath = path.join(uploadDir, filename);
+
+    await fsAsync.writeFile(filePath, Buffer.from(buffer));
+    console.log(`Asset ${assetUrl} downloaded and saved as ${filename}`);
+    return imageUrl(filename);    
+  } catch (error) {
+    console.error(`Error downloading or saving asset ${assetUrl}:`, error);
+    return null;
+  }
+}

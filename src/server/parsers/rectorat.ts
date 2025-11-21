@@ -1,14 +1,16 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { URL } from "url";
+
+import path from "path";
 import crypto from 'crypto';
 import { infoCards } from "../db"; 
 import type { InfoCard } from "../../shared/models";
 import config from "../config";
+import { downloadedAsset } from "../upload";
 
 const BASE_URL = config.rectoratBaseUrl;
 const TARGET_CATEGORY = "rectorat_members"; 
-
 const NBSP = '\u00A0'; 
 
 type RectoratCard = {
@@ -19,7 +21,8 @@ type RectoratCard = {
   image: string | null;
 };
 
-async function parseRectorPage(): Promise<RectoratCard[]> {
+
+async function parseRectoratePage(): Promise<RectoratCard[]> {
   const response = await fetch(BASE_URL, { headers: { "User-Agent": "Mozilla/5.0" } });
   if (!response.ok) throw new Error(`Status: ${response.status}`);
 
@@ -53,7 +56,7 @@ async function parseRectorPage(): Promise<RectoratCard[]> {
     const id = crypto.createHash("sha1").update(name || "unknown").digest("hex");
 
     if (name) {
-      cards.push({ id: `rector_${id}`, title: name, position, phone, image });
+      cards.push({ id: `rectorat_${id}`, title: name, position, phone, image });
     }
   });
 
@@ -61,47 +64,53 @@ async function parseRectorPage(): Promise<RectoratCard[]> {
 }
 
 export async function syncRectoratData() {
-  console.log(" Оновлюємо склад ректорату...");
-
   try {
-    const parsedCards = await parseRectorPage();
-
-    if (parsedCards.length === 0) console.log(" Карток не знайдено.");
+    const parsedCards = await parseRectoratePage();
+    let updatedCount = 0;
 
     for (const [index, card] of parsedCards.entries()) {
       
       const cleanTitle = card.title;
-
       let subtitleContent = card.position;
       
       if (card.phone) {
-          subtitleContent += ` | 📞${NBSP}${card.phone}`;
+        subtitleContent += ` | 📞${NBSP}${card.phone}`;
       }
+
+      const existing = await infoCards.get(card.id);
+
+      // if the card already exists and matches a fetched one skip it
+      if (existing && 
+        existing.resource === card.image &&
+        existing.title === cleanTitle &&
+        existing.subtitle === subtitleContent
+      ) continue;
 
       const memberCard: InfoCard = {
         id: card.id,
         title: cleanTitle, 
         subtitle: subtitleContent,
         content: "", 
-        image: card.image,
+        image: card.image ? await downloadedAsset(card.image) : null,
         category: TARGET_CATEGORY,
         subcategory: null,
-        resource: "parser_rectorat",
+        resource: card.image ?? undefined,
         position: index, 
         published: true
       };
 
-      const existing = await infoCards.get(card.id);
+      updatedCount++;
+
       if (existing) {
-          await infoCards.update({ ...memberCard, published: existing.published });
+        await infoCards.update({...existing, ...memberCard, published: existing.published });
       } else {
-          await infoCards.create(memberCard);
+        await infoCards.create(memberCard);
       }
     }
 
-    console.log(` Записано ${parsedCards.length} карток.`);
-    return parsedCards.length;
-
+    if (updatedCount > 0) {
+      console.log(`Updated ${updatedCount} rectorate cards.`);
+    }
   } catch (error) {
     console.error(" Помилка:", error);
     return 0;

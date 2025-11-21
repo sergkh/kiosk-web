@@ -76,6 +76,12 @@ const infoCards = {
     return await db.all(select + where + unpublishedClause + orderClause + limitClause, params) as InfoCard[];
   },
 
+  async listCategories(): Promise<string[]> {
+    const db = getDbInstance();
+    const rows = await db.all(`SELECT DISTINCT category FROM info_cards ORDER BY category ASC`);
+    return rows.map(row => row.category);
+  },
+
   async get(id: String, category?: string): Promise<InfoCard | null> {
     const db = getDbInstance();
     if (category) {

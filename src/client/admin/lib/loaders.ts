@@ -36,6 +36,16 @@ async function infoListLoader({ params }: LoaderFunctionArgs) {
   return await res.json();
 }
 
+async function categoriesLoader() {
+  const res = await fetch(`/api/info`);
+
+  if (!res.ok) {
+    throw new Error(`Помилка завантаження категорій: ${res.status}`);
+  }
+
+  return await res.json() as string[];
+}
+
 export {
-  newInfoLoader, infoEntryLoader, infoListLoader
+  newInfoLoader, infoEntryLoader, infoListLoader, categoriesLoader
 }

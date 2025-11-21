@@ -19,7 +19,7 @@
   gap: 1em;
 }
 
-.card-editor-page .action-buttons button {
+.card-editor-page .header-container button {
   font-size: 1em;
   font-weight: bold;
   background-color: #008397;
@@ -27,6 +27,17 @@
   border: none;
   padding: 0.5em 1em;
   border-radius: 1em;
+}
+
+.card-editor-page .header-container .right-header {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+}
+
+.card-editor-page .header-container button.small {
+  font-size: 0.8em;
+  padding: 0.3em 0.6em;
 }
 
 .card-editor-page .preview {
@@ -93,7 +104,7 @@
   border-right: 1px solid var(--header-background);
 }
 
-.card-editor-page .container-action-buttons {
+.card-editor-page .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;

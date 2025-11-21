@@ -53,7 +53,7 @@ async function parseRectorPage(): Promise<RectoratCard[]> {
     const id = crypto.createHash("sha1").update(name || "unknown").digest("hex");
 
     if (name) {
-      cards.push({ id: `rector_${id}`, title: name, position, phone, image });
+      cards.push({ id: `rectorat_${id}`, title: name, position, phone, image });
     }
   });
 
@@ -61,21 +61,18 @@ async function parseRectorPage(): Promise<RectoratCard[]> {
 }
 
 export async function syncRectoratData() {
-  console.log(" Оновлюємо склад ректорату...");
+  console.log("Оновлюємо склад ректорату...");
 
   try {
     const parsedCards = await parseRectorPage();
 
-    if (parsedCards.length === 0) console.log(" Карток не знайдено.");
-
     for (const [index, card] of parsedCards.entries()) {
       
       const cleanTitle = card.title;
-
       let subtitleContent = card.position;
       
       if (card.phone) {
-          subtitleContent += ` | 📞${NBSP}${card.phone}`;
+        subtitleContent += ` | 📞${NBSP}${card.phone}`;
       }
 
       const memberCard: InfoCard = {
@@ -86,7 +83,7 @@ export async function syncRectoratData() {
         image: card.image,
         category: TARGET_CATEGORY,
         subcategory: null,
-        resource: "parser_rectorat",
+        resource: `${BASE_URL}`,
         position: index, 
         published: true
       };

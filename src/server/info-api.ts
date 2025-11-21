@@ -8,6 +8,12 @@ import { syncFacultyInfo } from "./parsers/faculties.ts";
 
 const cards = express.Router();
 
+cards.get("/", async (req: Request, res: Response) => {
+  console.log("Fetching all categories");
+  const categories = await infoCards.listCategories();
+  res.json(categories);
+});
+
 cards.get("/:category", validateCategory, rejectInvalid, async (req: Request, res: Response) => {
   res.json(await infoCards.all({
     category: req.params.category,

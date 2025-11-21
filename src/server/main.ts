@@ -7,6 +7,7 @@ import { updateNews } from "./parsers/news.ts";
 import infoApi from "./info-api.ts";
 import { initDb } from "./db";
 import { loadAllFaculties } from "./parsers/faculties.ts";
+import { syncRectoratData } from "./parsers/rectorat";
 
 const app = express();
 
@@ -47,6 +48,14 @@ async function startServer() {
     setInterval(updateNews, 1000 * 60 * 60 * 6); // TODO: put into config
     
     await updateNews();
+
+    await syncRectoratData()
+      .then((count) => {
+        console.log(` Синхронізація завершена успішно. Оброблено: ${count}`);
+      })
+      .catch((err) => {
+        console.error(" Помилка синхронізації при старті:", err);
+      });
 
     ViteExpress.listen(app, 3000, () =>
       console.log("Server is listening on http://localhost:3000/")

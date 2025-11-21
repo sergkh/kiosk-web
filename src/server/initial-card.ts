@@ -9,6 +9,7 @@ export const initialCards: InfoCard[] = [
         title: "Все про ректорат",
         subtitle: "",
         category: "students",
+        subcategory: "rectorat_members",
         position: 0,
         published: true
     },

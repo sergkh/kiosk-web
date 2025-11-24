@@ -15,7 +15,8 @@ const resources = {
       title: {
         students: "Information for Students",
         abiturients: "Information for Applicants",
-        schedule: "Schedule"
+        schedule: "Schedule",
+        video: "Video Library"
       },
       footer: {
         info: "© 2025 VNAU. Information may be updated",
@@ -62,7 +63,8 @@ const resources = {
       title: {
         students: "Інформація для студентів",
         abiturients: "Інформація для абітурієнтів",
-        schedule: "Розклад занять"
+        schedule: "Розклад занять",
+        video: "Відеобібліотека"
       },
       footer: {
         info: "© 2025 ВНАУ. Інформація може оновлюватися",

@@ -28,6 +28,7 @@ const config = {
   cacheTime: parseInt(kioskConf.get('cache_ttl') ?? "3600000"),
   showStudentInfo: boolParam('show_students_page', import.meta.env.VITE_SHOW_STUD_INFO, true),
   showAbiturientInfo: boolParam('show_abiturients_page', import.meta.env.VITE_SHOW_ABITURIENT_INFO, true),
+  showVideoPage: boolParam('show_video_page', import.meta.env.VITE_SHOW_VIDEO_PAGE, true),
   idleVideoId: kioskConf.get('idle_video_id') ?? import.meta.env.VITE_IDLE_VIDEO_ID ?? '',
   idleTimeout: parseInt(kioskConf.get('idle_timeout') ?? import.meta.env.VITE_IDLE_TIMEOUT ?? "600000"),
   mkrApiUrl: kioskConf.get('mkr_api_url') ?? import.meta.env.VITE_MKR_API_URL ?? 'https://mkr.sergkh.com',

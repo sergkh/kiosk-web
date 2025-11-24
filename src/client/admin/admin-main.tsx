@@ -9,6 +9,8 @@ import InfoManagementPage from "./pages/InfoManagementPage";
 import CardEditorPage from "./components/CardEditorPage";
 import { infoListLoader, newInfoLoader, infoEntryLoader } from "./lib/loaders";
 import ErrorBoundary from "../pages/ErrorBoundary";
+import VideoManagementPage from "./pages/VideoManagementPage";
+import VideoEditorPage from "./components/VideoEditorPage";
 
 const router = createBrowserRouter([ 
   {
@@ -21,6 +23,18 @@ const router = createBrowserRouter([
           element: <Navigate to="/admin/categories/students" replace />
         },
         {
+           path: "categories/videos", 
+           element: <VideoManagementPage />,
+        },
+        {
+           path: "categories/videos/new",
+           element: <VideoEditorPage />,
+        },
+        {
+           path: "categories/videos/:id/edit",
+           element: <VideoEditorPage />,
+        },
+        {
           path: "categories/:category",
           children: [
             { 
@@ -29,7 +43,7 @@ const router = createBrowserRouter([
               loader: infoListLoader
             },
             { 
-              path: "create",
+              path: "create", 
               element: <CardEditorPage create={true} />, 
               loader: newInfoLoader
             },
@@ -38,9 +52,9 @@ const router = createBrowserRouter([
               element: <CardEditorPage />, 
               loader: infoEntryLoader
             }
-          ]
+          ] 
         }
-      ],
+      ], 
   },
   {
     path: "admin/login",

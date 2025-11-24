@@ -50,4 +50,30 @@ export type MkrEvent = {
   end: string
 }
 
+export type Video = {
+  id: string;
+  title: string;
+  src: string;
+  image?: string;
+  preview?: string;
+  category: 'about' | 'admissions' | 'student_life' | 'science' | 'culture' | 'international' | 'events';
+  description: string;
+  subtitles?: Subtitle[];
+}
+
+export type Category = 'all' | 'about' | 'admissions' | 'student_life' | 'science' | 'culture' | 'international' | 'events';
+
+
+
+export type CategoryOption = {
+  id: Category;
+  label: string;
+}
+
+export type Subtitle = {
+  language: string;
+  label: string;
+  src: string;
+}
+
 

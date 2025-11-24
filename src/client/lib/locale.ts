@@ -9,13 +9,14 @@ const resources = {
         main: "News",
         students: "For Students",
         applicants: "For Applicants",
-        deligate: "Deligate",
+        videos: "Video library",
         schedule: "Schedule"
       },
       title: {
         students: "Information for Students",
         abiturients: "Information for Applicants",
-        schedule: "Schedule"
+        schedule: "Schedule",
+        video: "Video Library"
       },
       footer: {
         info: "© 2025 VNAU. Information may be updated",
@@ -56,13 +57,14 @@ const resources = {
         main: "Новини",
         students: "Студентам",
         applicants: "Абітурієнтам",
-        deligate: "Делегати",
+        videos: "Відеобібліотека",
         schedule: "Розклад"
       },
       title: {
         students: "Інформація для студентів",
         abiturients: "Інформація для абітурієнтів",
-        schedule: "Розклад занять"
+        schedule: "Розклад занять",
+        video: "Відеобібліотека"
       },
       footer: {
         info: "© 2025 ВНАУ. Інформація може оновлюватися",

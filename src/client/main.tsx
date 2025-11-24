@@ -8,7 +8,7 @@ import Schedule from "./pages/Schedule.tsx";
 import InfoCardsPage from "./pages/InfoCardsPage.tsx";
 import Page from "./Page.tsx";
 import DevelopersPage from "./pages/DevelopersPage.tsx";
-import DeligatePage from "./pages/DeligatePage.tsx";
+import VideoPage from "./pages/VideoPage.tsx";
 import ErrorBoundary from "./pages/ErrorBoundary.tsx";
 // needed for i18n to work
 import i18n from "./lib/locale.ts";
@@ -43,6 +43,11 @@ const router = createBrowserRouter([
   //   path: "/deligate",
   //   element: <Page><DeligatePage /></Page>
   // },
+  {
+    path: "/videos",
+    element: <Page><VideoPage/></Page>,
+    errorElement: <ErrorBoundary />
+  },
   {
     path: "/developers",
     element: <Page><DevelopersPage /></Page>,

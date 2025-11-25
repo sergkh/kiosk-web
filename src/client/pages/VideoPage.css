@@ -37,11 +37,11 @@
 .video-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 45px;
+  gap: 30px;
   z-index: 2;
   position: relative;
   max-width: 1300px;
-  margin: 0 auto;
+  margin: 20px auto 0;
   padding-bottom: 40px;
 }
 

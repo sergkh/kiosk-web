@@ -33,11 +33,12 @@ const upload = multer({
 });
 
 export const singleImageUpload = upload.single("image");
-export const imageUrl = (fileName?: string | null): string | null => fileName ? `/uploads/${fileName}` : null;
+export const imageUrl = (fileName?: string | null, subfolder: string | null = null): string | null => 
+  fileName ? subfolder ? `/uploads/${subfolder}/${fileName}` : `/uploads/${fileName}` : null;
 
 // Download external asset into uploads directory
 // returns the relative URL to the saved image
-export async function downloadedAsset(assetUrl: string): Promise<string | null> {
+export async function downloadedAsset(assetUrl: string, subfolder: string | null = null): Promise<string | null> {
   try {
     const response = await fetch(assetUrl);
     if (!response.ok) {
@@ -49,11 +50,13 @@ export async function downloadedAsset(assetUrl: string): Promise<string | null> 
     const hash = crypto.createHash("sha1").update(Buffer.from(buffer)).digest("hex");
     const ext = path.extname(new URL(assetUrl).pathname);
     const filename = `${hash}${ext}`;
-    const filePath = path.join(uploadDir, filename);
+    const basePath = subfolder ? path.join(uploadDir, subfolder) : uploadDir;
+    if (subfolder && !fs.existsSync(basePath)) fs.mkdirSync(basePath);
+    const filePath = path.join(basePath, filename);
 
     await fsAsync.writeFile(filePath, Buffer.from(buffer));
     console.log(`Asset ${assetUrl} downloaded and saved as ${filename}`);
-    return imageUrl(filename);    
+    return imageUrl(filename, subfolder);    
   } catch (error) {
     console.error(`Error downloading or saving asset ${assetUrl}:`, error);
     return null;

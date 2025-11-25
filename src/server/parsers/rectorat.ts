@@ -91,7 +91,7 @@ export async function syncRectoratData() {
         title: cleanTitle, 
         subtitle: subtitleContent,
         content: "", 
-        image: card.image ? await downloadedAsset(card.image) : null,
+        image: card.image ? await downloadedAsset(card.image, "rectorat") : null,
         category: TARGET_CATEGORY,
         subcategory: null,
         resource: card.image ?? undefined,

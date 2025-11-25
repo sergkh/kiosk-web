@@ -10,6 +10,7 @@ FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 EXPOSE 3000
+RUN apk add --no-cache ffmpeg
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/vite.config.ts .
 COPY --from=builder /app/src/server ./src/server

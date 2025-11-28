@@ -22,8 +22,6 @@ export const VideoPage: React.FC = () => {
 
   return (
     <div className="video-page">
-      <h1>{t('title.video')}</h1>
-
       <CategoryFilter categories={allCategories} selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
 
       <VideoGrid videos={filteredVideos} onVideoClick={setSelectedVideo} />

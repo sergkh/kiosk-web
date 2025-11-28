@@ -41,9 +41,10 @@ function loadSubItems(card: CardWithSubItems | null, update: (i: CardWithSubItem
 
 function InfosList({ cards, active, onSelect }: CardsListProps) {
   const size = active == null ? CardSize.Full : CardSize.Minimized;
+  const partiallyFilled = cards.length < 3;
   return (
     <motion.div
-      className={"info-cards" + (size === CardSize.Minimized ? " minimized" : "")}
+      className={"info-cards" + (size === CardSize.Minimized ? " minimized" : "") + (partiallyFilled ? " partially-filled" : "")}
       transition={{ duration: 0.6, ease: "easeInOut" }}
     >
       {cards.map((info) => (

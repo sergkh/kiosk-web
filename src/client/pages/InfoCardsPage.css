@@ -3,7 +3,7 @@
   flex-direction: column;
 }
 
-.student-info-cards {
+.info-cards {
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(18em, auto));
@@ -12,7 +12,7 @@
   flex: 1;
 }
 
-.student-info-cards.minimized {
+.info-cards.minimized {
   display: flex;
   gap: 16px;
   flex-direction: row;

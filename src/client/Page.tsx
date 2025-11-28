@@ -13,13 +13,13 @@ import { logPageOpenedEvent } from './lib/firebase';
 import { useEffect } from 'react';
 
 function Header() {
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   const links: MenuItem[] = [
     { path: '/', icon: faNewspaper, label: 'header.main' },
     config.showStudentInfo ? { path: '/students', icon: faGraduationCap, label: 'header.students' } : null,
     config.showAbiturientInfo ? { path: '/abiturients', icon: faAddressCard, label: 'header.applicants' } : null,
-    { path: '/videos', icon: faVideo, label: 'header.videos' },
+    config.showVideoPage ? { path: '/videos', icon: faVideo, label: 'header.videos' } : null ,
     { path: '/schedule', icon: faCalendarDays, label: 'header.schedule' },
   ].filter(Boolean) as MenuItem[];
 
@@ -38,7 +38,7 @@ function Header() {
 }
 
 function Footer() {
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   return <footer>          
     <span>{ t('footer.info')}</span>        
     <span>{ t('footer.created_pt1') } <FontAwesomeIcon icon={faHeart} /> { t('footer.created_pt2') } 

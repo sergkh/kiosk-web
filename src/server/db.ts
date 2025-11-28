@@ -47,14 +47,15 @@ async function initDb() {
           title TEXT NOT NULL,
           src TEXT NOT NULL,
           image TEXT,
-          preview TEXT,
           category TEXT NOT NULL,
-          description TEXT
+          description TEXT,
+          published BOOLEAN DEFAULT TRUE,
+          position INTEGER,
+          date DATETIME DEFAULT CURRENT_TIMESTAMP
         )
       `); 
 
       await infoCards.createList(initialCards);
-      await importVideosFromFolder();
   }
 
   return db;
@@ -137,56 +138,18 @@ const infoCards = {
   }
 }
 
-
-function getProjectVideos(): Video[] {
-  const videoDir = path.join(process.cwd(), "data/uploads/videos");
-
-  if (!fs.existsSync(videoDir)) {
-    fs.mkdirSync(videoDir, { recursive: true });
-    return [];
-  }
-
-  const files = fs.readdirSync(videoDir).filter(file => {
-    const ext = path.extname(file).toLowerCase();
-    return [".mp4", ".mov", ".avi", ".mkv"].includes(ext);
-  });
-
-  return files.map(file => {
-    const id = path.parse(file).name;
-    const video: Video = {
-      id,
-      title: id,
-      src: `/uploads/videos/${file}`, 
-      image: undefined, 
-      preview: undefined,
-      category: "about", 
-      description: ""
-    };
-    return video;
-  });
-}
-
-async function importVideosFromFolder() {
-  const db = getDbInstance();
-  const videosFromFolder = getProjectVideos();
-
-  for (const video of videosFromFolder) {
-    const exists = await db.get("SELECT id FROM videos WHERE id = ?", [video.id]);
-    if (!exists) {
-      await db.run(
-        `INSERT INTO videos (id, title, src, image, preview, category, description) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [video.id, video.title, video.src, video.image ?? null, video.preview ?? null, video.category, video.description]
-      );
-      console.log(` Додано в базу: ${video.title}`);
-    }
-  }
-}
-
-
 const videos = {
-  async all(): Promise<Video[]> {
+  async all({ includeUnpublished }: { includeUnpublished?: boolean }): Promise<Video[]> {
     const db = getDbInstance();
-    return await db.all("SELECT * FROM videos ORDER BY id DESC") as Video[];
+    const select = "SELECT * FROM videos";
+    const where = includeUnpublished ? '' : ' WHERE published = TRUE';
+    const order = " ORDER BY position DESC";
+    return await db.all(select + where + order) as Video[];    
+  },
+
+  async listCategories(): Promise<string[]> {
+    const db = getDbInstance();
+    return await db.all("SELECT DISTINCT(category) FROM videos ORDER BY category");
   },
 
   async get(id: string): Promise<Video | null> {
@@ -197,8 +160,8 @@ const videos = {
   async create(video: Video): Promise<Video> {
     const db = getDbInstance();
     await db.run(
-      `INSERT INTO videos (id, title, src, image, preview, category, description) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [video.id, video.title, video.src, video.image ?? null, video.preview ?? null, video.category, video.description]
+      `INSERT INTO videos (id, title, src, image, category, description, position, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [video.id, video.title, video.src, video.image, video.category, video.description, video.position, video.published]
     );
     return video;
   },
@@ -206,8 +169,10 @@ const videos = {
   async update(video: Video): Promise<Video> {
     const db = getDbInstance();
     await db.run(
-      `UPDATE videos SET title = ?, src = ?, image = ?, preview = ?, category = ?, description = ? WHERE id = ?`,
-      [video.title, video.src, video.image ?? null,video.preview ?? null, video.category, video.description, video.id]
+      `UPDATE videos 
+      SET title = ?, src = ?, image = ?, category = ?, description = ?, published = ?, position = ?
+      WHERE id = ?`,
+      [video.title, video.src, video.image, video.category, video.description, video.published, video.position, video.id]
     );
     return video;
   },

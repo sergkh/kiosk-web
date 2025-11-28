@@ -43,7 +43,7 @@ function InfosList({ cards, active, onSelect }: CardsListProps) {
   const size = active == null ? CardSize.Full : CardSize.Minimized;
   return (
     <motion.div
-      className={"student-info-cards" + (size === CardSize.Minimized ? " minimized" : "")}
+      className={"info-cards" + (size === CardSize.Minimized ? " minimized" : "")}
       transition={{ duration: 0.6, ease: "easeInOut" }}
     >
       {cards.map((info) => (

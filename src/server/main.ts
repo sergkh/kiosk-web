@@ -8,9 +8,7 @@ import infoApi from "./info-api.ts";
 import { initDb } from "./db";
 import { loadAllFaculties } from "./parsers/faculties.ts";
 import { syncRectoratData } from "./parsers/rectorat";
-import path from "path";
 import videoRoutes from './video-api';
-import subtitlesRouter from "./subtitles-api.ts"
 
 const app = express();
 
@@ -21,30 +19,14 @@ if (process.env.NODE_ENV === "production") {
 app.use(express.json());
 app.use(cookieParser());
 
-const uploadsPath = process.env.UPLOADS_DIR || path.join(process.cwd(), 'data/uploads');
-app.use('/uploads/videos/:filename', (req, res, next) => {
-  const ext = path.extname(req.params.filename).toLowerCase();
-  if (ext === '.mp4') {
-    res.type('video/mp4');
-  } else if (ext === '.webm') {
-    res.type('video/webm');
-  } else if (ext === '.ogg') {
-    res.type('video/ogg');
-  }
-  next();
-});
-
 app.use("/uploads", express.static("data/public/uploads"));
 app.use("/api", login);
 app.use("/api/info", infoApi);
+app.use('/api', videoRoutes);
 
 app.get("/admin", (req: Request, res: Response, next: NextFunction) => {
   if (req.path === "/admin") { res.redirect(301, "/admin/"); } else next();
 });
-
-app.use('/api/admin', videoRoutes);
-
-app.use(subtitlesRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error("Error in request:", {
@@ -63,7 +45,7 @@ async function startServer() {
   try {
     await initDb();
 
-    loadAllFaculties(); // Initialize faculties data
+    loadAllFaculties();
     
     // Update news every 1 hour
     setInterval(updateNews, 1000 * 60 * 60 * 6); // TODO: put into config

@@ -13,7 +13,7 @@ import ErrorBoundary from "./pages/ErrorBoundary.tsx";
 // needed for i18n to work
 import i18n from "./lib/locale.ts";
 import IdlePage from "./pages/IdlePage.tsx";
-import { infoCardsLoader } from "./lib/loaders.ts";
+import { infoCardsLoader, videosLoader } from "./lib/loaders.ts";
 
 const router = createBrowserRouter([
   {
@@ -46,7 +46,8 @@ const router = createBrowserRouter([
   {
     path: "/videos",
     element: <Page><VideoPage/></Page>,
-    errorElement: <ErrorBoundary />
+    errorElement: <ErrorBoundary />,
+    loader: videosLoader()
   },
   {
     path: "/developers",

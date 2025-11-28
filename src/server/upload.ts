@@ -6,6 +6,11 @@ import { type Request } from "express";
 import crypto from "crypto";
 
 const uploadDir = "./data/public/uploads";
+const videoUploadDir = path.join(uploadDir, 'videos');
+export const videoPreviewsDir = path.join(uploadDir, 'videos', 'previews');
+
+if (!fs.existsSync(videoPreviewsDir)) fs.mkdirSync(videoPreviewsDir, { recursive: true });
+
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -33,8 +38,39 @@ const upload = multer({
 });
 
 export const singleImageUpload = upload.single("image");
+
 export const imageUrl = (fileName?: string | null, subfolder: string | null = null): string | null => 
   fileName ? subfolder ? `/uploads/${subfolder}/${fileName}` : `/uploads/${fileName}` : null;
+
+export const videoUrl = (fileName?: string | null): string | null => 
+  fileName ? `/uploads/videos/${fileName}` : null;
+
+export const videoPreviewUrl = (fileName?: string | null): string | null => 
+  fileName ? `/uploads/videos/previews/${fileName}` : null;
+
+const videoStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, videoUploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${crypto.randomUUID()}${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
+  }
+});
+
+export const videoUpload = multer({ 
+  storage: videoStorage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /mp4|webm|ogg|jpg|jpeg|png|vtt/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype) || file.mimetype === 'text/vtt' || file.mimetype === 'application/x-subrip';
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    }    
+    cb(new Error('Тільки відео, зображення або субтитри дозволені!'));
+  }
+});
 
 // Download external asset into uploads directory
 // returns the relative URL to the saved image

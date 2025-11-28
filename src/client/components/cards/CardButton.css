@@ -67,8 +67,7 @@
 }
 
 .info-card img {
-  max-width: 100%;
-  order: -1;  
+  max-width: 90%;
   height: auto;  
   margin-bottom: 1em;
   border-radius: 0.5em;

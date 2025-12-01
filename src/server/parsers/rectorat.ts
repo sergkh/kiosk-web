@@ -12,8 +12,7 @@ import { downloadedAsset } from "../upload";
 const BASE_URL = config.rectoratBaseUrl;
 const TARGET_CATEGORY = "rectorat_members"; 
 const NBSP = '\u00A0'; 
-//потрібно буде добавити в папочку rectorat на сервері default_image
-const DEFAULT_IMAGE = "/uploads/rectorat/default_avatar.jpg"
+const DEFAULT_IMAGE = "/img/default_avatar.jpg"
 
 
 type RectoratCard = {

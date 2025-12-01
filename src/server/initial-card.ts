@@ -1,4 +1,6 @@
 import type { InfoCard } from "../shared/models";
+const CENTERS_URL = "https://vsau.org/pro-universitet/strukturni-pidrozdili";
+
 
 export const initialCards: InfoCard[] = [
     ///////////////////
@@ -17,8 +19,8 @@ export const initialCards: InfoCard[] = [
         id: "functional-parts",
         title: "Функціональні частини",
         subtitle: "",
-        content: "no info",
         category: "students",
+        subcategory: "centers", 
         image: "/img/students/list.png",
         position: 1,
         published: true
@@ -762,6 +764,170 @@ export const initialCards: InfoCard[] = [
         content: "no info",
         position: 7,
         published: true
-    }
+    },
+     /////////////////
+  // Centers  //
+  /////////////////
+  {
+    "id": "center-audit",
+    "title": "ЦЕНТР АУДИТУ, КОНТРОЛЮ, КАДРОВОГО ТА ЮРИДИЧНОГО СУПРОВОДУ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 0,
+    "published": true
+  },
+  {
+    "id": "center-culture",
+    "title": "ЦЕНТР КУЛЬТУРНО-ЕСТЕТИЧНОГО ВИХОВАННЯ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 1,
+    "published": true
+  },
+  {
+    "id": "center-pre-uni",
+    "title": "ЦЕНТР ДОВУЗІВСЬКОЇ ПІДГОТОВКИ, ПРИЙОМУ НА НАВЧАННЯ ТА ВИХОВНОЇ РОБОТИ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 2,
+    "published": true
+  },
+  {
+    "id": "center-integration",
+    "title": "ЦЕНТР ІНТЕГРАЦІЇ З ВИРОБНИЦТВОМ, ПІДВИЩЕННЯ КВАЛІФІКАЦІЇ ТА ДОРАДНИЦТВА",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 3,
+    "published": true
+  },
+  {
+    "id": "center-admin",
+    "title": "ЦЕНТР АДМІНІСТРАТИВНО-ГОСПОДАРСЬКОЇ РОБОТИ ТА ВИРОБНИЧОЇ ДІЯЛЬНОСТІ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 4,
+    "published": true
+  },
+  {
+    "id": "dept-euro-integration",
+    "title": "ВІДДІЛ ЄВРОІНТЕГРАЦІЇ ТА МІЖНАРОДНОЇ ДІЯЛЬНОСТІ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 5,
+    "published": true
+  },
+  {
+    "id": "center-academic-research",
+    "title": "НАВЧАЛЬНО-НАУКОВИЙ ЦЕНТР",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 6,
+    "published": true
+  },
+  {
+    "id": "dept-personnel",
+    "title": "ВІДДІЛ КАДРІВ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 7,
+    "published": true
+  },
+  {
+    "id": "service-accounting",
+    "title": "БУХГАЛТЕРСЬКА СЛУЖБА",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 8,
+    "published": true
+  },
+  {
+    "id": "dept-finance",
+    "title": "ПЛАНОВО-ФІНАНСОВИЙ ВІДДІЛ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 9,
+    "published": true
+  },
+  {
+    "id": "dept-media",
+    "title": "ВІДДІЛ МЕДІА ТА ІНФОРМАЦІЙНИХ РЕСУРСІВ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 10,
+    "published": true
+  },
+  {
+    "id": "dept-editorial",
+    "title": "РЕДАКЦІЙНО-ВИДАВНИЧИЙ ВІДДІЛ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 11,
+    "published": true
+  },
+  {
+    "id": "dept-legal",
+    "title": "ЮРИДИЧНИЙ ВІДДІЛ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 12,
+    "published": true
+  },
+  {
+    "id": "dept-general",
+    "title": "ЗАГАЛЬНИЙ ВІДДІЛ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 13,
+    "published": true
+  },
+  {
+    "id": "hq-civil-defense",
+    "title": "ШТАБ ЦИВІЛЬНОЇ ОБОРОНИ",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 14,
+    "published": true
+  },
+  {
+    "id": "center-computing",
+    "title": "ОБЧИСЛЮВАЛЬНИЙ ЦЕНТР",
+    "category": "centers",
+    "resource": CENTERS_URL,
+    "image": "/img/centers/default.jpg",
+    "content": "no info",
+    "position": 15,
+    "published": true
+  }
+
 
 ];

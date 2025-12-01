@@ -1,121 +1,116 @@
 import './VideoManagementPage.css'
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { NavLink, useLoaderData } from 'react-router-dom';
+import { useState} from 'react';
 import type { Video } from '../../../shared/models';
-import { videosApi } from '../../api/video';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash, faFilePen, faIcons, faSquarePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import config from '../../lib/config';
+import toast, { Toaster } from 'react-hot-toast';
+import performWithUndo from '../lib/undo';
 
 export function VideoManagementPage() {
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const loadedVideos = useLoaderData<Video[]>();
+  const [videos, setVideos] = useState<Video[]>(loadedVideos || []);
 
-  useEffect(() => {
-    loadVideos();
-  }, []);
+  const handleDelete = (video: Video) => {
+    const index = videos.indexOf(video);
+    setVideos(prevVideos => prevVideos.filter(v => v.id !== video.id)); 
 
-  const loadVideos = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await videosApi.getAll(); 
-      setVideos(data);
-    } catch (err) {
-      setError('Не вдалося завантажити відео');
-    } finally {
-      setLoading(false);
+    const deletionAction = async () => {
+      const deleteResp = await fetch(`${config.baseUrl}api/videos/${video.id}`, { method: 'DELETE' });
+
+      if (!deleteResp.ok) {
+        const errorData = await deleteResp.json();
+        throw new Error(errorData.error || `Помилка видалення: ${deleteResp.status}`);
+      }
     }
+
+    const undoAction = () => {
+      setVideos((prev) => {
+          const newItems = [...prev];        
+          newItems.splice(index, 0, video); // Restore to original position
+          return newItems;
+        })
+    }
+
+    performWithUndo("Відео видалено", deletionAction, { onUndo: undoAction });
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Ви впевнені, що хочете видалити це відео?')) return;
-    
-    try {
-      await videosApi.delete(id);
-      setVideos(videos.filter(v => v.id !== id));
-    } catch (err) {
-      alert('Не вдалося видалити відео');
-      console.error(err);
+  const togglePublishing = (video: Video) => {
+    const updateAction = async () => {
+      const updateResp = await fetch(`${config.baseUrl}api/videos/${video.id}/published`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ published: !video.published })
+      });
+
+      if (!updateResp.ok) {
+        const errorData = await updateResp.json();
+        throw new Error(errorData.error || `Помилка оновлення статусу: ${updateResp.status}`);
+      }
+
+      return await updateResp.json();
+    };
+
+    const updateVideo = (publish: boolean) => {
+      setVideos((prev) => {
+        return prev.map((v) => v.id === video.id ? { ...v, published: publish } : v);
+      });
     }
+
+    performWithUndo(`Відео ${!video.published ? 'опубліковано' : 'приховано'}`, updateAction, { onUndo: () => updateVideo(video.published) });
+    
+    updateVideo(!video.published);
   };
 
     return (
-    <div className="vm-page">
-      <div className="vm-content">
-        <div className="vm-header">
-          <h1>Управління відео</h1>
-          <Link to="/admin/categories/videos/new" className="vm-btn-add">
-            + Додати відео
-          </Link>
+      <div className="cards-list">
+        <Toaster position="top-center" />
+        <div className="main-controls">
+          <NavLink to="/admin/categories/videos/new" className="action-btn">
+            <FontAwesomeIcon className="action-btn" icon={faSquarePlus} />
+          </NavLink>
         </div>
 
-        {loading && <div className="vm-status">Завантаження...</div>}
-        
-        {error && <div className="vm-error">{error}</div>}
-
-        {!loading && !error && (
-          <div className="vm-table-wrapper">
-            <table className="vm-table">
-              <thead>
-                <tr>
-                  <th style={{ width: '120px' }}>Прев'ю</th>
-                  <th>Назва</th>
-                  <th className="center">Категорія</th>
-                  <th className="right">Дії</th>
-                </tr>
-              </thead>
-              <tbody>
-                {videos.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="vm-status">
-                      Відео ще немає. Додайте перше відео!
-                    </td>
-                  </tr>
-                ) : (
-                  videos.map(video => (
-                    <tr key={video.id}>
-                      <td>
-                        {video.image || video.preview ? (
-                          <img 
-                            src={video.preview || video.image || ''} 
-                            alt={video.title} 
-                            className="vm-thumb" 
-                          />
-                        ) : (
-                          <div className="vm-thumb-placeholder">📹</div>
-                        )}
-                      </td>
-                      <td>
-                        <strong>{video.title}</strong>
-                      </td>
-                      <td className="center">
-                        {video.category}
-                      </td>
-                      <td className="right">
-                        <div className="vm-actions">
-                          <Link 
-                            to={`/admin/categories/videos/${video.id}/edit`} 
-                            className="vm-btn-action vm-btn-edit"
-                          >
-                            Редагувати
-                          </Link>
-                          <button 
-                            onClick={() => handleDelete(video.id)} 
-                            className="vm-btn-action vm-btn-delete"
-                          >
-                            Видалити
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+        {
+          videos.length === 0 ? <div>Відео ще немає. Додайте перше відео!</div>: <></>
+        } 
+        <ul>
+        {          
+          videos.map(video => (
+            <li key={video.id} className="card video">            
+              <div className="card-content">
+                { video.image ? <img src={video.image} alt={video.title} className="preview" /> : (
+                  <div className="preview">📹</div>
                 )}
-              </tbody>
-            </table>
-          </div>
-        )}
+
+                <div className="video-content">
+                  <NavLink to={`/admin/categories/videos/${video.id}/edit`}>
+                    <h3>{video.title}</h3>
+                  </NavLink>                
+                  <div><FontAwesomeIcon icon={faIcons} /> {video.category}</div>
+                </div>
+              </div>
+
+              <div className="actions">
+                <FontAwesomeIcon 
+                  title={video.published ? 'Приховати' : 'Опублікувати'} 
+                  className="action-btn" 
+                  icon={video.published ? faEye : faEyeSlash} 
+                  onClick={() => togglePublishing(video)} 
+                />
+                &nbsp;
+                <NavLink to={`/admin/categories/videos/${video.id}/edit`} className="action-btn">
+                  <FontAwesomeIcon title="Редагувати" className="action-btn" icon={faFilePen} />
+                </NavLink>
+                &nbsp;
+                <FontAwesomeIcon title="Видалити відео" className="action-btn" icon={faTrash} onClick={() => handleDelete(video)} />
+              </div>
+            </li>
+        ))}
+        </ul>
       </div>
-    </div>
-);
+  );
 }
 
 export default VideoManagementPage;

@@ -18,6 +18,7 @@ type ButtonProps = {
 };
 
 export default function CardButton({ title, subtitle, image, active, onClick, size, empty }: ButtonProps) {
+  const downsizeText = title.length > 50;
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -25,7 +26,7 @@ export default function CardButton({ title, subtitle, image, active, onClick, si
       transition={{ duration: 0.2, ease: "easeInOut" }}
       whileHover={{ scale: 1.05 }}
       whileTap={ empty ? {} : { scale: 0.95 }}
-      className={"info-card" + (active ? " active" : "") + (size ? ` ${size}` : "") + (empty ? " empty" : " actionable")}
+      className={"info-card" + (active ? " active" : "") + (size ? ` ${size}` : "") + (empty ? " empty" : " actionable" + (downsizeText ? " downsized" : ""))}
       onClick={ () => {        
         if (onClick) onClick()
       }}>      

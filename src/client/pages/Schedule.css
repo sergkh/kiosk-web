@@ -17,8 +17,10 @@
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
+  scroll-padding-left: 12px;
   scroll-snap-type: x mandatory;
   justify-content: left;
+  background-color: var(--sub-menu-background);  
 }
 
 

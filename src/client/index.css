@@ -1,16 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&display=swap');
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  src: local('Golos Text'), url(./fonts/golos-text.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  src: local('Inter'), url(./fonts/inter.ttf) format('truetype');
+}
 
 :root {
-  --background: #092f25;
-  --foreground: rgba(255,255,255, 0.85);
-  --header-background: rgba(155,184,175,0.15);
+  --background: #06231C;
+  --foreground: #E8EEF2DF;
+  --header-background: rgba(155,184,175,0.17);
   --footer-background: #333;
   --footer-foreground: var(--foreground);
-  --cards-primary: #5ed96b;
+  --cards-primary: var(--foreground);
   --cards-backround: rgba(155,184,175,0.15);
   --cards-backround-active: rgba(155,184,175,0.6);
   --main-btn-background: #018804;
   --main-btn-background-active: #005b02;
+  --sub-menu-background: rgba(155,184,175,0.04);
+  --buttons-font: 'Inter', 'Golos Text', sans-serif;
 }
 
 html,

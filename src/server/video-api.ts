@@ -4,158 +4,240 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs'; 
 import { videos } from './db';
-import type { Video } from './../shared/models';
+import type { Video, VideoSubtitle } from './../shared/models';
 import ffmpeg from 'fluent-ffmpeg';
+import { videoPreviewsDir, videoUpload, videoUrl, videoPreviewUrl } from './upload';
 
+const videoUploadDir = path.join(process.cwd(), 'data/public/uploads/videos');
 const router = Router();
 
-const UPLOADS_ROOT = path.join(process.cwd(), 'data/public/uploads');
-const VIDEOS_DIR = path.join(UPLOADS_ROOT, 'videos');
-const PREVIEWS_DIR = path.join(UPLOADS_ROOT, 'previews');
-
-[VIDEOS_DIR, PREVIEWS_DIR].forEach(dir => {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
-});
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, VIDEOS_DIR);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = `${crypto.randomUUID()}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
+// Helper function to generate subtitles based on existing VTT files
+function generateSubtitlesFromFiles(videoSrc: string, lang: 'uk' | 'en'): VideoSubtitle | null {  
+  const videoFilename = path.parse(path.basename(videoSrc)).name;
+  
+  const subtitleFilename = `${videoFilename}.${lang}.vtt`;
+  const subtitlePath = path.join(videoUploadDir, subtitleFilename);
+  
+  if (fs.existsSync(subtitlePath)) {
+    return {
+      language: lang,
+      label: lang === 'uk' ? 'Українська' : 'English',
+      src: videoUrl(subtitleFilename) ?? ''
+    };
   }
-});
-
-const upload = multer({ 
-  storage,
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /mp4|webm|ogg|jpg|jpeg|png/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-    
-    if (mimetype && extname) {
-      return cb(null, true);
-    }
-    cb(new Error('Тільки відео або зображення дозволені!'));
-  }
-});
+  return null;
+}
 
 router.get('/videos', async (req: Request, res: Response) => {
-  try {
-    const allVideos = await videos.all();
-    res.json(allVideos);
-  } catch (error) {
-    console.error('Помилка завантаження відео:', error);
-    res.status(500).json({ error: 'Помилка завантаження відео' });
-  }
+  const allVideos = await videos.all({ includeUnpublished: req.query.all === 'true' });
+  res.json(allVideos);
+});
+
+router.get('/videos/categories', async (req: Request, res: Response) => {
+  const categories = await videos.listCategories();
+  res.json(categories);
 });
 
 router.get('/videos/:id', async (req: Request, res: Response) => {
+  const video = await videos.get(req.params.id);
+  if (!video) return res.status(404).json({ error: 'Відео не знайдено' });
+  res.json(video);
+});
+
+router.get('/videos/:id/subtitles/:lang', async (req: Request, res: Response) => {
+  const video = await videos.get(req.params.id);
+  if (!video) {
+    return res.status(404).json({ error: 'Відео не знайдено' });
+  }
+  const lang = req.params.lang as 'uk' | 'en';
+  
+  const videoFilename = path.parse(path.basename(video.src)).name;
+  const subtitlePath = path.join(videoUploadDir, `${videoFilename}.${lang}.vtt`);
+  
+  console.log(subtitlePath);
+
+  if (!fs.existsSync(subtitlePath)) {
+    return res.status(404).json({ error: 'Субтитр не знайдено' });
+  }
+  
+  res.sendFile(subtitlePath);
+});
+
+router.post('/videos', videoUpload.fields([
+  { name: 'video', maxCount: 1 },
+  { name: 'image', maxCount: 1 },
+  { name: 'subtitle_uk', maxCount: 1 },
+  { name: 'subtitle_en', maxCount: 1 }
+]), async (req: Request, res: Response) => {
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
+
+  if (!req.body.title || !req.body.category || !files?.video) {
+    return res.status(400).json({ error: 'Обов\'язкові поля: title, category, video' });
+  }
+
+  const category = req.body.category as string;
+  const videoFilename = path.parse(files.video[0].filename).name; // Get filename without extension
+
+  // Process subtitle files
+  const allowedLanguages = ['uk', 'en'];
+  
+  for (const lang of allowedLanguages) {
+    const subtitleField = `subtitle_${lang}`;
+    if (files?.[subtitleField] && files[subtitleField][0]) {
+      const subtitleFile = files[subtitleField][0];
+      const subtitleFilename = `${videoFilename}.${lang}.vtt`;
+      const subtitlePath = path.join(path.dirname(subtitleFile.path), subtitleFilename);
+      
+      // Rename/move the subtitle file to match the video filename
+      try {
+        fs.renameSync(subtitleFile.path, subtitlePath);
+      } catch (error) {
+        console.error(`Помилка збереження субтитрів ${lang}:`, error);
+      }
+    }
+  }
+
+  const video: Video = {
+    id: crypto.randomUUID(),
+    title: req.body.title,
+    src: videoUrl(files.video[0].filename) ?? '',
+    image: files?.image ? videoPreviewUrl(files.image[0].filename) : null,
+    category,
+    description: req.body.description || '',
+    published: req.body.published === 'true' || req.body.published === true,
+    position: 0
+  };
+
+  if (files?.video) {
+    const videoPath = files.video[0].path;
+    const previewFilename = `${files.video[0].filename}.jpg`;
+
+    try {
+        await new Promise ((resolve, reject) => {
+          ffmpeg(videoPath)
+            .screenshots ({
+              timestamps: ['5'],
+              filename: previewFilename,
+              folder: videoPreviewsDir,
+              size: '320x240'
+            })
+            .on('end', resolve)
+            .on('error', reject);
+        });
+        video.image = videoPreviewUrl(previewFilename) ?? null;
+    } catch (ffmpegError) {
+      console.log("FFmpeg не зміг створити прев'ю відео:", ffmpegError);
+    }
+  } 
+
+  await videos.create(video);
+  // Return video without subtitles - fetch lazily via /videos/:id/subtitles
+  res.status(201).json(video);
+});
+
+router.put('/videos/:id', videoUpload.fields([
+  { name: 'video', maxCount: 1 },
+  { name: 'image', maxCount: 1 },
+  { name: 'subtitle_uk', maxCount: 1 },
+  { name: 'subtitle_en', maxCount: 1 }
+]), async (req: Request, res: Response) => {
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
+  const existingVideo = await videos.get(req.params.id);
+
+  if (!existingVideo) {
+    return res.status(404).json({ error: 'Відео не знайдено' });
+  }
+
+  const category = req.body.category as string;
+
+  // Determine video filename (use existing or new)
+  let videoFilename: string;
+  if (files?.video && files.video[0]) {
+    videoFilename = path.parse(files.video[0].filename).name;
+  } else {
+    // Extract filename from existing video src
+    const existingSrc = existingVideo.src;
+    videoFilename = path.parse(path.basename(existingSrc)).name;
+  }
+
+  // Process subtitle files
+  const allowedLanguages = ['uk', 'en'];
+  
+  for (const lang of allowedLanguages) {
+    const subtitleField = `subtitle_${lang}`;
+    if (files?.[subtitleField] && files[subtitleField][0]) {
+      const subtitleFile = files[subtitleField][0];
+      const subtitleFilename = `${videoFilename}.${lang}.vtt`;
+      const subtitlePath = path.join(path.dirname(subtitleFile.path), subtitleFilename);
+      
+      // Rename/move the subtitle file to match the video filename
+      try {
+        // Remove old subtitle file if it exists
+        if (fs.existsSync(subtitlePath)) {
+          fs.unlinkSync(subtitlePath);
+        }
+        
+        fs.renameSync(subtitleFile.path, subtitlePath);
+      } catch (error) {
+        console.error(`Помилка збереження субтитрів ${lang}:`, error);
+      }
+    }
+  }
+  
+  // Handle subtitle removal if requested
+  if (req.body.removeSubtitles) {
+    try {
+      const languagesToRemove = typeof req.body.removeSubtitles === 'string'
+        ? JSON.parse(req.body.removeSubtitles)
+        : req.body.removeSubtitles;
+      
+      if (Array.isArray(languagesToRemove)) {
+        // Remove subtitle files
+        for (const lang of languagesToRemove) {
+          if (allowedLanguages.includes(lang)) {
+            const subtitleFilename = `${videoFilename}.${lang}.vtt`;
+            const subtitlePath = path.join(videoUploadDir, subtitleFilename);
+            if (fs.existsSync(subtitlePath)) {
+              fs.unlinkSync(subtitlePath);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Помилка видалення субтитрів:', error);
+    }
+  }
+
+  const updatedVideo: Video = {
+    ...existingVideo,
+    title: req.body.title || existingVideo.title,
+    src: files?.video ? videoUrl(files.video[0].filename) ?? '' : existingVideo.src,
+    image: req.body.removeImage === 'true' ? null : 
+          files?.image ?  videoPreviewUrl(files.image[0].filename) ?? null : existingVideo.image,
+    category,
+    description: req.body.description || existingVideo.description,
+    published: req.body.published === 'true' || req.body.published === true
+  };
+
+  await videos.update(updatedVideo);
+  res.json(updatedVideo);
+
+});
+
+router.put('/videos/:id/published', async (req: Request, res: Response) => {
   try {
     const video = await videos.get(req.params.id);
     if (!video) {
       return res.status(404).json({ error: 'Відео не знайдено' });
     }
+
+    video.published = req.body.published === true || req.body.published === 'true';
+    await videos.update(video);
+
     res.json(video);
   } catch (error) {
-    console.error('Помилка отримання відео:', error);
-    res.status(500).json({ error: 'Помилка отримання відео' });
-  }
-});
-
-router.post('/videos', upload.fields([
-  { name: 'video', maxCount: 1 },
-  { name: 'image', maxCount: 1 }
-]), async (req: Request, res: Response) => {
-  try {
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
-
-    if (!req.body.title || !req.body.category) {
-      return res.status(400).json({ error: 'Обов\'язкові поля: title, category' });
-    }
-
-    const category = req.body.category as Video['category'];
-    if (!['about', 'admissions', 'student_life', 'science', 'culture', 'international', 'events'].includes(category)) {
-      return res.status(400).json({ error: 'Невірна категорія' });
-    }
-
-    const video: Video = {
-      id: crypto.randomUUID(),
-      title: req.body.title,
-      src: files?.video ? `/uploads/videos/${files.video[0].filename}` : '',
-      image: files?.image ? `/uploads/videos/${files.image[0].filename}` : undefined,
-      category,
-      description: req.body.description || ''
-    };
-
-    if (files?.video) {
-      const videoPath = files.video[0].path;
-      const previewFilename = `${files.video[0].filename}.jpg`;
-      
-      const previewFolder = PREVIEWS_DIR;
-
-      try {
-          await new Promise ((resolve, reject) => {
-            ffmpeg(videoPath)
-              .screenshots ({
-                timestamps: ['5'],
-                filename: previewFilename,
-                folder: previewFolder,
-                size: '320x240'
-              })
-              .on ('end', resolve)
-              .on ('error', reject);
-          });
-          video.preview = `/uploads/previews/${previewFilename}`;
-      } catch (ffmpegError) {
-          console.log(" FFmpeg не зміг створити прев'ю ")
-      }
-    } 
-
-    await videos.create(video);
-    res.status(201).json(video);
-  } catch (error) {
-    console.error('Помилка створення відео:', error);
-    res.status(500).json({ error: 'Помилка створення відео' });
-  }
-});
-
-router.put('/videos/:id', upload.fields([
-  { name: 'video', maxCount: 1 },
-  { name: 'image', maxCount: 1 }
-]), async (req: Request, res: Response) => {
-  try {
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
-    const existingVideo = await videos.get(req.params.id);
-
-    if (!existingVideo) {
-      return res.status(404).json({ error: 'Відео не знайдено' });
-    }
-
-    const category = req.body.category as Video['category'];
-    if (!['about', 'admissions', 'student_life', 'science', 'culture', 'international', 'events'].includes(category)) {
-      return res.status(400).json({ error: 'Невірна категорія' });
-    }
-
-    const updatedVideo: Video = {
-      ...existingVideo,
-      title: req.body.title || existingVideo.title,
-      src: files?.video ? `/uploads/videos/${files.video[0].filename}` : existingVideo.src,
-      image: req.body.removeImage === 'true' ? undefined : 
-            files?.image ? `/uploads/videos/${files.image[0].filename}` : 
-            existingVideo.image,
-      category,
-      description: req.body.description || existingVideo.description
-    };
-
-    await videos.update(updatedVideo);
-    res.json(updatedVideo);
-  } catch (error) {
-    console.error('Помилка оновлення відео:', error);
-    res.status(500).json({ error: 'Помилка оновлення відео' });
+    console.error('Помилка оновлення статусу публікації:', error);
+    res.status(500).json({ error: 'Помилка оновлення статусу публікації' });
   }
 });
 

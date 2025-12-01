@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import AdminLayout from "./AdminLayout";
 import InfoManagementPage from "./pages/InfoManagementPage";
 import CardEditorPage from "./components/CardEditorPage";
-import { infoListLoader, newInfoLoader, infoEntryLoader } from "./lib/loaders";
+import { infoListLoader, newInfoLoader, infoEntryLoader, newVideoLoader, videoEntryLoader, videosLoader } from "./lib/loaders";
 import ErrorBoundary from "../pages/ErrorBoundary";
 import VideoManagementPage from "./pages/VideoManagementPage";
 import VideoEditorPage from "./components/VideoEditorPage";
@@ -23,16 +23,19 @@ const router = createBrowserRouter([
           element: <Navigate to="/admin/categories/students" replace />
         },
         {
-           path: "categories/videos", 
-           element: <VideoManagementPage />,
+          path: "categories/videos", 
+          element: <VideoManagementPage />,
+          loader: videosLoader
         },
         {
-           path: "categories/videos/new",
-           element: <VideoEditorPage />,
+          path: "categories/videos/new",
+          element: <VideoEditorPage />,
+          loader: newVideoLoader
         },
         {
-           path: "categories/videos/:id/edit",
-           element: <VideoEditorPage />,
+          path: "categories/videos/:id/edit",
+          element: <VideoEditorPage />,
+          loader: videoEntryLoader
         },
         {
           path: "categories/:category",

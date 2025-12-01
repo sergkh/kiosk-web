@@ -1,5 +1,4 @@
 import type { InfoCard } from "../shared/models";
-const CENTERS_URL = "https://vsau.org/pro-universitet/strukturni-pidrozdili";
 
 
 export const initialCards: InfoCard[] = [
@@ -770,9 +769,9 @@ export const initialCards: InfoCard[] = [
   /////////////////
   {
     "id": "center-audit",
-    "title": "ЦЕНТР АУДИТУ, КОНТРОЛЮ, КАДРОВОГО ТА ЮРИДИЧНОГО СУПРОВОДУ",
+    "title": "Центр аудиту, контролю, кадрового та юридичного супроводу",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive1",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 0,
@@ -780,9 +779,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "center-culture",
-    "title": "ЦЕНТР КУЛЬТУРНО-ЕСТЕТИЧНОГО ВИХОВАННЯ",
+    "title": "Центр культурно-естетичного виховання",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive2",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 1,
@@ -790,9 +789,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "center-pre-uni",
-    "title": "ЦЕНТР ДОВУЗІВСЬКОЇ ПІДГОТОВКИ, ПРИЙОМУ НА НАВЧАННЯ ТА ВИХОВНОЇ РОБОТИ",
+    "title": "Центр довузівської підготовки, прийому на навчання та виховної роботи",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive3",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 2,
@@ -800,9 +799,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "center-integration",
-    "title": "ЦЕНТР ІНТЕГРАЦІЇ З ВИРОБНИЦТВОМ, ПІДВИЩЕННЯ КВАЛІФІКАЦІЇ ТА ДОРАДНИЦТВА",
+    "title": "Центр інтеграції з виробництвом, підвищення кваліфікації та дорадництва",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive4",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 3,
@@ -810,9 +809,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "center-admin",
-    "title": "ЦЕНТР АДМІНІСТРАТИВНО-ГОСПОДАРСЬКОЇ РОБОТИ ТА ВИРОБНИЧОЇ ДІЯЛЬНОСТІ",
+    "title": "Центр адміністративно-господарської роботи та виробничої діяльності",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive5",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 4,
@@ -820,9 +819,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "dept-euro-integration",
-    "title": "ВІДДІЛ ЄВРОІНТЕГРАЦІЇ ТА МІЖНАРОДНОЇ ДІЯЛЬНОСТІ",
+    "title": "Відділ євроінтеграції та міжнародної діяльності",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive6",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 5,
@@ -830,9 +829,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "center-academic-research",
-    "title": "НАВЧАЛЬНО-НАУКОВИЙ ЦЕНТР",
+    "title": "Навчально-науковий центр",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive7",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 6,
@@ -840,9 +839,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "dept-personnel",
-    "title": "ВІДДІЛ КАДРІВ",
+    "title": "Відділ кадрів",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive8",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 7,
@@ -850,9 +849,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "service-accounting",
-    "title": "БУХГАЛТЕРСЬКА СЛУЖБА",
+    "title": "Бухгалтерська служба",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive9",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 8,
@@ -860,9 +859,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "dept-finance",
-    "title": "ПЛАНОВО-ФІНАНСОВИЙ ВІДДІЛ",
+    "title": "Планово-фінансовий відділ",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive10",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 9,
@@ -870,9 +869,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "dept-media",
-    "title": "ВІДДІЛ МЕДІА ТА ІНФОРМАЦІЙНИХ РЕСУРСІВ",
+    "title": "Відділ медіа та інформаційних ресурсів",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive11",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 10,
@@ -880,9 +879,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "dept-editorial",
-    "title": "РЕДАКЦІЙНО-ВИДАВНИЧИЙ ВІДДІЛ",
+    "title": "Редакційно-видавничий відділ",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive12",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 11,
@@ -890,9 +889,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "dept-legal",
-    "title": "ЮРИДИЧНИЙ ВІДДІЛ",
+    "title": "Юридичний відділ",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive13",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 12,
@@ -900,9 +899,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "dept-general",
-    "title": "ЗАГАЛЬНИЙ ВІДДІЛ",
+    "title": "Загальний відділ",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive14",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 13,
@@ -910,9 +909,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "hq-civil-defense",
-    "title": "ШТАБ ЦИВІЛЬНОЇ ОБОРОНИ",
+    "title": "Штаб цивільної оборони",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive15",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 14,
@@ -920,9 +919,9 @@ export const initialCards: InfoCard[] = [
   },
   {
     "id": "center-computing",
-    "title": "ОБЧИСЛЮВАЛЬНИЙ ЦЕНТР",
+    "title": "Обчислювальний центр",
     "category": "centers",
-    "resource": CENTERS_URL,
+    "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive16",
     "image": "/img/centers/default.jpg",
     "content": "no info",
     "position": 15,

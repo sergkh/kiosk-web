@@ -13,131 +13,138 @@ function normalizeText(text: string): string {
   return text.replace(/\s+/g, " ").trim().toLowerCase();
 }
 
-export async function ensureInitialCenters(): Promise<void> {
+async function parseAllCentersFromUrl(url: string): Promise<CenterInfo[]> {
+  if (!url || !url.startsWith("http")) return [];
 
-  const cardsToSync = initialCards.filter(
-    (c) => c.category === "centers");
+  try {
+    const urlObj = new URL(url);
+    const baseUrl = `${urlObj.origin}${urlObj.pathname}`;
 
-  const allCards = await infoCards.all({ includeUnpublished: true });
-
-  for (const card of cardsToSync) {
-    const existing = allCards.find(c => c.id === card.id);
-
-    if (!existing) {
-      await infoCards.create({
-        ...card,
-        content: card.content || "no info",
-      });
-    } else {
-      const needsUpdate = existing.resource !== card.resource || 
-                          existing.image !== card.image || 
-                          existing.subcategory !== card.subcategory;
-      
-      if (needsUpdate) {
-          await infoCards.update({
-            ...existing,
-            resource: card.resource,
-            image: card.image,
-            subcategory: card.subcategory,
-            position: card.position,
-            published: true
-          });
-      }
-    }
-  }
-}
-
-async function parseCenterInfo(url: string, targetTitle: string): Promise<CenterInfo> {
-  const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
-  if (!response.ok) {
-    throw new Error(`Не вдалося завантажити сторінку центрів: ${response.status}`);
-  }
-
-  const html = await response.text();
-  const $ = cheerio.load(html);
-
-  let foundTitle = "";
-  let foundContent = "";
-  
-  const targetNormalized = normalizeText(targetTitle);
-  
-  const foundHeadersOnPage: string[] = [];
-
-  $(".card-outline").each((_, element) => {
-    const rawBtnText = $(element).find("button").text();
-    const btnTextNormalized = normalizeText(rawBtnText);
+    const response = await fetch(baseUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
     
-    foundHeadersOnPage.push(rawBtnText.trim());
-
-    if (btnTextNormalized.includes(targetNormalized) || targetNormalized.includes(btnTextNormalized)) {
-        
-        foundTitle = rawBtnText.trim();
-        foundTitle = foundTitle.charAt(0).toUpperCase() + foundTitle.slice(1).toLowerCase();
-
-        const contentContainer = $(element).find(".card-body");
-
-        contentContainer.find("img").each((_, img) => {
-            const src = $(img).attr("src") || $(img).attr("data-src");
-            if (src) {
-              if (src.startsWith("http")) {
-                $(img).attr("src", src);
-              } else if (src.startsWith("//")) {
-                $(img).attr("src", `https:${src}`);
-              } else {
-                 const u = new URL(url); 
-                 const cleanPath = src.startsWith("/") ? src : `/${src}`;
-                 $(img).attr("src", `${u.origin}${cleanPath}`);
-              }
-              $(img).addClass("img-fluid").css("max-width", "100%").css("height", "auto");
-            }
-        });
-
-        const blockHtml = contentContainer.html();
-        if (blockHtml && blockHtml.trim().length > 0) {
-             foundContent = blockHtml.trim();
-        }
-        
-        return false; 
+    if (!response.ok) {
+        return [];
     }
-  });
 
-  return { title: foundTitle || targetTitle, content: foundContent } as CenterInfo;
-}
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    const cards: CenterInfo[] = [];
 
-export async function syncCenterInfo(center: InfoCard): Promise<InfoCard> {
-  const { title, content } = await parseCenterInfo(center.resource!, center.title);
-  if (!content && center.content) return center;
-  return { ...center, title, content };
-}
+    $(".card-outline").each((_, element) => {
+      const btnText = $(element).find("button").text().trim();
+      if (!btnText) return;
 
-export async function loadAllCenters(): Promise<void> {
+      const title = btnText;
 
-  const centerCards = await infoCards.all({ category: "centers", includeUnpublished: true });
-  
-  if (centerCards.length === 0) {
-      return;
-  }
+      const contentContainer = $(element).find(".card-body");
+      
+      contentContainer.find("img").each((_, img) => {
+          const src = $(img).attr("src") || $(img).attr("data-src");
+          if (src && !src.startsWith("http")) {
+              try {
+                const u = new URL(url);
+                const cleanPath = src.startsWith("/") ? src : `/${src}`;
+                $(img).attr("src", `${u.origin}${cleanPath}`);
+              } catch (e) {}
+          }
+          $(img).addClass("img-fluid").css("max-width", "100%").css("height", "auto");
+      });
 
-  const allLoaded = centerCards
-    .filter(center => center.resource)
-    .map(async (center) => {
-      try {
-        const info = await parseCenterInfo(center.resource!, center.title);
-        const isDefaultContent = center.content === "no info";
-        const hasNewContent = info.content && info.content.length > 0;
+      const contentHtml = contentContainer.html()?.trim() || "";
 
-        if ((center.content != info.content && hasNewContent) || (isDefaultContent && hasNewContent)) {
-          const updatedCenter = {
-            ...center,
-            title: info.title || center.title,
-            content: info.content
-          };
-          return await infoCards.update(updatedCenter);
-        }
-      } catch (error) {
-        return null;
-      }
+      cards.push({
+        title: title,
+        content: contentHtml
+      });
     });
 
-  await Promise.all(allLoaded);
+    return cards;
+
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function loadAllCenters() {
+  try {
+    const cardsToSync = initialCards.filter(c => c.category === "centers");
+    
+    const uniqueUrls = new Set(
+        cardsToSync
+          .map(c => c.resource)
+          .filter(url => url && url.startsWith("http")) as string[]
+    );
+
+    if (uniqueUrls.size === 0) return;
+
+    const scrapedDataMap = new Map<string, CenterInfo[]>();
+    
+    for (const url of uniqueUrls) {
+        try {
+          const u = new URL(url);
+          const cleanKey = `${u.origin}${u.pathname}`;
+          
+          if (!scrapedDataMap.has(cleanKey)) {
+              const data = await parseAllCentersFromUrl(url);
+              scrapedDataMap.set(cleanKey, data);
+          }
+        } catch (e) { console.error(`Invalid URL config: ${url}`); }
+    }
+
+    let updatedCount = 0;
+
+    for (const configCard of cardsToSync) {
+        if (!configCard.resource || !configCard.resource.startsWith("http")) continue;
+
+        let foundInfo: CenterInfo | undefined;
+        
+        try {
+               const u = new URL(configCard.resource);
+               const cleanKey = `${u.origin}${u.pathname}`;
+               const pageData = scrapedDataMap.get(cleanKey);
+
+               if (pageData) {
+                   const targetNorm = normalizeText(configCard.title);
+                   foundInfo = pageData.find(item => {
+                       const itemNorm = normalizeText(item.title);
+                       return itemNorm.includes(targetNorm) || targetNorm.includes(itemNorm);
+                   });
+               }
+        } catch (e) {}
+
+        const finalContent = foundInfo ? foundInfo.content : "no info";
+        const existing = await infoCards.get(configCard.id);
+
+        if (existing && 
+            existing.content === finalContent &&
+            existing.image === configCard.image &&
+            existing.title === configCard.title
+        ) continue;
+
+        const centerCard: InfoCard = {
+            ...configCard,
+            title: configCard.title, 
+            content: finalContent,
+            published: true
+        };
+
+        updatedCount++;
+
+        if (existing) {
+            if (finalContent === "no info" && existing.content !== "no info" && existing.content) {
+            }
+            await infoCards.update({ ...existing, ...centerCard, published: existing.published });
+        } else {
+            await infoCards.create(centerCard);
+        }
+    }
+
+    if (updatedCount > 0) {
+      console.log(`Updated ${updatedCount} cards.`);
+    }
+
+  } catch (error) {
+    console.error(" Помилка:", error);
+    return;
+  }
 }

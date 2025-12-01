@@ -12,6 +12,8 @@ import { downloadedAsset } from "../upload";
 const BASE_URL = config.rectoratBaseUrl;
 const TARGET_CATEGORY = "rectorat_members"; 
 const NBSP = '\u00A0'; 
+const DEFAULT_IMAGE = "/img/default_avatar.jpg"
+
 
 type RectoratCard = {
   id: string;
@@ -91,7 +93,7 @@ export async function syncRectoratData() {
         title: cleanTitle, 
         subtitle: subtitleContent,
         content: "", 
-        image: card.image ? await downloadedAsset(card.image, "rectorat") : null,
+        image: card.image ? await downloadedAsset(card.image, "rectorat") : DEFAULT_IMAGE,
         category: TARGET_CATEGORY,
         subcategory: null,
         resource: card.image ?? undefined,

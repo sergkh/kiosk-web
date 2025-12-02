@@ -772,7 +772,7 @@ export const initialCards: InfoCard[] = [
     "title": "Центр аудиту, контролю, кадрового та юридичного супроводу",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive1",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/center-audit.png",
     "content": "no info",
     "position": 0,
     "published": true
@@ -782,7 +782,7 @@ export const initialCards: InfoCard[] = [
     "title": "Центр культурно-естетичного виховання",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive2",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/center-culture.png",
     "content": "no info",
     "position": 1,
     "published": true
@@ -792,7 +792,7 @@ export const initialCards: InfoCard[] = [
     "title": "Центр довузівської підготовки, прийому на навчання та виховної роботи",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive3",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/center-pre-uni.png",
     "content": "no info",
     "position": 2,
     "published": true
@@ -802,7 +802,7 @@ export const initialCards: InfoCard[] = [
     "title": "Центр інтеграції з виробництвом, підвищення кваліфікації та дорадництва",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive4",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/center-integration.png",
     "content": "no info",
     "position": 3,
     "published": true
@@ -812,7 +812,7 @@ export const initialCards: InfoCard[] = [
     "title": "Центр адміністративно-господарської роботи та виробничої діяльності",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive5",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/center-admin.png",
     "content": "no info",
     "position": 4,
     "published": true
@@ -822,7 +822,7 @@ export const initialCards: InfoCard[] = [
     "title": "Відділ євроінтеграції та міжнародної діяльності",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive6",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/dept-euro-integration.png",
     "content": "no info",
     "position": 5,
     "published": true
@@ -832,7 +832,7 @@ export const initialCards: InfoCard[] = [
     "title": "Навчально-науковий центр",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive7",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/center-academic-research.png",
     "content": "no info",
     "position": 6,
     "published": true
@@ -842,7 +842,7 @@ export const initialCards: InfoCard[] = [
     "title": "Відділ кадрів",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive8",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/dept-personnel.png",
     "content": "no info",
     "position": 7,
     "published": true
@@ -852,7 +852,7 @@ export const initialCards: InfoCard[] = [
     "title": "Бухгалтерська служба",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive9",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/service-accounting.png",
     "content": "no info",
     "position": 8,
     "published": true
@@ -862,7 +862,7 @@ export const initialCards: InfoCard[] = [
     "title": "Планово-фінансовий відділ",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive10",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/dept-finance.png",
     "content": "no info",
     "position": 9,
     "published": true
@@ -872,7 +872,7 @@ export const initialCards: InfoCard[] = [
     "title": "Відділ медіа та інформаційних ресурсів",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive11",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/dept-media.png",
     "content": "no info",
     "position": 10,
     "published": true
@@ -882,7 +882,7 @@ export const initialCards: InfoCard[] = [
     "title": "Редакційно-видавничий відділ",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive12",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/dept-editorial.png",
     "content": "no info",
     "position": 11,
     "published": true
@@ -892,7 +892,7 @@ export const initialCards: InfoCard[] = [
     "title": "Юридичний відділ",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive13",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/dept-legal.png",
     "content": "no info",
     "position": 12,
     "published": true
@@ -902,7 +902,7 @@ export const initialCards: InfoCard[] = [
     "title": "Загальний відділ",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive14",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/dept-general.png",
     "content": "no info",
     "position": 13,
     "published": true
@@ -912,7 +912,7 @@ export const initialCards: InfoCard[] = [
     "title": "Штаб цивільної оборони",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive15",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/hq-civil-defense.png",
     "content": "no info",
     "position": 14,
     "published": true
@@ -922,7 +922,7 @@ export const initialCards: InfoCard[] = [
     "title": "Обчислювальний центр",
     "category": "centers",
     "resource": "https://vsau.org/pro-universitet/strukturni-pidrozdili#collapseFive16",
-    "image": "/img/centers/default.jpg",
+    "image": "/img/centers/center-computing.png",
     "content": "no info",
     "position": 15,
     "published": true

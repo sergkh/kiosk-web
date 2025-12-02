@@ -1,13 +1,12 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { URL } from "url";
-
-import path from "path";
 import crypto from 'crypto';
 import { infoCards } from "../db"; 
 import type { InfoCard } from "../../shared/models";
 import config from "../config";
 import { downloadedAsset } from "../upload";
+
 
 const BASE_URL = config.rectoratBaseUrl;
 const TARGET_CATEGORY = "rectorat_members"; 

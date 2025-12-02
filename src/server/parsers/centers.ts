@@ -1,207 +1,121 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
+import { URL } from "url";
+import crypto from 'crypto';
 import { infoCards } from "../db";
 import type { InfoCard } from "../../shared/models";
-import { initialCards } from "../initial-card";
-import crypto from 'crypto';
+import config from "../config";
+import { downloadedAsset } from "../upload";
 
-type CenterInfo = {
+
+const BASE_URL = config.centersBaseUrl;
+const TARGET_CATEGORY = "centers";
+const DEFAULT_IMAGE = "/img/default_avatar.jpg"
+
+type CenterCard = {
+  id: string;
   title: string;
   content: string;
+  image: string | null;
 };
 
-function normalizeText(text: string): string {
-  return text.replace(/\s+/g, " ").trim().toLowerCase();
-}
+async function parseCentersPage(): Promise<CenterCard[]> {
+  const response = await fetch(BASE_URL, { headers: { "User-Agent": "Mozilla/5.0" } });
+  if (!response.ok) throw new Error(`Status: ${response.status}`);
 
-async function parseAllCentersFromUrl(url: string): Promise<CenterInfo[]> {
-  if (!url || !url.startsWith("http")) return [];
+  const html = await response.text();
+  const $ = cheerio.load(html);
+  const cards: CenterCard[] = [];
 
-  try {
-    const urlObj = new URL(url);
-    const baseUrl = `${urlObj.origin}${urlObj.pathname}`;
+  $(".card-outline").each((_, el) => {
+    const btnText = $(el).find("button").text().trim();
+    if (!btnText) return;
 
-    const response = await fetch(baseUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+    const title = btnText;
+    const contentContainer = $(el).find(".card-body");
     
-    if (!response.ok) {
-        return [];
-    }
-
-    const html = await response.text();
-    const $ = cheerio.load(html);
-    const cards: CenterInfo[] = [];
-
-    $(".card-outline").each((_, element) => {
-      const btnText = $(element).find("button").text().trim();
-      if (!btnText) return;
-
-      const title = btnText;
-
-      const contentContainer = $(element).find(".card-body");
-      
-      contentContainer.find("img").each((_, img) => {
-          const src = $(img).attr("src") || $(img).attr("data-src");
-          if (src && !src.startsWith("http")) {
-              try {
-                const u = new URL(url);
-                const cleanPath = src.startsWith("/") ? src : `/${src}`;
-                $(img).attr("src", `${u.origin}${cleanPath}`);
-              } catch (e) {}
-          }
-          $(img).addClass("img-fluid").css("max-width", "100%").css("height", "auto");
-      });
-
-      const contentHtml = contentContainer.html()?.trim() || "";
-
-      cards.push({
-        title: title,
-        content: contentHtml
-      });
+    contentContainer.find("img").each((_, img) => {
+      const src = $(img).attr("src") || $(img).attr("data-src");
+      if (src && !src.startsWith("http")) {
+        try {
+          const cleanPath = src.startsWith("/") ? src : `/${src}`;
+          const baseOrigin = new URL(BASE_URL).origin;
+          $(img).attr("src", `${baseOrigin}${cleanPath}`);
+        } catch (e) {}
+      }
+      $(img).addClass("img-fluid").css("max-width", "100%").css("height", "auto");
     });
 
-    return cards;
-
-  } catch (error) {
-    return [];
-  }
-}
-
-export async function loadAllCenters() {
-  try {
-    const cardsToSync = initialCards.filter(c => c.category === "centers");
+    const contentHtml = contentContainer.html()?.trim() || "";
     
-    const uniqueUrls = new Set(
-        cardsToSync
-          .map(c => c.resource)
-          .filter(url => url && url.startsWith("http")) as string[]
-    );
-
-    if (uniqueUrls.size === 0) return;
-
-    const scrapedDataMap = new Map<string, CenterInfo[]>();
-    
-    for (const url of uniqueUrls) {
-        try {
-          const u = new URL(url);
-          const cleanKey = `${u.origin}${u.pathname}`;
-          
-          if (!scrapedDataMap.has(cleanKey)) {
-              const data = await parseAllCentersFromUrl(url);
-              scrapedDataMap.set(cleanKey, data);
-          }
-        } catch (e) { console.error(`Invalid URL config: ${url}`); }
+    const imageSrc = contentContainer.find("img").attr("src");
+    let image: string | null = null;
+    if (imageSrc) {
+      try {
+        image = imageSrc.startsWith("http") ? imageSrc : new URL(imageSrc, BASE_URL).href;
+      } catch (e) {
+        image = null;
+      }
     }
 
+    const id = crypto.createHash("sha1").update(title || "unknown").digest("hex");
+
+    if (title) {
+      cards.push({ id: `centers_${id}`, title, content: contentHtml, image });
+    }
+  });
+
+  return cards;
+}
+
+export async function syncCentersData() {
+  try {
+    const parsedCards = await parseCentersPage();
     let updatedCount = 0;
 
-    const consumed = new Set<string>();
+    for (const [index, card] of parsedCards.entries()) {
+      const cleanTitle = card.title;
+      const finalContent = card.content || "no info";
 
-    for (const configCard of cardsToSync) {
-      if (!configCard.resource || !configCard.resource.startsWith("http")) continue;
-
-      let foundInfo: CenterInfo | undefined;
-        
-      try {
-           const u = new URL(configCard.resource);
-           const cleanKey = `${u.origin}${u.pathname}`;
-           const pageData = scrapedDataMap.get(cleanKey);
-
-           if (pageData) {
-             const targetNorm = normalizeText(configCard.title);
-             foundInfo = pageData.find(item => {
-               const itemNorm = normalizeText(item.title);
-               return itemNorm.includes(targetNorm) || targetNorm.includes(itemNorm);
-             });
-           }
-      } catch (e) {}
-
-      const finalContent = foundInfo ? foundInfo.content : "no info";
-      const existing = await infoCards.get(configCard.id);
+      const existing = await infoCards.get(card.id);
 
       if (existing && 
-        existing.content === finalContent &&
-        existing.image === configCard.image &&
-        existing.title === configCard.title
-      ) {
-        if (foundInfo) consumed.add(normalizeText(foundInfo.title));
-        continue;
-      }
+        existing.resource === card.image &&
+        existing.title === cleanTitle &&
+        existing.content === finalContent
+      ) continue;
 
       const centerCard: InfoCard = {
-        ...configCard,
-        title: configCard.title, 
+        id: card.id,
+        title: cleanTitle,
+        subtitle: undefined,
         content: finalContent,
+        image: card.image ? await downloadedAsset(card.image, "centers") : DEFAULT_IMAGE,
+        category: TARGET_CATEGORY,
+        subcategory: null,
+        resource: card.image ?? undefined,
+        position: index,
         published: true
       };
 
       updatedCount++;
 
       if (existing) {
-        if (finalContent === "no info" && existing.content !== "no info" && existing.content) {
-        }
-        await infoCards.update({ ...existing, ...centerCard, published: existing.published });
+        await infoCards.update({...existing, ...centerCard, published: existing.published });
       } else {
         await infoCards.create(centerCard);
       }
-
-      if (foundInfo) consumed.add(normalizeText(foundInfo.title));
-    }
-
-    const parsedItems: { info: CenterInfo; pageUrl: string }[] = [];
-    for (const [pageUrl, list] of scrapedDataMap.entries()) {
-      for (const it of list) parsedItems.push({ info: it, pageUrl });
-    }
-
-    const existingCenters = await infoCards.all({ category: 'centers', includeUnpublished: true });
-
-    for (const parsed of parsedItems) {
-      const norm = normalizeText(parsed.info.title);
-      if (consumed.has(norm)) continue; 
-
-      const matched = existingCenters.find(ec => {
-        const en = normalizeText(ec.title);
-        return en.includes(norm) || norm.includes(en);
-      });
-
-      if (matched) {
-        if ((matched.content || '') !== (parsed.info.content || '')) {
-          await infoCards.update({ ...matched, content: parsed.info.content });
-          updatedCount++;
-        }
-        consumed.add(norm);
-        continue;
-      }
-
-      const id = `centers_${crypto.createHash('sha1').update(parsed.info.title).digest('hex')}`;
-      const configMatch = cardsToSync.find(cc => {
-        const cn = normalizeText(cc.title);
-        return cn.includes(norm) || norm.includes(cn);
-      });
-
-      const centersCard: InfoCard = {
-        id,
-        title: parsed.info.title,
-        subtitle: undefined,
-        content: parsed.info.content,
-        image: configMatch ? configMatch.image : undefined,
-        category: 'centers',
-        subcategory: null,
-        resource: parsed.pageUrl,
-        position: 0,
-        published: true
-      };
-
-      await infoCards.create(centersCard);
-      updatedCount++;
-      consumed.add(norm);
     }
 
     if (updatedCount > 0) {
-      console.log(`Updated ${updatedCount} cards.`);
+      console.log(`Updated ${updatedCount} centers cards.`);
     }
-
   } catch (error) {
-    console.error(" Помилка:", error);
-    return;
+    console.error("Помилка:", error);
+    return 0;
   }
+}
+
+export async function loadAllCenters() {
+  return syncCentersData();
 }

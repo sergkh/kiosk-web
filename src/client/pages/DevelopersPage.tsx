@@ -26,14 +26,14 @@ function DevelopersPage() {
           <p>Front-end</p>
         </div>
         <div className='developer_stydent'>
-          <img src={research} alt="Front-end developer|Front-end розробник" />
+          <img src={design} alt="Front-end developer|Front-end розробник" />
           <h4>{t('developers.students.kateryna')}</h4>
-          <p>Content Researcher</p>
+          <p>Designer</p>
         </div>
         <div className='developer_stydent'>
-          <img src={design} alt="Front-end developer|Front-end розробник" />
+          <img src={research} alt="Front-end developer|Front-end розробник" />
           <h4>{t('developers.students.serhii')}</h4>
-          <p>Designer</p>
+          <p>Content Researcher</p>
         </div>
       </div>
 

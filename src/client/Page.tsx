@@ -41,8 +41,8 @@ function Footer() {
   const {t} = useTranslation();
   return <footer>          
     <span>{ t('footer.info')}</span>        
-    <span>{ t('footer.created_pt1') } <FontAwesomeIcon icon={faHeart} /> { t('footer.created_pt2') } 
-    <NavLink to="/developers">{ t('footer.devs_link')}</NavLink></span>                        
+    <span>{ t('footer.created_pt1') } <FontAwesomeIcon icon={faHeart} /> { t('footer.created_pt2')}</span> 
+    <NavLink to="/developers">{ t('footer.devs_link')}</NavLink>                        
   </footer>
 }
 

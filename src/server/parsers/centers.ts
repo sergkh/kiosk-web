@@ -3,6 +3,7 @@ import * as cheerio from "cheerio";
 import { infoCards } from "../db";
 import type { InfoCard } from "../../shared/models";
 import { initialCards } from "../initial-card";
+import crypto from 'crypto';
 
 type CenterInfo = {
   title: string;
@@ -93,50 +94,106 @@ export async function loadAllCenters() {
 
     let updatedCount = 0;
 
+    const consumed = new Set<string>();
+
     for (const configCard of cardsToSync) {
-        if (!configCard.resource || !configCard.resource.startsWith("http")) continue;
+      if (!configCard.resource || !configCard.resource.startsWith("http")) continue;
 
-        let foundInfo: CenterInfo | undefined;
+      let foundInfo: CenterInfo | undefined;
         
-        try {
-               const u = new URL(configCard.resource);
-               const cleanKey = `${u.origin}${u.pathname}`;
-               const pageData = scrapedDataMap.get(cleanKey);
+      try {
+           const u = new URL(configCard.resource);
+           const cleanKey = `${u.origin}${u.pathname}`;
+           const pageData = scrapedDataMap.get(cleanKey);
 
-               if (pageData) {
-                   const targetNorm = normalizeText(configCard.title);
-                   foundInfo = pageData.find(item => {
-                       const itemNorm = normalizeText(item.title);
-                       return itemNorm.includes(targetNorm) || targetNorm.includes(itemNorm);
-                   });
-               }
-        } catch (e) {}
+           if (pageData) {
+             const targetNorm = normalizeText(configCard.title);
+             foundInfo = pageData.find(item => {
+               const itemNorm = normalizeText(item.title);
+               return itemNorm.includes(targetNorm) || targetNorm.includes(itemNorm);
+             });
+           }
+      } catch (e) {}
 
-        const finalContent = foundInfo ? foundInfo.content : "no info";
-        const existing = await infoCards.get(configCard.id);
+      const finalContent = foundInfo ? foundInfo.content : "no info";
+      const existing = await infoCards.get(configCard.id);
 
-        if (existing && 
-            existing.content === finalContent &&
-            existing.image === configCard.image &&
-            existing.title === configCard.title
-        ) continue;
+      if (existing && 
+        existing.content === finalContent &&
+        existing.image === configCard.image &&
+        existing.title === configCard.title
+      ) {
+        if (foundInfo) consumed.add(normalizeText(foundInfo.title));
+        continue;
+      }
 
-        const centerCard: InfoCard = {
-            ...configCard,
-            title: configCard.title, 
-            content: finalContent,
-            published: true
-        };
+      const centerCard: InfoCard = {
+        ...configCard,
+        title: configCard.title, 
+        content: finalContent,
+        published: true
+      };
 
-        updatedCount++;
+      updatedCount++;
 
-        if (existing) {
-            if (finalContent === "no info" && existing.content !== "no info" && existing.content) {
-            }
-            await infoCards.update({ ...existing, ...centerCard, published: existing.published });
-        } else {
-            await infoCards.create(centerCard);
+      if (existing) {
+        if (finalContent === "no info" && existing.content !== "no info" && existing.content) {
         }
+        await infoCards.update({ ...existing, ...centerCard, published: existing.published });
+      } else {
+        await infoCards.create(centerCard);
+      }
+
+      if (foundInfo) consumed.add(normalizeText(foundInfo.title));
+    }
+
+    const parsedItems: { info: CenterInfo; pageUrl: string }[] = [];
+    for (const [pageUrl, list] of scrapedDataMap.entries()) {
+      for (const it of list) parsedItems.push({ info: it, pageUrl });
+    }
+
+    const existingCenters = await infoCards.all({ category: 'centers', includeUnpublished: true });
+
+    for (const parsed of parsedItems) {
+      const norm = normalizeText(parsed.info.title);
+      if (consumed.has(norm)) continue; 
+
+      const matched = existingCenters.find(ec => {
+        const en = normalizeText(ec.title);
+        return en.includes(norm) || norm.includes(en);
+      });
+
+      if (matched) {
+        if ((matched.content || '') !== (parsed.info.content || '')) {
+          await infoCards.update({ ...matched, content: parsed.info.content });
+          updatedCount++;
+        }
+        consumed.add(norm);
+        continue;
+      }
+
+      const id = `centers_${crypto.createHash('sha1').update(parsed.info.title).digest('hex')}`;
+      const configMatch = cardsToSync.find(cc => {
+        const cn = normalizeText(cc.title);
+        return cn.includes(norm) || norm.includes(cn);
+      });
+
+      const centersCard: InfoCard = {
+        id,
+        title: parsed.info.title,
+        subtitle: undefined,
+        content: parsed.info.content,
+        image: configMatch ? configMatch.image : undefined,
+        category: 'centers',
+        subcategory: null,
+        resource: parsed.pageUrl,
+        position: 0,
+        published: true
+      };
+
+      await infoCards.create(centersCard);
+      updatedCount++;
+      consumed.add(norm);
     }
 
     if (updatedCount > 0) {

@@ -17,23 +17,23 @@ function DevelopersPage() {
       <div className="team-grid">
         <div className='developer_stydent'>
           <img src={back} alt="Front-end developer|Front-end розробник" />
-          <p>{t('developers.students.artem')}</p>
-          <p>Back-end</p>
+          <h4>{t('developers.students.artem')}</h4>
+          <span>Back-end</span>
         </div>
         <div className='developer_stydent'>
           <img src={front} alt="Front-end developer|Front-end розробник" />
-          <p>{t('developers.students.ioann')}</p>
+          <h4>{t('developers.students.ioann')}</h4>
           <p>Front-end</p>
         </div>
         <div className='developer_stydent'>
-          <img src={research} alt="Front-end developer|Front-end розробник" />
-          <p>{t('developers.students.kateryna')}</p>
-          <p>Content Researcher</p>
+          <img src={design} alt="Front-end developer|Front-end розробник" />
+          <h4>{t('developers.students.kateryna')}</h4>
+          <p>Designer</p>
         </div>
         <div className='developer_stydent'>
-          <img src={design} alt="Front-end developer|Front-end розробник" />
-          <p>{t('developers.students.serhii')}</p>
-          <p>Designer</p>
+          <img src={research} alt="Front-end developer|Front-end розробник" />
+          <h4>{t('developers.students.serhii')}</h4>
+          <p>Content Researcher</p>
         </div>
       </div>
 
@@ -41,12 +41,12 @@ function DevelopersPage() {
 
       <div className="teachers-grid">
         <div className='developer_teachers'>
-          <p>{t('developers.teachers.serhii')}</p>
-          <p>{t('developers.senior_teacher')}</p>
+          {t('developers.teachers.serhii')}<br/>
+          <em>{t('developers.senior_teacher')}</em>
         </div>
         <div className='developer_teachers'>
-          <p>{t('developers.teachers.alexander')}</p>
-          <p>{t('developers.senior_teacher')}</p>
+          {t('developers.teachers.alexander')}<br/>
+          <em>{t('developers.senior_teacher')}</em>
         </div>
       </div>
     </main>

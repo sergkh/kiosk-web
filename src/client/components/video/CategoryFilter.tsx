@@ -1,11 +1,10 @@
 import React from 'react';
-import type { Category, CategoryOption } from '../../../shared/models';
 import CardButton, { CardSize } from '../cards/CardButton';
 
 interface CategoryFilterProps {
-  categories: CategoryOption[];
-  selectedCategory: Category;
-  onCategoryChange: (category: Category) => void;
+  categories: string[];
+  selectedCategory: string;
+  onCategoryChange: (category: string) => void;
 }
 
 export const CategoryFilter: React.FC<CategoryFilterProps> = ({
@@ -14,14 +13,14 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   onCategoryChange
 }) => {
   return (
-    <div className="category-filter">
+    <div className="info-cards minimized">
       {categories.map(category => (
         <CardButton
-          title={category.label}
-          key={category.id}
-          active={selectedCategory === category.id}
+          title={category}
+          key={category}
+          active={selectedCategory === category}
           size={CardSize.Minimized}
-          onClick={() => onCategoryChange(category.id)}
+          onClick={() => onCategoryChange(category)}
         />
       ))}
     </div>

@@ -1,17 +1,19 @@
 import React from 'react';
 import type { Video } from '../../../shared/models';
+import CardButton, { CardSize } from '../cards/CardButton';
 
 interface VideoCardProps {
   video: Video;
   onClick: (video: Video) => void;
 }
 
-export const VideoCard: React.FC<VideoCardProps> = ({ video, onClick }) => (
-  <div className="video-card" onClick={() => onClick(video)}>
-  <img src={video.preview || video.image || '/assets/image.png'} alt={video.title} />
-    <div className="video-card-content">
-      <div className="video-card-title">{video.title}</div>
-      <div className="video-card-desc">{video.description}</div>
-    </div>
-  </div>
-);
+export default function VideoCard({ video, onClick }: VideoCardProps) {
+  return <CardButton 
+    title={video.title} 
+    subtitle={video.description} 
+    image={video.image} 
+    onClick={() => onClick(video)} 
+    size={CardSize.Full} 
+    empty={true} 
+  />;
+};

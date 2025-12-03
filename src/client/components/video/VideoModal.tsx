@@ -1,15 +1,19 @@
 import React, { useRef, useEffect, useState } from 'react';
 import type { Video } from '../../../shared/models';
+import { useTranslation } from 'react-i18next';
+import config from '../../lib/config';
 
 interface VideoModalProps {
-  video: Video | null;
+  video: Video;
   onClose: () => void;
 }
 
 export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
+  const { t, i18n } = useTranslation();  
   const modalRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [subtitleSrc, setSubtitleSrc] = useState<string | null>(null);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -20,8 +24,33 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  // Load subtitle for current language
   useEffect(() => {
-    if (videoRef.current) {
+    const loadSubtitle = async () => {      
+      if (!video.id || !isVideoFile) {
+        setSubtitleSrc(null);
+        return;
+      }
+
+      try {
+        const subtitleUrl = `${config.baseUrl}api/videos/${video.id}/subtitles/${i18n.language}`;
+        const response = await fetch(subtitleUrl);
+        if (response.ok) {
+          setSubtitleSrc(subtitleUrl);
+        } else {
+          setSubtitleSrc(null);
+        }
+      } catch (error) {
+        console.error('Error loading subtitle:', error);
+        setSubtitleSrc(null);
+      }
+    };
+
+    loadSubtitle();
+  }, [video, i18n.language]);
+
+  useEffect(() => {
+    if (videoRef.current && subtitleSrc) {
       const timer = setTimeout(() => {
         const tracks = videoRef.current?.textTracks;
         if (tracks && tracks.length > 0) {
@@ -32,7 +61,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [video]);
+  }, [video, subtitleSrc]);
 
   const toggleFullscreen = async () => {
     if (!modalRef.current) return;
@@ -55,11 +84,15 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
     onClose();
   };
 
-  if (!video) return null;
-
   const isVideoFile = /\.(mp4|webm|ogg)$/i.test(video.src);
-  const subtitles = video?.subtitles || [];
   
+  // Build subtitles array with current language subtitle if available
+  const subtitles = subtitleSrc ? [{
+    language: i18n.language === 'uk' ? 'uk' : 'en',
+    label: i18n.language === 'uk' ? 'Українська' : 'English',
+    src: subtitleSrc
+  }] : [];
+
   return (
     <div 
       ref={modalRef}

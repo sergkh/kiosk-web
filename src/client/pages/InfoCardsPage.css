@@ -3,7 +3,7 @@
   flex-direction: column;
 }
 
-.student-info-cards {
+.info-cards {
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(18em, auto));
@@ -12,7 +12,7 @@
   flex: 1;
 }
 
-.student-info-cards.minimized {
+.info-cards.minimized {
   display: flex;
   gap: 16px;
   flex-direction: row;
@@ -20,10 +20,14 @@
   scroll-behavior: smooth;
   scrollbar-width: none; 
   padding-left: 12px; /** To avoid cutting a shadow */
-  padding-bottom: 18px; /** To avoid cutting a shadow */  
   scroll-snap-type: x mandatory;
   scroll-padding-left: 12px;
   justify-content: left;
+  background-color: var(--sub-menu-background);
+}
+
+.info-cards.partially-filled {
+  justify-content: start;
 }
 
 .active-info {

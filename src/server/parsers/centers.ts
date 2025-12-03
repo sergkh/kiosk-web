@@ -79,21 +79,37 @@ export async function syncCentersData() {
 
       const existing = await infoCards.get(card.id);
 
-      if (existing && 
-        existing.resource === card.image &&
+      const isAdminUploadedImage = !!existing && (
+        (!!existing.resource && existing.resource.startsWith('/uploads')) ||
+        (!!existing.image && existing.image.startsWith('/uploads'))
+      );
+
+      if (existing &&
         existing.title === cleanTitle &&
-        existing.content === finalContent
+        existing.content === finalContent &&
+        (existing.resource === card.image || isAdminUploadedImage || existing.image === card.image)
       ) continue;
+
+      let imageValue: string | null;
+      let resourceValue: string | undefined;
+
+      if (isAdminUploadedImage) {
+        imageValue = existing!.image ?? DEFAULT_IMAGE;
+        resourceValue = existing!.resource;
+      } else {
+        imageValue = DEFAULT_IMAGE;
+        resourceValue = undefined;
+      }
 
       const centerCard: InfoCard = {
         id: card.id,
         title: cleanTitle,
         subtitle: undefined,
         content: finalContent,
-        image: card.image ? await downloadedAsset(card.image, "centers") : DEFAULT_IMAGE,
+        image: imageValue,
         category: TARGET_CATEGORY,
         subcategory: null,
-        resource: card.image ?? undefined,
+        resource: resourceValue,
         position: index,
         published: true
       };

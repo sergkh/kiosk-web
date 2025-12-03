@@ -10,9 +10,17 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+const ALLOWED_UPLOAD_SUBFOLDERS = new Set(['centers', 'rectorat', 'subtitles']);
+
 const storage = multer.diskStorage({
   destination: (req: Request, file, cb) => {
-    cb(null, uploadDir);
+    const category = (req.params as any)?.category || (req.body as any)?.category;
+    const subfolder = category && ALLOWED_UPLOAD_SUBFOLDERS.has(category) ? category : null;
+    const targetDir = subfolder ? path.join(uploadDir, subfolder) : uploadDir;
+    if (subfolder && !fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+    cb(null, targetDir);
   },
   filename: (req, file, cb) => {
     const name = crypto.randomBytes(64).toString("hex");

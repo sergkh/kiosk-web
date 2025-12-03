@@ -69,7 +69,7 @@ const videoStorage = multer.diskStorage({
 export const videoUpload = multer({ 
   storage: videoStorage,
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /mp4|webm|ogg|jpg|jpeg|png|vtt/;
+    const allowedTypes = /mp4|webm|ogg|mov|jpg|jpeg|png|vtt/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype) || file.mimetype === 'text/vtt' || file.mimetype === 'application/x-subrip';
     

@@ -7,6 +7,7 @@ import { updateNews } from "./parsers/news.ts";
 import infoApi from "./info-api.ts";
 import { initDb } from "./db";
 import { loadAllFaculties } from "./parsers/faculties.ts";
+import { loadAllCenters} from "./parsers/centers.ts";
 import { syncRectoratData } from "./parsers/rectorat";
 import videoRoutes from './video-api';
 
@@ -45,7 +46,8 @@ async function startServer() {
   try {
     await initDb();
 
-    loadAllFaculties();
+    loadAllFaculties(); // Initialize faculties data
+    loadAllCenters();
     
     // Update news every 1 hour
     setInterval(updateNews, 1000 * 60 * 60 * 6); // TODO: put into config

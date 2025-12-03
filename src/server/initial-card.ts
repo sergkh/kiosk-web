@@ -1,5 +1,6 @@
 import type { InfoCard } from "../shared/models";
 
+
 export const initialCards: InfoCard[] = [
     ///////////////////
     // Student cards //
@@ -17,8 +18,8 @@ export const initialCards: InfoCard[] = [
         id: "functional-parts",
         title: "Функціональні частини",
         subtitle: "",
-        content: "no info",
         category: "students",
+        subcategory: "centers", 
         image: "/img/students/list.png",
         position: 1,
         published: true
@@ -762,6 +763,6 @@ export const initialCards: InfoCard[] = [
         content: "no info",
         position: 7,
         published: true
-    }
-
+    },
+ 
 ];

@@ -40,7 +40,9 @@ cards.post("/:category", validateCategory, rejectInvalid, authorized, singleImag
   
   console.log(`Creating new ${category} card:`, card);
 
-  card.image = imageUrl((req.file as Express.Multer.File)?.filename);
+  const ALLOWED_FOLDERS = new Set(['centers', 'rectorat', 'subtitles']);
+  const subfolder = ALLOWED_FOLDERS.has(category) ? category : null;
+  card.image = imageUrl((req.file as Express.Multer.File)?.filename, subfolder);
   const newCard = await infoCards.create(card);
   res.status(201).json(newCard);
 });
@@ -84,7 +86,9 @@ cards.put("/:category/:id", validateCategory, rejectInvalid, authorized, singleI
       return res.status(404).json({ error: "Картку не знайдено" });
   }
   
-  card.image = imageUrl((req.file as Express.Multer.File)?.filename) || oldCard.image;
+  const ALLOWED_FOLDERS = new Set(['centers', 'rectorat', 'subtitles']);
+  const subfolder = ALLOWED_FOLDERS.has(req.params.category) ? req.params.category : null;
+  card.image = imageUrl((req.file as Express.Multer.File)?.filename, subfolder) || oldCard.image;
   
   const updateCard = await infoCards.update(card);
   res.json(updateCard);

@@ -78,7 +78,7 @@ export async function loadAllFaculties(): Promise<void> {
       try {
         const info = await parseFacultyInfo(faculty.resource!);
 
-        if (faculty.content != info.content || faculty.title != info.title) {
+        if (faculty.title != info.title) {
           console.log(`Оновлення інформації про факультет ${faculty.title}`);
           const updatedFaculty = {
             ...faculty,

@@ -84,11 +84,7 @@ export async function syncCentersData() {
         (!!existing.image && existing.image.startsWith('/uploads'))
       );
 
-      if (existing &&
-        existing.title === cleanTitle &&
-        existing.content === finalContent &&
-        (existing.resource === card.image || isAdminUploadedImage || existing.image === card.image)
-      ) continue;
+      if (existing && existing.title === cleanTitle) continue;
 
       let imageValue: string | null;
       let resourceValue: string | undefined;
@@ -133,5 +129,5 @@ export async function syncCentersData() {
 }
 
 export async function loadAllCenters() {
-  return syncCentersData();
+  return await syncCentersData();
 }

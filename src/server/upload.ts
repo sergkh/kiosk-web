@@ -69,11 +69,14 @@ const videoStorage = multer.diskStorage({
 export const videoUpload = multer({ 
   storage: videoStorage,
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /mp4|webm|ogg|mov|jpg|jpeg|png|vtt/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype) || file.mimetype === 'text/vtt' || file.mimetype === 'application/x-subrip';
+    const ext = path.extname(file.originalname).toLowerCase();
+    const allowedExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.jpg', '.jpeg', '.png', '.vtt'];
+    const allowedMimetypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'image/jpeg', 'image/png', 'text/vtt', 'application/x-subrip'];
     
-    if (mimetype && extname) {
+    const hasAllowedExt = allowedExtensions.includes(ext);
+    const hasAllowedMimetype = allowedMimetypes.includes(file.mimetype);
+    
+    if (hasAllowedExt && hasAllowedMimetype) {
       return cb(null, true);
     }    
     cb(new Error('Тільки відео, зображення або субтитри дозволені!'));

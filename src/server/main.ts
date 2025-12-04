@@ -20,7 +20,19 @@ if (process.env.NODE_ENV === "production") {
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/uploads", express.static("data/public/uploads"));
+app.use("/uploads", express.static("data/public/uploads", {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.mov')) {
+      res.setHeader('Content-Type', 'video/quicktime');
+    } else if (path.endsWith('.mp4')) {
+      res.setHeader('Content-Type', 'video/mp4');
+    } else if (path.endsWith('.webm')) {
+      res.setHeader('Content-Type', 'video/webm');
+    } else if (path.endsWith('.ogg')) {
+      res.setHeader('Content-Type', 'video/ogg');
+    }
+  }
+}));
 app.use("/api", login);
 app.use("/api/info", infoApi);
 app.use('/api', videoRoutes);

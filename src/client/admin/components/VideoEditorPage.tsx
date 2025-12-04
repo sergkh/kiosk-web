@@ -32,7 +32,7 @@ export function VideoEditorPage() {
     getInputProps: getVideoInputProps
   } = useDropzone({
     multiple: false,
-    accept: { 'video/*': ['.mp4', '.webm', '.ogg'] },
+    accept: { 'video/*': ['.mp4', '.webm', '.ogg', '.mov'] },
     onDrop: (files) => { 
       if (files[0]) {
         setVideoFile(Object.assign(files[0], { preview: URL.createObjectURL(files[0]) }));

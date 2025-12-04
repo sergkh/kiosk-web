@@ -84,7 +84,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ video, onClose }) => {
     onClose();
   };
 
-  const isVideoFile = /\.(mp4|webm|ogg)$/i.test(video.src);
+  const isVideoFile = /\.(mp4|webm|ogg|mov)$/i.test(video.src);
   
   // Build subtitles array with current language subtitle if available
   const subtitles = subtitleSrc ? [{
